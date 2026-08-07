@@ -11,3 +11,11 @@ _Avoid_: Live skill, working copy
 **Installed skill**:
 A disposable copy of a source skill made available to agents.
 _Avoid_: Source skill
+
+**Overlay skill**:
+A source skill that reuses and selectively changes an upstream skill without copying it.
+_Avoid_: Fork, vendored skill
+
+**Upstream skill**:
+An externally maintained skill that an overlay skill requires and loads separately.
+_Avoid_: Bundled skill
