@@ -1,6 +1,6 @@
 interface:
   display_name: "Implement in Parallel"
-  short_description: "Implement ready child tickets safely in parallel"
-  default_prompt: "Use $implement-in-parallel with a parent GitHub issue to implement its ready child tickets."
+  short_description: "Create an isolated, verified Batch PR from child tickets"
+  default_prompt: "Use $implement-in-parallel with a Parent Ticket to implement its ready Child Tickets in an isolated Batch Run and leave a verified PR open."
 policy:
   allow_implicit_invocation: false
