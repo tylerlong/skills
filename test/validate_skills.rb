@@ -121,7 +121,7 @@ skill_dirs.each do |skill_dir|
   end
 
   default_prompt = interface["default_prompt"]
-  unless nonempty_string?(default_prompt) && default_prompt.include?("$#{directory_name}")
+  unless nonempty_string?(default_prompt) && default_prompt.match?(/\$#{Regexp.escape(directory_name)}(?![a-z0-9-])/)
     errors << "#{directory_name}: default_prompt must reference $#{directory_name}"
   end
 
