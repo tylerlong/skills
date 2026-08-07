@@ -1,0 +1,96 @@
+---
+name: plain
+description: Make Codex-authored chat prose concrete, claim-first, structured, and easy to follow without changing the task or a paired skill's workflow. Use only when the user explicitly invokes $plain, alone or with another skill, for final answers and intermediate commentary.
+---
+
+# Plain
+
+Improve only Codex-authored conversational prose in the current invocation:
+final answers and intermediate commentary. Classify text by its intended
+destination, not merely by whether it appears in the conversation.
+
+## Keep publishable artifacts outside the skill
+
+- Apply these rules to chat explanations, findings, recommendations, questions,
+  approval prompts, and progress reports.
+- Do not apply them to GitHub Issue bodies or comments, specifications,
+  documentation, or other publishable artifacts, including drafts previewed in
+  chat. Preserve the artifact's owning workflow and format.
+- Apply these rules to chat prose surrounding an excluded artifact.
+- Do not rewrite source code, identifiers, commands, configuration, quoted text,
+  logs, external source text, or machine-readable output.
+
+## Preserve the task and paired skills
+
+- Change presentation only. Preserve facts, meaning, qualifications, technical
+  precision, and required evidence.
+- Let a paired skill own investigation, verification, decisions, actions,
+  workflow, question count, stopping points, and required output structure.
+- When a paired skill requires exact headings, sections, or a machine-readable
+  format, preserve that structure and improve only the prose within it.
+
+## Write for three priorities
+
+1. **Visible main claim:** Make the strongest honest conclusion, open decision,
+   or current result easy to find.
+2. **Concrete content:** Name the actual subject and place precise evidence beside
+   project-specific factual claims.
+3. **Easy-to-follow reasoning:** Use familiar language and develop each point from
+   claim to explanation and support.
+
+## Make substantive chat claim-first
+
+- Leave a bare acknowledgement or short progress update unheaded while keeping
+  it concrete and readable.
+- When `$plain` controls a substantive response's structure, begin with one H3
+  heading that states its strongest honest claim, unresolved decision, or current
+  result.
+- When a response has multiple independently meaningful supporting claims, give
+  each its own H4 heading. Create sections from distinct ideas, not word count,
+  and do not add one redundant H4 beneath a single-point H3.
+- Prefer a meaningful claim, decision, or result over generic headings such as
+  `Overview`, `Details`, or `Update`.
+- Make the first sentence expand or sharpen the heading instead of repeating it.
+  Begin every later section with that section's main claim.
+
+## Explain in a natural order
+
+- Lead with the claim, then give its explanation, nearby evidence or an example
+  when needed, and a recommendation or consequence when useful.
+- Prefer familiar, concrete words. Define an unavoidable unfamiliar term briefly
+  on first use. Do not vary abstraction or verbosity according to inferred
+  expertise.
+- Treat brevity as an anti-waste guardrail, not the goal. Remove filler,
+  repetition, irrelevant tangents, unnecessary examples, and redundant
+  conclusions without removing useful context, reasoning, evidence,
+  qualifications, or transitions.
+- Do not impose a sentence, paragraph, or word count. Use introductions,
+  conclusions, and summaries only when they help navigate a longer response.
+
+## Ground project facts beside their claims
+
+- Name the actual subject instead of relying on vague references such as “this
+  suite,” “the layer,” or “it.”
+- Support each project-specific factual claim nearby, not in an unmapped link
+  list.
+- For code facts, link the exact relevant lines and link every location being
+  compared. Use the source-link form appropriate to the available local or
+  remote context.
+- For GitHub facts, link the exact Issue, comment, commit, check, or native
+  relationship. For document facts, link the relevant section.
+- For test, search, command, or runtime claims that source lines cannot prove,
+  give the relevant command and result.
+- Mark unsupported claims as unverified. Do not use broad or decorative links as
+  evidence.
+
+## Use examples only when they add context
+
+When an explanation would otherwise lack context, prefer:
+
+1. a real example from the current code, Issue, document, or situation;
+2. a short example labelled as hypothetical when no real example is available;
+3. an analogy only when direct explanation and the first two options remain
+   insufficient.
+
+Do not force an example when the explanation is already clear. Use examples to
+explain, never to prove a factual claim.

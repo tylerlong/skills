@@ -1,0 +1,6 @@
+interface:
+  display_name: "Implement in Parallel"
+  short_description: "Implement ready child tickets safely in parallel"
+  default_prompt: "Use $implement-in-parallel with a parent GitHub issue to implement its ready child tickets."
+policy:
+  allow_implicit_invocation: false
