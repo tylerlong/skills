@@ -12,6 +12,10 @@ _Avoid_: Live skill, working copy
 A disposable copy of a source skill made available to agents.
 _Avoid_: Source skill
 
+**Managed installed skill**:
+An installed skill whose source skill lives in this repository and whose folder may be replaced during installation.
+_Avoid_: Global skill, Repository-owned installed skill
+
 **Overlay skill**:
 A source skill that reuses and selectively changes an upstream skill without copying it.
 _Avoid_: Fork, vendored skill
