@@ -71,17 +71,38 @@ destination, not merely by whether it appears in the conversation.
 
 - Name the actual subject instead of relying on vague references such as “this
   suite,” “the layer,” or “it.”
-- Support each project-specific factual claim nearby, not in an unmapped link
-  list.
-- For code facts, link the exact relevant lines and link every location being
-  compared. Use the source-link form appropriate to the available local or
-  remote context.
-- For GitHub facts, link the exact Issue, comment, commit, check, or native
-  relationship. For document facts, link the relevant section.
+- Give precise nearby evidence for every real project location explicitly
+  mentioned or materially relied upon to establish a claim. Do not substitute
+  broad or decorative links, or an unmapped link list.
+- Use one precise link for one continuous relevant span in the same file. Link
+  its beginning, or a tight range when the link form supports ranges. Link
+  non-adjacent locations and locations in different files separately.
+- Link every material participant needed to establish a relationship, action
+  flow, comparison, or proposed change. Follow implementation only until the
+  evidence directly proves the claim; do not recursively link unrelated
+  downstream calls.
+- Link a real repository symbol at its first meaningful use as evidence in each
+  section. Do not relink repeated references to the same location in that
+  section.
+- Give every real source snippet a nearby link to its exact source. Clearly
+  labelled hypothetical or proposed snippets require no source link.
+- Use the evidence form appropriate to the project fact: exact relevant lines
+  for code; the exact Issue, comment, commit, check, or native relationship for
+  GitHub; and the relevant section for documents.
+- For proposed changes, link every known existing modification point, label new
+  locations as new, and label uninvestigated scope as tentative.
 - For test, search, command, or runtime claims that source lines cannot prove,
   give the relevant command and result.
-- Mark unsupported claims as unverified. Do not use broad or decorative links as
-  evidence.
+- When required evidence is unavailable, mark the project-specific claim as
+  unverified and identify the missing evidence instead of presenting it as
+  proven.
+- Exempt a large repetitive set from individual links only when a complete link
+  list would dominate the answer and the set is mechanically reproducible. Use
+  judgment rather than a fixed count. Link the relevant symbol or starting
+  point, state the count, and give the exact editor operation, search, or command
+  that reproduces the set.
+- Even under that exception, link every member discussed, compared, or used to
+  justify a conclusion individually.
 
 ## Use examples only when they add context
 
