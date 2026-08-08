@@ -207,9 +207,10 @@ While holding the turn:
    the turn immediately, and rerun every candidate gate outside the turn before
    trying again.
 3. Reconfirm that the PR head is the exact green candidate and merge the PR
-   through GitHub with a merge commit, without deleting its branch yet. Capture
-   the resulting merge commit and verify that fetched `origin/main` is that exact
-   commit and contains the Batch Branch head.
+   through GitHub with a merge commit, without deleting its branch yet. After
+   GitHub reports the merge, capture the resulting merge commit, fetch
+   `origin/main`, and verify that it is that exact commit and contains the Batch
+   Branch head.
 4. Keep the turn while monitoring CI for that exact remote `main` commit. A
    non-green result never closes tickets, reports completion, or releases
    responsibility as though delivery succeeded. Preserve the turn and all
