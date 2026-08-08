@@ -19,31 +19,25 @@ Keep upstream skills installed separately. Do not copy them into this repository
 ## Workflow
 
 1. Edit the source skill under `skills/`.
-2. Review it and run the relevant Skills CLI checks.
+2. Review it and run `make test`.
 3. Commit and push `main`.
-4. Update the installed skill.
+4. Run `make install`.
 
 Only install committed versions from `main`.
 
-## Install in Codex
+## Commands
 
 ```sh
-npx --yes skills@latest add tylerlong/skills \
-  --global \
-  --agent codex \
-  --skill implement-in-parallel \
-  --skill plain \
-  --skill to-gh-tickets \
-  --yes
+make validate
+make test-install
+make test
+make install
 ```
 
-## Update
+Bare `make` lists these commands without changing anything.
 
-```sh
-npx --yes skills@latest update \
-  implement-in-parallel \
-  plain \
-  to-gh-tickets \
-  --global \
-  --yes
-```
+`make install` validates a clean local `main`, updates every Installed Skill
+tracked by the Skills CLI, and then reconciles each Source Skill into its Managed
+Installed Skill folder. It removes legacy content only inside currently managed
+folders. This local reconciliation does not change unrelated Installed Skills or
+Skills CLI metadata.
