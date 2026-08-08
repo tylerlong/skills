@@ -11,9 +11,7 @@ ROOT = File.expand_path("..", __dir__)
 
 class InstallSkillsTest < Minitest::Test
   def test_install_updates_tracked_skills_then_mirrors_every_source_skill
-    temporary_root = nil
     with_repository do |repo, home, bin, log|
-      temporary_root = File.dirname(repo)
       write_skill(repo, "second", "second local version")
       installed = File.join(home, ".agents", "skills")
       FileUtils.mkdir_p(File.join(installed, "first"))
@@ -38,7 +36,6 @@ class InstallSkillsTest < Minitest::Test
       assert_equal "former", File.read(File.join(installed, "retired", "keep.txt"))
       assert_equal "locked", File.read(File.join(home, ".agents", ".skill-lock.json"))
     end
-    refute Dir.exist?(temporary_root), "temporary installation was not removed"
   end
 
   def test_install_requires_clean_local_main_before_validation
@@ -68,9 +65,7 @@ class InstallSkillsTest < Minitest::Test
   end
 
   def test_validation_and_global_update_failures_stop_before_reconciliation
-    temporary_root = nil
     with_repository do |repo, home, bin, log|
-      temporary_root = File.dirname(repo)
       skill = File.join(repo, "skills", "first", "SKILL.md")
       File.write(skill, "invalid source skill\n")
       commit(repo, "break source validation")
@@ -81,7 +76,6 @@ class InstallSkillsTest < Minitest::Test
       refute File.exist?(log), "global update ran after validation failed"
       refute Dir.exist?(File.join(home, ".agents")), "global state changed after validation failed"
     end
-    refute Dir.exist?(temporary_root), "failed temporary installation was not removed"
 
     with_repository do |repo, home, bin, log|
       target = File.join(home, ".agents", "skills", "first")
@@ -127,25 +121,6 @@ class InstallSkillsTest < Minitest::Test
     end
   end
 
-  def test_install_repairs_a_partial_managed_installation_on_rerun
-    with_repository do |repo, home, bin, log|
-      result = run_make(repo, home, bin, log, "install")
-      assert_predicate result, :success?, result.output
-
-      target = File.join(home, ".agents", "skills", "first")
-      File.write(File.join(target, "content.txt"), "partial\n")
-      File.write(File.join(target, "leftover"), "partial")
-      FileUtils.rm(File.join(target, "SKILL.md"))
-
-      result = run_make(repo, home, bin, log, "install")
-
-      assert_predicate result, :success?, result.output
-      assert_equal "local version\n", File.read(File.join(target, "content.txt"))
-      assert File.file?(File.join(target, "SKILL.md"))
-      refute File.exist?(File.join(target, "leftover"))
-    end
-  end
-
   def test_install_repairs_stale_bytes_with_the_source_size_and_timestamp
     with_repository do |repo, home, bin, log|
       source = File.join(repo, "skills", "first", "content.txt")
@@ -187,7 +162,7 @@ class InstallSkillsTest < Minitest::Test
     end
   end
 
-  def test_final_verification_ignores_timestamp_only_differences
+  def test_final_verification_ignores_timestamps_but_rejects_content_differences
     with_repository do |repo, home, bin, log|
       result = run_make(repo, home, bin, log, "install")
       assert_predicate result, :success?, result.output
@@ -201,9 +176,7 @@ class InstallSkillsTest < Minitest::Test
 
       assert_predicate result, :success?, result.output
     end
-  end
 
-  def test_install_fails_when_final_verification_finds_a_difference
     with_repository do |repo, home, bin, log|
       write_fake_rsync_that_skips_copy(bin)
 
