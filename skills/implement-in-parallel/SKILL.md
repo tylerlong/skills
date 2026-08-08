@@ -1,13 +1,13 @@
 ---
 name: implement-in-parallel
-description: Implement the ready direct children of one GitHub Parent Ticket in an isolated Batch Run. Use when the user invokes $implement-in-parallel to coordinate one or many dependency-aware workers, integrate one commit per Child Ticket, run exact combined review and verification, and leave a green Batch PR ready for delivery.
+description: Implement and deliver the ready direct children of one GitHub Parent Ticket in an isolated Batch Run. Use when the user invokes $implement-in-parallel to coordinate one or many dependency-aware workers, verify a Batch PR, serialize its merge through the Delivery Turn, prove exact main CI green, and update the tickets.
 ---
 
 # Implement in Parallel
 
 Reuse the installed `implement` workflow for Child Ticket work. Own only Parent
 Ticket discovery, dependency-aware orchestration, integration, combined
-validation, Batch PR creation, and PR CI here.
+validation, PR and CI delivery, and tracker updates here.
 
 ## 1. Load the implementation workflow
 
@@ -178,8 +178,69 @@ If the candidate changes for any reason, its earlier review, verification, and C
 evidence is stale. Preserve and report external or human-only failures rather than
 claiming success.
 
-After exact PR CI is green, leave the Batch PR open. Preserve the Batch Branch,
-Batch Worktree, frozen-ticket state, every other run-owned artifact, and all
-blocked or ambiguous artifacts. Do not merge the PR, push `main`, close tickets,
-modify local `main`, clean successful artifacts, or claim the Parent Ticket
-complete; Delivery Turn work owns those actions.
+After exact PR CI is green, preserve every run-owned artifact and continue to the
+Delivery Turn. Never push or merge through local `main`.
+
+## 8. Deliver through the Delivery Turn
+
+The Delivery Turn is the repository-wide atomic lock directory
+`<git-common-dir>/implement-in-parallel-delivery-turn.lock`. Its `owner` record
+contains the Parent Ticket number, Codex task identity, Batch Branch, and PR.
+Every Batch Run must use that exact path. Attempt to acquire it only after the
+exact PR head has green combined review, full verification, and PR CI evidence.
+
+Acquire the turn with one atomic create operation, such as creating a previously
+absent lock directory. Immediately write the owner record inside it. Treat an
+existing or ownerless lock as unavailable: preserve all state and report its
+identity without polling, deleting, replacing, or guessing ownership.
+
+While holding the turn:
+
+1. Refresh every frozen Child Ticket's requirements, state, readiness, native
+   parent, and blockers. Do not merge while a frozen child is runnable and
+   unfinished. Instead, verify lock ownership, release it immediately, implement
+   and integrate that child, update the existing Batch PR, and rerun combined
+   review, full verification, and exact PR CI before trying again.
+2. Fetch `origin/main`. If it advanced beyond the PR's reviewed base, merge the
+   fetched commit into the Batch Branch. Give any real conflict to a dedicated
+   worker in its own branch and worktree. Push the changed Batch Branch, release
+   the turn immediately, and rerun every candidate gate outside the turn before
+   trying again.
+3. Reconfirm that the PR head is the exact green candidate and merge the PR
+   through GitHub with a merge commit, without deleting its branch yet. Capture
+   the resulting merge commit and verify that fetched `origin/main` is that exact
+   commit and contains the Batch Branch head.
+4. Keep the turn while monitoring CI for that exact remote `main` commit. A
+   non-green result never closes tickets, reports completion, or releases
+   responsibility as though delivery succeeded. Preserve the turn and all
+   artifacts and report the exact failure for repair.
+5. On exact green `main` CI, verify ownership and release the turn immediately.
+
+If a merge request fails and GitHub proves no merge occurred, release the owned
+turn and preserve the Batch Run. If the merge result is uncertain, keep the turn
+until the remote PR and `main` state are reconciled.
+
+## 9. Update tickets, synchronize, and clean up
+
+Perform these steps only after releasing the Delivery Turn following exact green
+remote `main` CI:
+
+1. Comment on every delivered Child Ticket with the PR, merge commit, final
+   verification, and exact `main` CI evidence, then close it.
+2. Comment on each excluded, paused, or blocked child with its exact blocker and
+   next action. Leave it open and preserve its labels and native relationships.
+3. Refresh every current direct Child Ticket, including children added after the
+   frozen snapshot. Add one concise Parent Ticket summary and close the Parent
+   only when every current direct child is closed.
+4. Fetch `origin/main` and attempt to fast-forward the local `main` mirror only
+   when it has no local-only commits, is an ancestor of the fetched remote, and is
+   not checked out in a dirty, foreign, or otherwise unsafe worktree. Never
+   overwrite, reset, commit, merge, or push through an ahead, divergent,
+   checked-out, dirty, or ambiguous local `main`; preserve it and report the exact
+   action needed before claiming completion.
+5. Remove only successfully delivered branches and worktrees owned by this Batch
+   Run, including its remote Batch Branch after the merged PR no longer needs it.
+   Preserve every blocked, unfinished, ambiguous, and unrelated artifact.
+
+Report the Batch Run complete only after tracker updates, local `main`
+synchronization, and successful owned cleanup all finish.
