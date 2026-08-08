@@ -1,6 +1,6 @@
 interface:
   display_name: "Implement in Parallel"
-  short_description: "Deliver isolated Batch PRs through exact green main CI"
-  default_prompt: "Use $implement-in-parallel with a Parent Ticket to implement its ready Child Tickets in an isolated Batch Run and deliver them through exact green main CI."
+  short_description: "Resume and deliver isolated child-ticket batches safely"
+  default_prompt: "Use $implement-in-parallel with a Parent Ticket to start or resume its isolated Batch Run and deliver all currently progressable Child Tickets safely."
 policy:
   allow_implicit_invocation: false
