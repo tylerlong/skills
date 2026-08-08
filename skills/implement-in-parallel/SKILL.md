@@ -1,6 +1,6 @@
 ---
 name: implement-in-parallel
-description: Implement, resume, and deliver the ready direct children of one GitHub Parent Ticket in an isolated Batch Run. Use when the user invokes $implement-in-parallel to coordinate dependency-aware workers, continue safely from sparse checkpoints, deliver Batch PRs through the Delivery Turn, and prove exact main CI green.
+description: Implement, resume, and deliver the ready direct children of one GitHub Parent Ticket in an isolated Batch Run. Use when the user invokes $implement-in-parallel to coordinate dependency-aware workers, recover interrupted or failed deliveries, serialize Batch PR merges, and prove exact main CI green.
 ---
 
 # Implement in Parallel
@@ -33,14 +33,15 @@ Store at most one active checkpoint at
 outside every worktree and branch. Record only the repository and Parent Ticket,
 frozen child numbers, current Batch Base/Branch/Worktree, integrated and delivered
 child commits, exact candidate review and verification evidence, PR heads and CI,
-merge and exact `main` CI evidence, Delivery Turn ownership, external write/retry
-usage, owned artifacts, and the next action. Git commits are authoritative for
+merge and exact `main` CI evidence, Delivery Turn ownership and phase, external
+write/retry usage, owned artifacts, and the next action. Git commits are authoritative for
 code; GitHub Tickets are authoritative for requirements and public ticket state;
 PRs and CI are authoritative for their own delivery state; the checkpoint is only
 authoritative for orchestration progress.
 
 Write the checkpoint atomically after new-run initialization, each integrated
-Child Ticket commit, exact combined validation, exact PR CI, a PR merge, and
+Child Ticket commit, exact combined validation, exact PR CI, Delivery Turn
+acquisition or inheritance, a PR merge, every ownership-phase change, and
 immediately before every Resumable Stop. Do not record routine commands, worker
 starts, or polls. Remove the checkpoint only at Complete.
 
@@ -135,6 +136,14 @@ One ready child and many ready children always use this same Batch Run path.
 Use available worker-agent capacity while keeping the primary agent as coordinator
 and integrator. Schedule only by native blockers and capacity. Do not inspect
 likely file overlap or predict conflicts before dispatch.
+
+Before starting or resuming ordinary Child Ticket work, at every coordinator phase
+transition, and during every external-monitoring poll, inspect the Delivery Turn.
+Another run's normal delivery phase does not prevent concurrent work outside the
+turn. Repair suspension is cooperative: when a coordinator observes `repair`, it
+stops its own dispatch, integration, review, verification, push, PR, and monitoring
+activity, halts its workers at recoverable boundaries, checkpoints their artifacts,
+and makes a Resumable Stop.
 
 Immediately before dispatch, refresh the Parent Ticket's direct children and the
 selected child's requirements, comments, state, readiness, native parent, and
@@ -261,23 +270,46 @@ or merge through local `main`.
 
 ## 10. Deliver through the Delivery Turn
 
-The Delivery Turn is the repository-wide atomic lock directory
-`<git-common-dir>/implement-in-parallel-delivery-turn.lock`. Its `owner` record
-contains the Parent Ticket number, Codex task identity, Batch Branch, and PR.
-Every Batch Run must use that exact path. Attempt to acquire it only after the
-exact PR head has green combined review, full verification, and PR CI evidence.
+The Delivery Turn is the repository-wide atomic lock file
+`<git-common-dir>/implement-in-parallel-delivery-turn.lock`. Its complete owner
+record contains the Parent Ticket number, Codex task identity, Batch Branch, PR,
+and `delivery` or `repair` phase. Every Batch Run uses that exact path and serializes
+all reads and mutations through a stable `<lock>.guard` file held with a
+process-scoped OS advisory lock. The guard file carries no ownership, may persist,
+and releases its mutex automatically when a task ends. While holding the guard,
+prepare the owner record beside the lock and acquire with one exclusive atomic
+create that makes the complete record visible only when the lock was absent; never
+expose an ownerless or partial lock. Attempt acquisition only after the exact PR
+head has green combined review, full verification, and PR CI evidence, then
+checkpoint it and release the guard immediately. Keep every guard critical section
+short; never hold its advisory mutex while doing GitHub work, CI observation,
+review, verification, or implementation.
 
-On resume, when this Parent's checkpoint says it owns the turn and the `owner`
-record exactly matches the checkpoint, reconcile the PR and `origin/main` and
-continue the recorded post-merge obligation without acquiring a second lock.
-Never use a checkpoint to alter a mismatched or different-Parent lock.
+On resume, reconcile the lock, checkpoint, PR, and `origin/main` before acting.
+Inherit a same-Parent lock only when its recorded task is proven inactive and its
+branch, PR, exact head, phase, and merge state agree with authoritative evidence.
+Acquire the guard's exclusive advisory mutex, re-read and match the unchanged
+owner, atomically replace it with the current task identity, checkpoint the
+inheritance, then release the mutex. Activity age, a missing process guess, or
+Parent number alone is not proof. A completed checkpointed Resumable Stop or conclusive
+orchestration-provider evidence that the recorded task ended is proof. If the
+mutex, inactivity, or unchanged owner cannot be proven, treat the turn as busy.
 
-Acquire the turn with one atomic create operation, such as creating a previously
-absent lock directory. Immediately write the owner record inside it. Except for
-the exact same-Parent resume case above, treat an existing or ownerless lock as
-unavailable: checkpoint, preserve all state, report its identity, and make an
-immediate Resumable Stop without polling, deleting, replacing, or guessing
-ownership.
+The lock record is authoritative only for current ownership and phase. Change it
+atomically before checkpointing the corresponding phase. After an interrupted
+two-write transition, only the same proven owner may reconcile a lagging checkpoint
+from the lock plus Git, PR, and CI evidence; every other mismatch is ambiguous and
+must stop.
+
+Treat every active, ambiguous, unmatched, or different-Parent lock as unavailable:
+checkpoint, preserve all state, report its owner, and make an immediate Resumable
+Stop without polling, deleting, replacing, or guessing ownership. Explicitly
+abandon any recorded turn only when the user names that run and asks, after
+reconciling its owning checkpoint and PR and proving that neither its recorded head
+nor PR was merged into `origin/main`. Atomically record no ownership in that
+checkpoint immediately after releasing the exact unchanged lock; preserve tickets
+and artifacts unless their cleanup was separately authorized. If the merge
+occurred or remains uncertain, retain the turn for delivery or repair.
 
 While holding the turn:
 
@@ -286,11 +318,14 @@ While holding the turn:
    unfinished. Instead, verify lock ownership, release it immediately, implement
    and integrate that child, update the existing Batch PR, and rerun combined
    review, full verification, and exact PR CI before trying again.
-2. Fetch `origin/main`. If it advanced beyond the PR's reviewed base, merge the
-   fetched commit into the Batch Branch. Give any real conflict to a dedicated
-   worker in its own branch and worktree. Push the changed Batch Branch, release
-   the turn immediately, and rerun every candidate gate outside the turn before
-   trying again.
+2. Fetch `origin/main`. If it advanced beyond the PR's reviewed base, immediately
+   invalidate the checkpoint's combined review, full verification, and PR CI.
+   Merge the fetched commit into the Batch Branch. For a conflict, abort the merge,
+   release the turn, checkpoint the new base and no ownership, and give the exact
+   conflict to a dedicated worker in its own branch and worktree. After a clean
+   merge, release the turn and checkpoint the changed exact head and no ownership
+   before pushing. Resolve or push outside the turn, then rerun every candidate
+   gate against the changed exact commit before trying again.
 3. Reconfirm that the PR head is the exact green candidate and merge the PR
    through GitHub with a merge commit, without deleting its branch yet. After
    GitHub reports the merge, capture the resulting merge commit and immediately
@@ -298,9 +333,11 @@ While holding the turn:
    and contains the Batch Branch head.
 4. Keep the turn while monitoring CI for that exact remote `main` commit. A
    non-green result never closes tickets, reports completion, or releases
-   responsibility as though delivery succeeded. Checkpoint the result, preserve
-   the turn and all artifacts, and make a Resumable Stop if current repair rules
-   cannot make progress.
+   responsibility as though delivery succeeded. For an implementation failure,
+   atomically change the owner record to `repair`, checkpoint that phase, suspend
+   ordinary work repository-wide as described above, and follow the repair workflow
+   below. For any other failure, apply the bounded CI rules, then keep the turn and
+   make a Resumable Stop if no allowed action can progress.
 5. On exact green `main` CI, verify ownership and release the turn immediately,
    then checkpoint the green evidence.
 
@@ -309,13 +346,44 @@ turn, checkpoint, and make a Resumable Stop. If the merge result is uncertain,
 keep the turn until the remote PR and `main` state are reconciled, then checkpoint
 the proven state before continuing or stopping.
 
+### Restore broken `main`
+
+While the owner record is in `repair`, do no ordinary ticket, batch, tracker,
+local-`main`, or cleanup work. From the exact broken `origin/main` commit, create a
+dedicated task-owned repair branch and worktree. Give one repair worker only the
+failure evidence and restoration scope. Do not roll back automatically; require a
+focused repair commit and keep every unrelated feature out of the repair PR.
+
+Run combined review and canonical full verification on each exact repair candidate,
+then push normally, open a non-draft repair-only PR, and observe exact PR CI. Apply
+the same worker-attempt, synchronous retry, write-reconciliation, async observation,
+CI dispatch, and transient-rerun bounds used elsewhere. Return accepted findings
+or implementation failures to the same repair worker and invalidate evidence for
+the changed candidate. Across the entire broken-`main` incident, allow only that
+worker plus the one fresh-worker or different-approach attempt defined above;
+checkpoint the cumulative usage and never reset it for a later repair PR. If both
+attempts are exhausted, record the exact human decision needed. That or another
+external or human-only blocker requires a Resumable Stop while retaining the turn
+and all repair artifacts.
+
+Before merging a green repair PR, fetch `origin/main`. If it changed, reconcile
+whether it is already green; otherwise update the repair branch from the new exact
+broken commit and repeat every invalidated gate while keeping the turn. Merge the
+repair PR with a merge commit and capture its exact merge SHA. Immediately
+checkpoint it, fetch `origin/main`, and verify exact equality with that SHA and
+ancestry of the repair head before monitoring CI for the exact repaired commit. A
+further implementation failure starts another bounded repair-only cycle; ordinary
+work remains suspended. Only exact green CI for current remote `main` permits the
+owner to release the turn and continue with tracker updates, local `main`
+synchronization, and owned cleanup.
+
 ## 11. Update tickets, synchronize, and clean up
 
 Perform these steps only after releasing the Delivery Turn following exact green
 remote `main` CI:
 
-1. Comment on every delivered Child Ticket with the PR, merge commit, final
-   verification, and exact `main` CI evidence, then close it.
+1. Comment on every delivered Child Ticket with the Batch and any repair PRs,
+   merge commits, final verification, and exact `main` CI evidence, then close it.
 2. Comment on each excluded, paused, or blocked child with its exact blocker and
    next action. Leave it open and preserve its labels and native relationships.
 3. Refresh every current direct Child Ticket, including children added after the
