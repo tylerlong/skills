@@ -162,6 +162,31 @@ class InstallSkillsTest < Minitest::Test
     end
   end
 
+  def test_install_preserves_other_permissions_and_reconciles_executability
+    with_repository do |repo, home, bin, log|
+      source = File.join(repo, "skills", "first")
+      source_script = File.join(source, "run")
+      File.write(source_script, "#!/bin/sh\n")
+      FileUtils.chmod(0o755, source_script)
+      commit(repo, "add executable source file")
+
+      target = File.join(home, ".agents", "skills", "first")
+      FileUtils.mkdir_p(target)
+      target_content = File.join(target, "content.txt")
+      target_script = File.join(target, "run")
+      FileUtils.cp(File.join(source, "content.txt"), target_content)
+      FileUtils.cp(source_script, target_script)
+      FileUtils.chmod(0o600, [target_content, target_script])
+
+      result = run_make(repo, home, bin, log, "install")
+
+      assert_predicate result, :success?, result.output
+      assert_equal 0o600, File.stat(target_content).mode & 0o777
+      assert_equal 0o600, File.stat(target_script).mode & 0o666
+      assert_equal 0o111, File.stat(target_script).mode & 0o111
+    end
+  end
+
   def test_final_verification_ignores_timestamp_only_differences
     with_repository do |repo, home, bin, log|
       result = run_make(repo, home, bin, log, "install")
@@ -214,9 +239,10 @@ class InstallSkillsTest < Minitest::Test
       home = File.join(root, "home")
       bin = File.join(root, "bin")
       log = File.join(root, "npx.log")
-      FileUtils.mkdir_p([repo, home, bin, File.join(repo, "test")])
+      FileUtils.mkdir_p([repo, home, bin, File.join(repo, "test"), File.join(repo, "script")])
       FileUtils.cp(File.join(ROOT, "Makefile"), repo)
       FileUtils.cp(File.join(ROOT, "test", "validate_skills.rb"), File.join(repo, "test"))
+      FileUtils.cp(File.join(ROOT, "script", "executable_bits.rb"), File.join(repo, "script"))
       write_skill(repo, "first", "local version")
       write_fake_npx(bin)
       git(repo, "init", "--quiet", "--initial-branch=main")

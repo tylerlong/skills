@@ -34,11 +34,13 @@ install:
 			rm -f -- "$$target"; \
 		fi; \
 		mkdir -p "$$target"; \
-		rsync -rlpc --delete "$$source/" "$$target/"; \
-		raw_difference=$$(rsync -rlpcn --delete --itemize-changes "$$source/" "$$target/"); \
+		rsync -rlc --delete "$$source/" "$$target/"; \
+		raw_difference=$$(rsync -rlcn --delete --itemize-changes "$$source/" "$$target/"); \
 		difference=$$(printf '%s\n' "$$raw_difference" | sed '/^\.f\.\.T\.\.\.\. /d'); \
 		if [ -n "$$difference" ]; then \
 			printf 'Managed Installed Skill %s still differs:\n%s\n' "$${source##*/}" "$$difference" >&2; \
 			exit 1; \
 		fi; \
+		ruby script/executable_bits.rb sync "$$source" "$$target"; \
+		ruby script/executable_bits.rb verify "$$source" "$$target"; \
 	done
