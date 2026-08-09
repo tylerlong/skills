@@ -1,0 +1,3 @@
+# Characterize source skills before simplifying them
+
+Before simplifying a source skill, define checked-in skill behavior tests that invoke the exact baseline skill through observable agent-output and external-state seams. Every baseline test must pass before a candidate skill is written, and the exact candidate must pass the same suite; specifications live outside source-skill folders so they add no normal invocation cost, while concise execution evidence belongs in the delivery ticket or pull request instead of a versioned results file. This accepts bounded AI nondeterminism and execution cost to preserve behavior without coupling tests to instruction wording.
