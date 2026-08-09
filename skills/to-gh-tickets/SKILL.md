@@ -20,8 +20,9 @@ precedence. If a future instruction creates another conflict that the overlay
 does not resolve, stop immediately after loading upstream and report it instead
 of guessing.
 
-Support GitHub only. For local files or another tracker, tell the user to invoke
-`to-tickets` instead.
+Support GitHub only. Even when requested, never draft or publish tickets as local
+files or to another tracker; stop and tell the user to invoke `to-tickets`
+instead.
 
 ## Resolve and approve the parent
 
