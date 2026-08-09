@@ -1,0 +1,10 @@
+# Human-gated change workflow
+
+Changes to this repository use four separate stages. A human starts every stage explicitly. An agent may recommend the next invocation, but must stop at its current boundary and must never invoke, combine, or perform a later stage automatically.
+
+1. **Design with `$grill-with-docs` and `$plain`.** The human invokes both in the design chat. `$grill-with-docs` owns the grilling session and domain documentation; `$plain` changes only the presentation of chat prose. Continue until the human confirms that the grilling is fully complete. Do not publish a specification, create tickets, or start implementation during this stage.
+2. **Publish one Parent specification with `$to-spec`.** After grilling is complete, the human explicitly invokes `$to-spec`. It synthesizes the settled conversation into one complete GitHub Parent issue and applies `ready-for-agent`. It then stops. It must not create Child Tickets, native parent or blocker relationships, or implementation artifacts.
+3. **Publish Child Tickets with `$to-gh-tickets`.** The human explicitly invokes `$to-gh-tickets` with the Parent issue created by `$to-spec`. It drafts a tracer-bullet breakdown, obtains human approval, then publishes the approved Child Tickets and verifies their native parent, blocker, and readiness state. It then stops. It must not begin implementation or modify the Parent beyond the native sub-issue additions permitted by that skill.
+4. **Implement from a new chat with `$implement-in-parallel <parent-ticket>`.** The human starts a new chat and explicitly invokes `$implement-in-parallel` with the GitHub Parent issue created by `$to-spec`, not with a Child Ticket. Only this stage may start the Batch Run that reads the Parent's direct native children and coordinates implementation, integration, validation, and delivery.
+
+Never collapse stages because the next action appears obvious, the breakdown was discussed earlier, or the next skill's inputs are already available. Completion of one stage grants no authority to start the next.
