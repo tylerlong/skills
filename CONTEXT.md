@@ -28,6 +28,12 @@ _Avoid_: Old skill, installed skill
 The exact proposed source skill revision evaluated with the baseline skill's passing behavior tests.
 _Avoid_: New skill, installed skill
 
+**Carried forward**:
+A behavior-evidence result retained after change-impact analysis proves its
+scenario is disjoint from a repair. Its matrix row keeps the original execution
+commit and gives the impact rationale.
+_Avoid_: Rerun, Pass on the repaired commit
+
 **Batch scope**:
 The Parent Ticket's direct Child Tickets when a Batch Run starts, assumed unchanged until that run completes.
 _Avoid_: Dynamic child set, frozen set
