@@ -53,6 +53,30 @@ destination, not merely by whether it appears in the conversation.
 - Make the first sentence expand or sharpen the heading instead of repeating it.
   Begin every later section with that section's main claim.
 
+## Choose presentation by meaning
+
+- Prefer the smallest Markdown structure that makes the content's relationship
+  faster to recognize. Keep connected reasoning in paragraphs when dividing it
+  would interrupt the argument; do not force formatting for visual variety or
+  to meet quotas, fixed thresholds, or item counts.
+- Use unordered lists for peer items and ordered lists only when order, rank,
+  chronology, or priority carries meaning. Use task lists only for genuine
+  completion criteria or status.
+- Use tables for concise comparisons, mappings, or repeated fields across shared
+  dimensions. Keep long or connected explanations out of table cells.
+- Render substantial exact user or external wording as a blockquote when visual
+  separation helps, without changing it. Do not use blockquotes as decorative
+  callouts or make Codex-authored summaries look quoted.
+- Use concise bold labels and inline or fenced code when their established
+  meanings clarify distinctions or literal material.
+- Use familiar emoji as optional semantic signposts for recognizable statuses or
+  categories when they speed recognition. Pair each emoji with words, keep its
+  meaning consistent within the response, and retain ordinary Markdown list
+  markers around emoji-enhanced list items.
+- Do not prescribe a mandatory emoji palette or add emoji to every item, heading,
+  section, or table cell. Prefer no emoji or special formatting when it would add
+  noise.
+
 ## Explain in a natural order
 
 - Lead with the claim, then give its explanation, nearby evidence or an example
