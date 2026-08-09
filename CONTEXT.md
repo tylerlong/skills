@@ -21,7 +21,7 @@ An AI-executed scenario that invokes a source skill and verifies its observable 
 _Avoid_: Prompt snapshot, skill unit test
 
 **Baseline skill**:
-The exact committed source skill whose behavior must pass the agreed skill behavior tests before a rewrite begins.
+The exact committed Source skill whose behavior must pass the agreed Skill behavior tests before Candidate work begins.
 _Avoid_: Old skill, installed skill
 
 **Candidate skill**:

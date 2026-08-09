@@ -15,7 +15,7 @@ in the catalog.
 
 ## Execution protocol
 
-Choose one coordinating Baseline commit for the whole simplification effort and
+Choose one coordinating Baseline commit for the whole Source skill revision and
 record its full SHA. In separate disposable repositories, copy each exact
 Baseline skill or Candidate skill to `.agents/skills/<name>`. Snapshot each
 required Upstream skill once, record its checksum, and stage byte-identical
@@ -30,10 +30,10 @@ name and identify the staged repository path in the prompt so the selected copy
 is observable.
 
 Run every required scenario once for initial Baseline qualification before
-writing Candidate text, then once for initial Candidate qualification. A clear
-failure starts diagnosis: repair the catalog, exact fixture, evaluator, Baseline
-skill, or Candidate skill at its owning boundary without weakening the Skill
-contract.
+creating the Candidate skill, then once for initial Candidate qualification. A
+clear failure starts diagnosis: repair the catalog, exact fixture, evaluator,
+Baseline skill, or Candidate skill at its owning boundary without weakening the
+Skill contract.
 
 Before a repair rerun, inspect the exact change and use the catalog's
 rule-to-scenario trace to find every scenario whose required or forbidden
@@ -42,7 +42,8 @@ model or settings, Upstream skills, earlier interaction turns, and dependent
 downstream flows. Invalidate and rerun that affected set. Evidence for a
 demonstrably disjoint scenario may be **Carried forward**, but its matrix row
 must retain the original execution commit and state the impact rationale; never
-claim that it ran against the repaired commit.
+claim that it ran against the repaired commit. Do not automatically restart the
+full required suite merely because the repaired commit changed.
 
 If impact is uncertain, cross-cutting, or cannot be bounded safely, invalidate
 the broader family or full required suite. Global evaluator, model, settings,
@@ -78,7 +79,8 @@ Use a unique prefix for every resource in
 evaluator cleanup. Cleanup may close evaluator-owned issues and remove disposable
 repositories; it is not behavior of the skill under test.
 
-Budget only the fresh tasks and follow-up turns named by each scenario. Against
-the exact final commit, always rerun deterministic repository tests, any
-repository-defined full verification, and required final reviews. Do not add a
-behavior-test Make target or generic runner.
+Budget only the fresh tasks and follow-up turns named by each scenario. The
+affected-set rule governs iterative Skill behavior tests only. Against the exact
+final commit, always rerun deterministic repository tests, any repository-defined
+full verification, and required final reviews. Do not add a behavior-test Make
+target or generic runner.
