@@ -8,6 +8,34 @@ This repository is the canonical home for skills authored and maintained by Tyle
 The canonical, version-controlled definition of an authored skill.
 _Avoid_: Live skill, working copy
 
+**Skill contract**:
+The required agent behavior and boundaries of a source skill, independent of its wording.
+_Avoid_: Feature list, current prose
+
+**Instruction footprint**:
+The text and resulting token cost of a source skill's metadata and instructions.
+_Avoid_: Big skill, skill size
+
+**Skill behavior test**:
+An AI-executed scenario that invokes a source skill and verifies its observable agent output or external state without depending on instruction wording.
+_Avoid_: Prompt snapshot, skill unit test
+
+**Baseline skill**:
+The exact committed source skill whose behavior must pass the agreed skill behavior tests before a rewrite begins.
+_Avoid_: Old skill, installed skill
+
+**Candidate skill**:
+The exact proposed source skill revision evaluated with the baseline skill's passing behavior tests.
+_Avoid_: New skill, installed skill
+
+**Batch scope**:
+The Parent Ticket's direct Child Tickets when a Batch Run starts, assumed unchanged until that run completes.
+_Avoid_: Dynamic child set, frozen set
+
+**Worker isolation**:
+Child Ticket workers do not communicate, monitor, synchronize, or know about sibling workers; the coordinator handles ticket dependencies through their starting commits.
+_Avoid_: Child independence, worker coordination
+
 **Installed skill**:
 A disposable copy of a source skill made available to agents.
 _Avoid_: Source skill
