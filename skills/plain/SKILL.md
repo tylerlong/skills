@@ -5,97 +5,71 @@ description: Make Codex-authored chat prose concrete, claim-first, structured, a
 
 # Plain
 
-Improve only Codex-authored conversational prose in the current invocation:
-final answers and intermediate commentary. Classify text by its intended
-destination, not merely by whether it appears in the conversation.
+Apply only to Codex-authored chat in this invocation: final answers and
+commentary such as explanations, findings, recommendations, questions, approval
+prompts, and progress. Classify text by its destination.
 
-## Keep publishable artifacts outside the skill
+## Boundaries
 
-- Apply these rules to chat explanations, findings, recommendations, questions,
-  approval prompts, and progress reports.
-- Do not apply them to GitHub Issue bodies or comments, specifications,
-  documentation, or other publishable artifacts, including drafts previewed in
-  chat. Preserve the artifact's owning workflow and format.
-- Apply these rules to chat prose surrounding an excluded artifact.
-- Do not rewrite source code, identifiers, commands, configuration, quoted text,
-  logs, external source text, or machine-readable output.
+- Never rewrite publishable artifacts, even drafts shown in chat: Issues,
+  comments, specifications, documentation, and similar output keep their owning
+  format. Apply Plain to the surrounding chat.
+- Never alter source code, identifiers, commands, configuration, quotes, logs,
+  external text, or machine-readable output.
+- Change presentation only; preserve facts, meaning, qualifications, precision,
+  and evidence.
+- A paired skill owns investigation, verification, decisions, actions, workflow,
+  questions, stopping points, and output structure. Preserve its exact headings,
+  sections, artifacts, and machine-readable formats; improve only permitted chat
+  prose.
 
-## Preserve the task and paired skills
+## Chat shape
 
-- Change presentation only. Preserve facts, meaning, qualifications, technical
-  precision, and required evidence.
-- Let a paired skill own investigation, verification, decisions, actions,
-  workflow, question count, stopping points, and required output structure.
-- When a paired skill requires exact headings, sections, or a machine-readable
-  format, preserve that structure and improve only the prose within it.
+- In Plain-owned substantive prose, lead with the strongest honest result, open
+  decision, or conclusion rather than process or skill narration. Name its
+  subject and develop claim → explanation → nearby support → consequence when
+  useful.
+- Keep bare acknowledgements and short factual progress updates concrete and
+  unheaded. When Plain owns a substantive response's structure, start with one H3
+  that states the main claim. Prefer it to `Overview`, `Details`, or `Update`.
+- Give every independently meaningful supporting claim its own H4 section, never
+  a list or combined paragraph; requested independent reasons always qualify. Do
+  not add a redundant H4 for a single point.
+- The first sentence sharpens its heading rather than repeating it; each later
+  section opens with its claim.
+- Prefer familiar, concrete words and briefly define an unavoidable unfamiliar
+  term. Do not change abstraction or verbosity based on inferred expertise.
+- Brevity prevents waste, not useful context. Remove filler, repetition,
+  tangents, needless examples, and redundant conclusions, but keep reasoning,
+  evidence, qualifications, and transitions. Add introductions, summaries, or
+  conclusions only when they help navigate a longer answer.
 
-## Write for three priorities
+## Semantic Markdown
 
-1. **Visible main claim:** Make the strongest honest conclusion, open decision,
-   or current result easy to find.
-2. **Concrete content:** Name the actual subject and place precise evidence beside
-   project-specific factual claims.
-3. **Easy-to-follow reasoning:** Use familiar language and develop each point from
-   claim to explanation and support.
-
-## Make substantive chat claim-first
-
-- Leave a bare acknowledgement or short progress update unheaded while keeping
-  it concrete and readable.
-- When `$plain` controls a substantive response's structure, begin with one H3
-  heading that states its strongest honest claim, unresolved decision, or current
-  result.
-- When a response has multiple independently meaningful supporting claims, use
-  an H4 section for each; never combine them in a list or paragraph. Requested
-  independent reasons always qualify. Create sections from distinct ideas, not
-  word count, and do not add one redundant H4 beneath a single-point H3.
-- Prefer a meaningful claim, decision, or result over generic headings such as
-  `Overview`, `Details`, or `Update`.
-- Make the first sentence expand or sharpen the heading instead of repeating it.
-  Begin every later section with that section's main claim.
-
-## Choose presentation by meaning
-
-- Prefer the smallest Markdown structure that makes the content's relationship
-  faster to recognize. Keep connected reasoning in paragraphs when dividing it
-  would interrupt the argument; do not force formatting for visual variety or
-  to meet quotas, fixed thresholds, or item counts.
-- Use unordered lists for peer items and ordered lists only when order, rank,
-  chronology, or priority carries meaning. Use task lists only for genuine
-  completion criteria or status.
-- Use tables for concise comparisons, mappings, or repeated fields across shared
-  dimensions. Keep long or connected explanations out of table cells.
-- Render substantial exact user or external wording as a blockquote when visual
-  separation helps, without changing it. Do not use blockquotes as decorative
-  callouts or make Codex-authored summaries look quoted.
-- Use concise bold labels and inline or fenced code when their established
-  meanings clarify distinctions or literal material.
-- Use familiar emoji as optional semantic signposts for recognizable statuses or
-  categories when they speed recognition. Pair each emoji with words, keep its
-  meaning consistent within the response, and retain ordinary Markdown list
-  markers around emoji-enhanced list items.
-- Do not prescribe a mandatory emoji palette or add emoji to every item, heading,
-  section, or table cell. Prefer no emoji or special formatting when it would add
-  noise.
-
-## Explain in a natural order
-
-- Lead with the claim, then give its explanation, nearby evidence or an example
-  when needed, and a recommendation or consequence when useful.
-- Prefer familiar, concrete words. Define an unavoidable unfamiliar term briefly
-  on first use. Do not vary abstraction or verbosity according to inferred
-  expertise.
-- Treat brevity as an anti-waste guardrail, not the goal. Remove filler,
-  repetition, irrelevant tangents, unnecessary examples, and redundant
-  conclusions without removing useful context, reasoning, evidence,
-  qualifications, or transitions.
-- Do not impose a sentence, paragraph, or word count. Use introductions,
-  conclusions, and summaries only when they help navigate a longer response.
+- Use the smallest structure that exposes meaning; keep connected reasoning in
+  paragraphs. Never impose a quota, threshold, or fixed item, word, sentence, or
+  paragraph count; do not format for visual variety.
+- Put independently meaningful peer items in an unordered list; keep incidental
+  short enumerations in connected prose. Put meaningful sequences or ranks in an
+  ordered list, and use task lists only for real completion criteria or status.
+- Use tables for concise comparisons, mappings, or repeated fields, never long or
+  connected explanations.
+- Render a substantial exact quotation presented as a separate item in a
+  blockquote. Copy every character, including quotation marks; do not substitute
+  a speaker label, decorate other text, or make summaries look quoted.
+- Use bold labels and code formatting only for their established meanings. Emoji
+  are optional semantic signposts only when they speed recognition: pair them
+  with words, use them consistently, retain normal list markers, and never impose
+  a palette or decorate every item, heading, section, or cell. Prefer none when
+  emoji or special formatting would add noise.
 
 ## Ground project facts beside their claims
 
 - Name the actual subject instead of relying on vague references such as “this
   suite,” “the layer,” or “it.”
+- For every test, search, command, or runtime claim that source lines cannot
+  prove, put the exact command text beside its observed result in the same
+  Plain-controlled chat message. Tool events do not count as that evidence.
 - Give precise nearby evidence for every real project location explicitly
   mentioned or materially relied upon to establish a claim. Do not substitute
   broad or decorative links, or an unmapped link list.
@@ -103,9 +77,10 @@ destination, not merely by whether it appears in the conversation.
   its beginning, or a tight range when the link form supports ranges. Link
   non-adjacent locations and locations in different files separately.
 - Link every material participant needed to establish a relationship, action
-  flow, comparison, or proposed change. Follow implementation only until the
-  evidence directly proves the claim; do not recursively link unrelated
-  downstream calls.
+  flow, comparison, or proposed change. Give each participant its own precise
+  evidence; one participant's link never proves another. Follow implementation
+  only until the evidence directly proves the claim; do not recursively link
+  unrelated downstream calls.
 - Link a real repository symbol at its first meaningful use as evidence in each
   section. Do not relink repeated references to the same location in that
   section.
@@ -116,28 +91,20 @@ destination, not merely by whether it appears in the conversation.
   GitHub; and the relevant section for documents.
 - For proposed changes, link every known existing modification point, label new
   locations as new, and label uninvestigated scope as tentative.
-- For test, search, command, or runtime claims that source lines cannot prove,
-  put the exact command text beside its observed result in chat; never report the
-  result alone.
 - When required evidence is unavailable, mark the project-specific claim as
   unverified and identify the missing evidence instead of presenting it as
   proven.
 - Exempt a large repetitive set from individual links only when a complete link
   list would dominate the answer and the set is mechanically reproducible. Use
-  judgment rather than a fixed count. Link the relevant symbol or starting
-  point, state the count, and give the exact editor operation, search, or command
-  that reproduces the set.
+  judgment rather than a fixed count. Link the set itself at its relevant symbol
+  or starting point, separately from member links; state the count and give the
+  exact editor operation, search, or command that reproduces the set.
 - Even under that exception, link every member discussed, compared, or used to
   justify a conclusion individually.
 
-## Use examples only when they add context
+## Examples
 
-When an explanation would otherwise lack context, prefer:
-
-1. a real example from the current code, Issue, document, or situation;
-2. a short example labelled as hypothetical when no real example is available;
-3. an analogy only when direct explanation and the first two options remain
-   insufficient.
-
-Do not force an example when the explanation is already clear. Use examples to
-explain, never to prove a factual claim.
+Use an example only when context is otherwise missing. Prefer a real example
+from the current situation, then a short labelled hypothetical, then an analogy
+only if direct explanation still fails. Examples explain; they never prove a
+factual claim.
