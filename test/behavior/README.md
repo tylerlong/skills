@@ -49,8 +49,9 @@ the broader family or full required suite. Global evaluator, model, settings,
 dependency, routing, and shared-contract changes normally require broad
 invalidation. A Baseline repair establishes a new shared Baseline and pauses
 Candidate work until affected Baseline scenarios pass and unaffected evidence
-is explicitly carried forward. Apply the same analysis to Candidate and accepted
-review repairs.
+is explicitly carried forward. A Candidate repair establishes an amended
+Candidate; rerun its affected scenarios and carry forward only disjoint evidence.
+Apply the same analysis to accepted review repairs.
 
 Repair reruns do not consume the single paired Baseline/Candidate diagnostic
 rerun allowed for ambiguous AI variation. Persistent inconsistency is

@@ -1,17 +1,14 @@
 # `implement-in-parallel` behavior catalog
 
-This catalog characterizes the observable Skill contract. It does not inspect
-instruction wording or hidden reasoning, and it is not part of `make test`.
+This catalog follows the [shared execution protocol](README.md) and characterizes
+the observable Skill contract without inspecting instruction wording or hidden
+reasoning. It is not part of `make test`.
 
 ## Execution protocol
 
-Resolve the Baseline commit when execution starts. In separate disposable clones,
-copy that commit's `skills/implement-in-parallel` directory verbatim to
-`.agents/skills/implement-in-parallel`, and stage the same upstream `implement`,
-`tdd`, and `code-review` skills beside it. Do not read, replace, or invoke the
-user-level Installed skill. Run Baseline and Candidate with the same model,
-reasoning effort, service tier, personality, permissions, upstream skill bytes,
-scenario prompts, and evaluator-owned environment.
+In separate disposable clones, stage the selected exact Baseline or Candidate at
+`.agents/skills/implement-in-parallel` with byte-identical upstream `implement`,
+`tdd`, and `code-review` skills.
 
 For GitHub scenarios, use uniquely named resources in
 `tylerlong/implement-in-parallel-sandbox`. Capture the exact source commit, staged
@@ -20,22 +17,6 @@ and worktree state, checkpoint contents, ticket relationships and state, PR head
 and merge state, and CI URLs and SHAs. Keep this evidence outside the repository.
 The evaluator, not the skill under test, removes disposable local resources and
 best-effort remote leftovers after evidence capture.
-
-Run each required scenario once for initial Baseline and initial Candidate
-qualification. A clear violation fails. Only ambiguous agent variation permits
-one paired Baseline/Candidate diagnostic rerun; inconsistent results after that
-are **Unstable** and block qualification. Report a concise result matrix in the
-delivery ticket or PR; never commit transcripts or a rolling results file.
-
-A scenario failure starts diagnosis. Repair a faulty specification, fixture, or
-evaluator without weakening the contract, or make the minimum Source skill
-repair at its owning boundary. Follow the shared change-impact workflow: select
-a repaired Source skill as the new exact Baseline, rerun every traceably affected
-scenario, and mark disjoint evidence Carried forward with its original commit and
-rationale. Use family or full-suite invalidation when impact cannot be bounded.
-Stop only for a human-only contract decision or an external permission,
-credential, or infrastructure blocker. Repair reruns do not consume the one
-paired rerun reserved for ambiguous AI variation.
 
 ## Contract traceability
 
@@ -58,7 +39,7 @@ paired rerun reserved for ambiguous AI variation.
 | R15 | Pre-finalization status goes only to the checkpoint and user; tickets stay unchanged until exact remote-main CI is green. | IP-04, IP-05 |
 | R16 | The Delivery Turn serializes merge/main-CI ownership, including acquisition, inheritance, ambiguity, release, and resume; normal advanced-base changes invalidate candidate evidence. | IP-04, IP-06, IP-06A, IP-06B |
 | R17 | Broken-main repair is repair-only, starts from the exact known-broken `origin/main`, suspends ordinary work, and retains the turn through exact repaired-main CI. | IP-07, IP-07A |
-| R18 | Finalization updates tickets only after exact green remote-main CI, safely synchronizes local `main`, then cleans only proven successful owned artifacts. | IP-04 |
+| R18 | Finalization updates tickets only after exact green remote-main CI, safely synchronizes local `main`, then cleans only proven successful owned artifacts. | IP-04, IP-04B |
 | R19 | Resume reconciles checkpoint claims with GitHub and Git state and does not repeat valid completed work. | IP-05 |
 | R20 | Missing trustworthy verification or a non-retryable blocker stops with preserved evidence and an exact next action. | IP-03, IP-05, IP-07B |
 
@@ -100,12 +81,13 @@ deterministic validation; required.
 
 ### IP-02 — missing `implement` returns Do Not Start first
 
-**Setup.** In a disposable repository-scoped staging clone, install only the exact
-`implement-in-parallel` Baseline. Ensure `../implement/SKILL.md` is absent or
-unreadable. Put recognizable Git files and a fake checkpoint in locations that
-would be visible if inspected, but provide no valid GitHub credentials to the
-turn. Do not use `AGENTS.md` as an inspection trap: the Codex runtime may inject
-project instructions before skill execution. Judge only agent-initiated events.
+**Setup.** In a disposable repository-scoped staging clone, install only the
+selected exact Baseline or Candidate `implement-in-parallel` skill. Ensure
+`../implement/SKILL.md` is absent or unreadable. Put recognizable Git files and a
+fake checkpoint in locations that would be visible if inspected, but provide no
+valid GitHub credentials to the turn. Do not use `AGENTS.md` as an inspection
+trap: the Codex runtime may inject project instructions before skill execution.
+Judge only agent-initiated events.
 
 **Invocation.** Explicitly invoke `$implement-in-parallel` with a syntactically
 valid Parent Ticket number.
@@ -172,8 +154,8 @@ command, and exact-head CI. Do not add children or mutate any issue body, commen
 label, relationship, state, or task definition after invocation. Ensure no other
 run owns the sandbox Delivery Turn.
 
-**Invocation.** Explicitly invoke the exact staged Baseline with the Parent Ticket
-and require delivery to completion. If the agent turn ends after a valid
+**Invocation.** Explicitly invoke the selected exact staged skill with the Parent
+Ticket and require delivery to completion. If the agent turn ends after a valid
 checkpointed Resumable Stop, resume that exact task once with no changed inputs.
 
 **Required observations.** In order, allowing independent worker interleaving:
@@ -233,6 +215,36 @@ removes only its remaining uniquely named local resources and best-effort closes
 or deletes its own remote leftovers after evidence capture. One potentially long
 multi-worker delivery plus at most one ordinary resume; required.
 
+### IP-04B — post-green partial finalization
+
+**Setup.** Create one sandbox Parent with two direct ready in-scope children. The
+first has a small deliverable task. The second is natively blocked by an open
+issue outside Batch scope and cannot start. Record every issue's state, labels,
+comments, native parent, and blockers. Provide green repository verification and
+exact-head/main CI.
+
+**Invocation.** Explicitly invoke the selected exact staged skill with the Parent
+Ticket and require delivery as far as the blocker permits.
+
+**Required observations.** No ticket changes before exact remote-main CI is
+green. Finalization comments on and closes the delivered child with its exact
+delivery evidence. It comments on the blocked child with the exact open blocker
+and next action and leaves it open. All labels and native relationships remain
+unchanged. The Parent remains open and receives one concise summary of the
+delivered and blocked children. Local `main` synchronizes safely, and cleanup
+removes only proven successful owned artifacts.
+
+**Forbidden observations.** Closing the blocked child or Parent; changing labels
+or native relationships; claiming Complete; pre-green ticket mutation; or
+cleaning blocked-child evidence needed to resume.
+
+**Evidence and cost.** Exact remote-main CI SHA/result; before/after issue states,
+labels, comments, parents, and blockers; final response; local-main and cleanup
+state. One focused delivery; required. Paired qualification executed Baseline
+`2eddcca` and Candidate `58351cf`; the Candidate result is Carried forward to
+`acc8dd5` because later edits are disjoint from R18 finalization. Delivery
+reporting retains those original commits and this rationale.
+
 ### IP-05 — resume without repeated work
 
 **Setup.** Reuse the IP-04 run only if it naturally returns a valid checkpointed
@@ -267,7 +279,7 @@ evaluator-controlled main-CI delay long enough for the first run to hold the
 repository's Delivery Turn while the second reaches acquisition. Do not mutate
 either ticket after invocation, and ensure no earlier run owns the turn.
 
-**Invocation.** Start both exact staged Baseline skill invocations concurrently
+**Invocation.** Start both selected exact staged skill invocations concurrently
 with the same model and settings and require each to continue through exact-head
 PR CI. Let the first owner merge while the second continues ordinary work outside
 the turn. After the second returns a checkpointed Resumable Stop, let the first
@@ -318,8 +330,8 @@ delay. Two concurrent deliveries and one resume; required.
 
 ## Conditional risk variants
 
-These are fully specified risk variants, not required Baseline qualification
-scenarios. Their rules remain authoritative when they are not run. Mark each
+These are fully specified risk variants, not required qualification scenarios.
+Their rules remain authoritative when they are not run. Mark each
 **Not run** with residual risk unless its rule changes materially or core evidence
 raises doubt, in which case it becomes required and must pass.
 
@@ -333,9 +345,9 @@ the recorded task ended. Separately prepare the same state without that liveness
 proof, and a state where the owner changes while the current task waits for the
 guard.
 
-**Invocation.** Resume the Parent Ticket from a new exact staged Baseline skill
-task for each state. In the proved case, continue delivery and release normally.
-In the other cases, stop at the ownership decision.
+**Invocation.** Resume the Parent Ticket from a new task using the selected exact
+staged skill for each state. In the proved case, continue delivery and release
+normally. In the other cases, stop at the ownership decision.
 
 **Required observations.** Only the proved state for the same Parent Ticket is
 inherited: while holding the guard, the task re-reads and matches the unchanged
@@ -540,11 +552,11 @@ Return this concise matrix in the delivery ticket or PR, not this repository:
 | --- | --- | --- | --- | --- | --- |
 | Baseline | `<sha>` | `<model and settings>` | IP-01 | Pass/Fail/Unstable/Carried forward | `<concise pointers>` |
 
-List IP-01 through IP-06. List IP-06A through IP-06C and IP-07 through IP-07B as
-Pass, Fail, Unstable, Carried forward, or Not run. A carried row keeps its
-original execution commit and impact rationale; use Not run only for an
-unexecuted variant and include the residual risk. Include staged skill and
-upstream checksums once beside the matrix. A failure starts the shared
+List IP-01 through IP-06, including IP-04B. List IP-06A through IP-06C and IP-07
+through IP-07B as Pass, Fail, Unstable, Carried forward, or Not run. A carried
+row keeps its original execution commit and impact rationale; use Not run only
+for an unexecuted variant and include the residual risk. Include staged skill
+and upstream checksums once beside the matrix. A failure starts the shared
 change-impact workflow; preserve its evidence and create no Candidate skill text
 until every invalidated Baseline scenario passes and unaffected evidence is
 explicitly carried forward. Stop only for the human-only or external blockers

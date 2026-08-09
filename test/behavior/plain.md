@@ -67,7 +67,8 @@ is an evaluator failure.
 
 **Covers:** C01, C02, C09, C12, C13, C15.
 
-**Setup:** Stage only the Baseline `plain` skill. Start one fresh task.
+**Setup:** Stage only the selected Baseline or Candidate `plain` skill. Start one
+fresh task.
 
 **Turn 1 invocation:**
 
