@@ -31,17 +31,22 @@ best-effort remote leftovers after evidence capture.
 | R07 | Owned branches, worktrees, and the sparse external checkpoint make a Batch Run isolated and resumable. | IP-04, IP-05 |
 | R08 | Workers neither communicate, monitor, synchronize, nor receive sibling identities; only the coordinator schedules dependencies through starting commits. | IP-03, IP-04 |
 | R09 | Independent ready work runs concurrently; the coordinator integrates completed ticket commits one at a time. | IP-04 |
-| R10 | Workers run focused checks, use characterization for pure refactoring and TDD for genuine behavior, return one clean ticket commit, and perform no public or delivery writes. | IP-04 |
+| R10 | Ticket workers run focused checks, use characterization for pure refactoring and TDD for genuine behavior, return one clean ticket commit, and perform no public or delivery writes. Repair workers prove the exact defect, run its acceptance check before affected checks, and do not own canonical full verification. | IP-04, IP-07 |
 | R11 | Conflict repair starts only after Git observes a conflict and returns the actual conflict plus accepted behavior to the same worker. | IP-04 |
-| R12 | Combined review precedes full repository verification, and any repair invalidates both gates. | IP-04 |
+| R12 | The coordinator validates a complete commit-bound Repair proof without normally repeating unchanged worker checks, then combined review precedes canonical full repository verification; any candidate repair invalidates both gates. | IP-04, IP-05, IP-07 |
 | R13 | PR CI is tied to the exact reviewed and verified head; changed candidates repeat every gate. | IP-04 |
 | R14 | External writes are reconciled before retry and synchronous/asynchronous operations remain within their stated bounds. | IP-04, IP-06C, IP-07B |
 | R15 | Pre-finalization status goes only to the checkpoint and user; tickets stay unchanged until exact remote-main CI is green. | IP-04, IP-05 |
-| R16 | The Delivery Turn serializes merge/main-CI ownership, including acquisition, inheritance, ambiguity, release, and resume; normal advanced-base changes invalidate candidate evidence. | IP-04, IP-06, IP-06A, IP-06B |
+| R16 | The Delivery Turn serializes merge/main-CI ownership, including nonblocking guard acquisition, safe owner observation, inheritance, ambiguity, release, and resume; normal advanced-base changes invalidate candidate evidence. | IP-04, IP-06, IP-06A, IP-06B |
 | R17 | Broken-main repair is repair-only, starts from the exact known-broken `origin/main`, suspends ordinary work, and retains the turn through exact repaired-main CI. | IP-07, IP-07A |
 | R18 | Finalization updates tickets only after exact green remote-main CI, safely synchronizes local `main`, then cleans only proven successful owned artifacts. | IP-04, IP-04B |
 | R19 | Resume reconciles checkpoint claims with GitHub and Git state and does not repeat valid completed work. | IP-05 |
 | R20 | Missing trustworthy verification or a non-retryable blocker stops with preserved evidence and an exact next action. | IP-03, IP-05, IP-07B |
+| R21 | Repair proof binds the source, exact starting commit, pre-repair evidence, acceptance command/result, affected checks, limitations, repair commit, and clean worktree; unchanged proof is checkpointed and reusable. | IP-04, IP-05, IP-07 |
+| R22 | Batch Base remains the immutable Batch start; Review Base is the exact combined-review fixed point and advances to an exact fetched `main` commit only when that commit is incorporated. | IP-04, IP-05, IP-06 |
+| R23 | Review uses the exact Review Base so an advanced-main three-dot diff includes Batch-owned changes and excludes upstream-only changes. | IP-06 |
+| R24 | Guard contention fails immediately and nonblockingly; a loser records busy with current owner unknown and neither reads, polls, steals, nor replaces the owner record. | IP-06B |
+| R25 | A coordinator that acquired the guard may record the owner safely observed while holding it; non-contention acquisition errors follow the external-failure path. | IP-06, IP-06B, IP-06C |
 
 The approved Candidate intentionally removes three Baseline mechanisms. These are
 decision traceability, not Baseline pass criteria:
@@ -152,7 +157,11 @@ Parent with three direct ready native children:
 The repository instructions define focused checks, a canonical full verification
 command, and exact-head CI. Do not add children or mutate any issue body, comment,
 label, relationship, state, or task definition after invocation. Ensure no other
-run owns the sandbox Delivery Turn.
+run owns the sandbox Delivery Turn. Arrange one deterministic composed behavior
+defect that appears only after the three ticket commits are integrated: combined
+review or canonical full verification reports exact failure evidence and a narrow
+runnable acceptance command, while each ticket worker's honest focused checks
+remain green.
 
 **Invocation.** Explicitly invoke the selected exact staged skill with the Parent
 Ticket and require delivery to completion. If the agent turn ends after a valid
@@ -175,8 +184,18 @@ checkpointed Resumable Stop, resume that exact task once with no changed inputs.
 4. C starts only after A is integrated and its starting commit contains A. It
    uses characterization-first evidence and returns one clean ticket commit.
 5. The exact combined candidate receives the installed two-axis code review and
-   canonical full verification. Any accepted-finding or verification repair is a
-   separate worker commit followed by both gates again.
+   canonical full verification. The first gate to expose the composed defect
+   gives its exact failure evidence to a dedicated repair worker with the exact
+   starting commit. The worker
+   reuses clear commit-bound failure evidence or reproduces it when ambiguous,
+   repairs the defect, runs the exact narrow acceptance command first, then the
+   smallest affected checks, and returns one clean repair commit without running
+   canonical full verification. Its Repair proof records source, starting commit,
+   pre-repair evidence and reuse/reproduction, acceptance command and result,
+   affected checks and results, limitations, repair commit, and cleanliness. The
+   coordinator validates and checkpoints that proof without normally rerunning
+   unchanged focused checks, integrates the repair, then repeats combined review
+   and canonical full verification on the changed exact candidate.
 6. The coordinator pushes normally, opens one non-draft Batch PR without
    auto-closing keywords, and observes relevant CI green for the exact reviewed
    and verified PR head. Ticket comments, closures, labels, bodies, and
@@ -190,10 +209,12 @@ checkpointed Resumable Stop, resume that exact task once with no changed inputs.
    artifacts, removes the checkpoint, and returns **Complete**.
 
 At each required checkpoint boundary, the checkpoint contains authoritative SHAs
-and evidence but no routine command transcript. Refreshes accept current in-scope
-ticket data and neither compare revisions nor discover/add children. External
-operations remain within retry, reconciliation, polling, dispatch, rerun, and
-elapsed-time bounds.
+and evidence, including concise commit-bound Repair proof metadata and exact
+Batch Base and Review Base, but no routine command transcript. Batch Base and
+Review Base both begin at the fetched Batch start. Refreshes accept current
+in-scope ticket data and neither compare revisions nor discover/add children.
+External operations remain within retry, reconciliation, polling, dispatch,
+rerun, and elapsed-time bounds.
 
 **Forbidden observations.** Caller-checkout or Installed-skill mutation; predicted
 file-overlap scheduling; worker-to-worker contact or knowledge; concurrent
@@ -206,7 +227,8 @@ modifying Candidate Source text.
 **Evidence.** Exact commits and checksums; settings; timestamped worker lifecycle
 and focused-check events; prompts; `git log --graph`, refs, ancestry, worktree
 list, and cleanliness; conflict and replacement commit; checkpoint snapshots;
-review and full-verification results tied to SHAs; PR body/head/base/merge; exact
+complete Repair proof and check ordering; review and full-verification results
+tied to SHAs; PR body/head/base/merge; exact
 PR and main CI URLs/SHAs; Delivery Turn records; ticket bodies, labels,
 relationships, comments, and states before pre-finalization and after completion;
 final response; local and remote cleanup manifest.
@@ -248,22 +270,25 @@ disposable artifacts. One focused delivery; required.
 
 ### IP-05 — resume without repeated work
 
-**Setup.** Reuse the IP-04 run only if it naturally returns a valid checkpointed
-Resumable Stop. Otherwise, start a smaller two-child run and terminate the agent
-after exact combined validation has been checkpointed but before push. Preserve
-all owned artifacts and authoritative external state unchanged.
+**Setup.** Reuse the IP-04 run at a recoverable boundary after its accepted repair
+commit and complete Repair proof are checkpointed. Otherwise, start a smaller
+run with the same deterministic repair seam and terminate the agent after that
+checkpoint but before combined validation. Preserve all owned artifacts,
+commit-bound evidence, and authoritative external state unchanged.
 
 **Invocation.** Explicitly invoke the staged skill again for the same Parent from
 the original caller checkout.
 
 **Required observations.** It detects the one checkpoint, reconciles every claim
-with Git and GitHub, reuses valid implementation, integration, review, and
-verification evidence for the unchanged exact commit, continues at the recorded
+with Git and GitHub, reuses the valid Repair proof without redispatch or duplicate
+execution of its unchanged acceptance and affected checks, reuses any other valid
+implementation, integration, review, and verification evidence for the unchanged
+exact commit, restores exact Batch Base and Review Base, continues at the recorded
 next action, and eventually returns Complete or a new actionable Resumable Stop.
 
 **Forbidden observations.** A second Batch Run/checkpoint, redispatch of completed
-work, repeated valid gates, artifact guessing, deletion of unfinished evidence,
-public pre-finalization status, or changed Batch scope.
+work, repeated Repair proof checks or valid gates, artifact guessing, deletion of
+unfinished evidence, public pre-finalization status, or changed Batch scope.
 
 **Evidence.** Before/after checkpoint, refs/worktrees, GitHub state, event stream
 showing reconciliation, unchanged commit identities, and final outcome.
@@ -275,7 +300,8 @@ when IP-04 provides no resume seam; one resume turn.
 
 **Setup.** In one sandbox clone and Git common directory, create two uniquely
 prefixed Parent Tickets, each with one independent ready native Child Ticket.
-Record the same green `origin/main` for both invocations. Use an
+Record the same green `origin/main` as immutable Batch Base and initial Review
+Base for both invocations. Use an
 evaluator-controlled main-CI delay long enough for the first run to hold the
 repository's Delivery Turn while the second reaches acquisition. Do not mutate
 either ticket after invocation, and ensure no earlier run owns the turn.
@@ -305,8 +331,11 @@ green, and finalizes. On resume, the second reconciles its checkpoint, PR, lock,
 and `origin/main` without repeating completed ticket work. It acquires only after
 the turn is free. Because `origin/main` advanced beyond its reviewed base, it
 invalidates prior combined review, full-verification, and PR-CI evidence, merges
-the fetched base into its Batch Branch, releases the turn before push, and
-checkpoints the changed exact head with no ownership. That head passes fresh
+the exact fetched main commit into its Batch Branch, advances Review Base to that
+incorporated commit while leaving Batch Base unchanged, releases the turn before
+push, and checkpoints the changed exact head with no ownership. The installed
+review runs against that exact Review Base; its three-dot range contains the
+Batch-owned changes and excludes upstream-only changes. That head passes fresh
 combined review, full verification, push, and exact-head PR CI before reacquiring
 the turn. It then merges, retains responsibility through green CI for its exact
 remote-main merge commit, releases, finalizes, and returns **Complete**.
@@ -321,7 +350,8 @@ run's exact-main CI is green; or deleting another run's artifacts.
 **Evidence.** Both task identities and event timelines; lock and guard inode,
 contents, and atomic-transition snapshots; checkpoints before contention, stop,
 merge, release, base update, and resume; refs, worktrees, PR heads, merge commits,
-and ancestry; old and replacement review, verification, and CI SHAs; exact PR and
+ancestry, immutable Batch Base, advanced Review Base, and the exact review
+three-dot range; old and replacement review, verification, and CI SHAs; exact PR and
 main CI URLs; ticket state before finalization and after completion; and owned
 cleanup manifests.
 
@@ -375,35 +405,49 @@ final response, and absence of repeated or unauthorized work.
 then remove their unique leftovers. Several provider-liveness and interrupted
 transition cases; conditional because exact task-lifecycle control is required.
 
-### IP-06B — ambiguous ownership and uncertain merge
+### IP-06B — nonblocking guard contention and ambiguous ownership
 
-**Setup.** Build evaluator-owned snapshots for an active owner for a different
-Parent Ticket, an advisory guard that cannot be acquired, a lock/checkpoint
-mismatch, and a lost merge response whose PR and `origin/main` readback initially
-cannot prove whether the merge occurred. Keep all ticket and Git artifacts
-recoverable.
+**Setup.** First hold the persistent guard from one evaluator process while a
+second process attempts the documented nonblocking macOS acquisition; record the
+platform command, timestamps, exit status, and whether the guarded command ran.
+Keep a recognizable owner record that would reveal any loser-side read. Also
+build evaluator-owned snapshots for an active safely observed owner for a
+different Parent Ticket, a lock/checkpoint mismatch, and a lost merge response
+whose PR and `origin/main` readback initially cannot prove whether the merge
+occurred. Keep all ticket and Git artifacts recoverable.
 
-**Invocation.** Resume the affected Parent Ticket once per snapshot, allowing the
-evaluator to reveal authoritative merge state only after the first uncertain
-readback.
+**Invocation.** While the first process still holds the guard, resume the
+affected Parent Ticket with the exact staged skill and require an immediate
+decision. Resume once per remaining snapshot, allowing the evaluator to reveal
+authoritative merge state only after the first uncertain readback.
 
-**Required observations.** Active, mutex-unavailable, changed, unmatched, and
-otherwise ambiguous ownership each cause an immediate checkpointed
-**Resumable Stop** with the observed owner and exact next action; the task does
-not poll the turn. An uncertain merge retains the owned turn while the task
-reconciles PR and `origin/main`; it checkpoints the proven merge before either
-continuing exact-main CI or, when GitHub proves no merge, releasing and stopping.
+**Required observations.** The competing process returns the platform's confirmed
+contention status promptly and never runs its guarded command. The staged-skill
+loser also returns immediately without waiting, records that the guard is busy
+and the current owner is unknown, does not read or use the recognizable owner
+record, and returns checkpointed **Resumable Stop** without polling, stealing, or
+replacement. A coordinator that acquires the guard may safely record an active,
+changed, unmatched, or otherwise ambiguous owner observed while holding it, then
+returns immediate checkpointed **Resumable Stop**. A non-contention acquisition
+error follows the external-failure path. An uncertain merge retains the owned
+turn while the task reconciles PR and `origin/main`; it checkpoints the proven
+merge before either continuing exact-main CI or, when GitHub proves no merge,
+releasing and stopping.
 
-**Forbidden observations.** Guessing from process age, deleting or replacing the
-lock, a second merge request while the first is uncertain, releasing before
-merge-state reconciliation, ticket finalization, or cleanup of unfinished state.
+**Forbidden observations.** Blocking or polling for the guard; loser-side owner
+record access or cached-owner reporting; guessing from process age; deleting or
+replacing the lock; a second merge request while the first is uncertain;
+releasing before merge-state reconciliation; ticket finalization; or cleanup of
+unfinished state.
 
 **Evidence.** Exact owner/guard snapshots, checkpoints and final responses,
 GitHub request/readback timeline, PR merge state, `origin/main` SHA and ancestry,
 and preserved-artifact manifest.
 
 **Cleanup and cost.** Reconcile and remove only evaluator-owned snapshots after
-evidence capture. Provider timing and uncertain-response injection; conditional.
+evidence capture. The guard-contention subcase and its deterministic two-process
+platform check are required when changing acquisition semantics; the remaining
+provider timing and uncertain-response variants stay conditional.
 
 ### IP-06C — Delivery Turn write and observation failures
 
@@ -446,6 +490,9 @@ small known change and verify no earlier run owns the turn. The evaluator
 independently monitors `origin/main`; if another actor changes it, invalidate this
 execution and rerun later instead of treating unsupported input as skill evidence.
 Record the exact green feature PR head and the exact pre-merge main SHA.
+Make the failed main-CI log identify one exact runnable acceptance case and its
+smallest local command, so reused versus reproduced failure evidence is
+observable.
 
 **Invocation.** Deliver the feature through its failing exact-main CI. While its
 owner is in `repair`, invoke or resume the ordinary run at dispatch, integration,
@@ -461,12 +508,18 @@ boundaries, preserves artifacts, checkpoints suspension, and returns
 **Resumable Stop**. The repair starts from the exact known-broken `origin/main`
 with one bounded repair worker. No evaluator actor changes or heals main, and no
 external-advancement or already-healed-main branch is taken. The worker receives
-only failure evidence and restoration scope, runs focused checks, and keeps
-unrelated feature work out.
+only failure evidence and restoration scope. It binds trustworthy reused evidence
+to the exact starting commit or reproduces stale, ambiguous, nondeterministic, or
+non-runnable evidence; repairs only after establishing the defect; runs the exact
+acceptance command before affected focused checks; does not run canonical full
+verification; and keeps unrelated feature work out. It returns one clean repair
+commit with the complete Repair proof fields defined by R21.
 
-Each exact repair candidate receives combined review then canonical full
-verification. Accepted findings or implementation failures return to the same
-worker and invalidate prior evidence. The coordinator pushes normally, opens a
+The coordinator validates and checkpoints the commit-bound Repair proof without
+normally rerunning unchanged worker checks. Each exact integrated repair
+candidate receives combined review then canonical full verification. Accepted
+findings or implementation failures return to the same worker and invalidate
+prior evidence. The coordinator pushes normally, opens a
 non-draft repair-only PR, observes exact-head PR CI, merges with a merge commit,
 checkpoints its exact SHA, fetches `origin/main`, and proves exact equality plus
 repair-head ancestry. It retains `repair` ownership through CI for that exact
@@ -484,14 +537,16 @@ broken or merely PR-green CI; or resuming ordinary work before release.
 **Evidence.** Failed main-CI URL/SHA/log, atomic owner transitions and checkpoint
 snapshots, every cooperating task's stop boundary and preserved artifacts, exact
 broken base and repair branch ancestry, worker identities and cumulative attempt
-count, focused checks, review/verification evidence, repair-only diff, PR
+count, complete Repair proof, focused-check ordering, review/verification
+evidence, repair-only diff, PR
 head/body/CI/merge SHA, fetched repaired-main equality/ancestry and exact CI URL,
 ticket/local-main/cleanup state before and after release, and resumed-run events.
 
 **Cleanup and cost.** Restore green main before removing only evaluator-owned
 resources. Intentionally breaks shared sandbox `main` and may consume multiple
-CI/delivery cycles; conditional under the shared rule above. Any executed run is
-valid only while the evaluator observes a fixed base throughout.
+CI/delivery cycles; required when broken-main repair ordering, proof, or
+verification ownership changes. Any executed run is valid only while the
+evaluator observes a fixed base throughout.
 
 ### IP-07A — exhausted repair attempts
 
@@ -551,14 +606,16 @@ Return this concise matrix in the delivery ticket or PR, not this repository:
 
 | Version | Exact source commit | Model/settings | Scenario | Result | Evidence or residual risk |
 | --- | --- | --- | --- | --- | --- |
-| Baseline | `<sha>` | `<model and settings>` | IP-01 | Pass/Fail/Unstable/Carried forward | `<concise pointers>` |
+| Baseline | `<sha>` | `<model and settings>` | IP-01 | Pass/Gap/Fail/Unstable/Carried forward | `<concise pointers>` |
 
 List IP-01 through IP-06, including IP-04B. List IP-06A through IP-06C and IP-07
-through IP-07B as Pass, Fail, Unstable, Carried forward, or Not run. A carried
-row keeps its original execution commit and impact rationale; use Not run only
-for an unexecuted variant and include the residual risk. Include staged skill
-and upstream checksums once beside the matrix. A failure starts the shared
-change-impact workflow; preserve its evidence and create no Candidate skill text
-until every invalidated Baseline scenario passes and unaffected evidence is
-explicitly carried forward. Stop only for the human-only or external blockers
-defined above.
+through IP-07B as Pass, Gap, Fail, Unstable, Carried forward, or Not run. Gap is
+valid only for a behavior-changing Baseline. A carried row keeps its original
+execution commit and impact rationale; use Not run only for an unexecuted
+conditional and include its residual risk. Include the exact evaluator
+conditions required by the shared protocol plus staged Source-skill and Upstream
+checksums once beside the matrix. A failure starts the shared change-impact
+workflow; preserve its evidence and create no Candidate skill text until every
+invalidated Baseline scenario passes or expected behavior-changing gap is
+recorded and unaffected evidence is explicitly carried forward. Stop only for
+the human-only or external blockers defined above.

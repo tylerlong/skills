@@ -17,15 +17,20 @@ The text and resulting token cost of a source skill's metadata and instructions.
 _Avoid_: Big skill, skill size
 
 **Skill behavior test**:
-An AI-executed scenario that invokes a source skill and verifies its observable agent output or external state without depending on instruction wording.
+An AI-executed, controlled scenario that invokes an exact Source skill and
+verifies its observable agent output or authoritative external state without
+depending on instruction wording or hidden reasoning.
 _Avoid_: Prompt snapshot, skill unit test
 
 **Baseline skill**:
-The exact committed Source skill whose behavior must pass the agreed Skill behavior tests before Candidate work begins.
+The exact committed Source skill evaluated before a revision under recorded
+controlled conditions. A behavior-preserving revision requires a passing
+characterized Baseline; a behavior-changing revision may record the current gap.
 _Avoid_: Old skill, installed skill
 
 **Candidate skill**:
-The exact proposed source skill revision evaluated with the baseline skill's passing behavior tests.
+The exact proposed Source skill revision evaluated with the same conditions and
+scenarios recorded for the Baseline skill.
 _Avoid_: New skill, installed skill
 
 **Carried forward**:

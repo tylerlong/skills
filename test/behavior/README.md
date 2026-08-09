@@ -29,11 +29,19 @@ them identical between Baseline and Candidate. Invoke explicit-only skills by
 name and identify the staged repository path in the prompt so the selected copy
 is observable.
 
-Run every required scenario once for initial Baseline qualification before
-creating the Candidate skill, then once for initial Candidate qualification. A
-clear failure starts diagnosis: repair the catalog, exact fixture, evaluator,
-Baseline skill, or Candidate skill at its owning boundary without weakening the
-Skill contract.
+Before Source-skill edits, classify the revision as behavior-preserving or
+behavior-changing and update its specifications. Run every affected Baseline
+scenario once, then each affected Candidate scenario once under the same
+recorded conditions. A behavior-preserving revision requires a passing
+characterized Baseline. A behavior-changing revision may classify a clear
+Baseline mismatch with the newly specified behavior as **Gap**; the Candidate
+must pass. A clear unexpected failure starts diagnosis at the owning catalog,
+fixture, evaluator, Baseline, or Candidate boundary without weakening the Skill
+contract.
+
+If either result is ambiguous, permit at most one paired Baseline/Candidate
+diagnostic rerun. Persistent inconsistency is **Unstable**; never rerun until a
+desired answer appears.
 
 Before a repair rerun, inspect the exact change and use the catalog's
 rule-to-scenario trace to find every scenario whose required or forbidden
@@ -49,15 +57,16 @@ If impact is uncertain, cross-cutting, or cannot be bounded safely, invalidate
 the broader family or full required suite. Global evaluator, model, settings,
 dependency, routing, and shared-contract changes normally require broad
 invalidation. A Baseline repair establishes a new shared Baseline and pauses
-Candidate work until affected Baseline scenarios pass and unaffected evidence
-is explicitly carried forward. A Candidate repair establishes an amended
+Candidate work until affected Baseline scenarios pass or expected
+behavior-changing gaps are recorded, and unaffected evidence is explicitly
+carried forward. A Candidate repair establishes an amended
 Candidate; rerun its affected scenarios and carry forward only disjoint evidence.
 Apply the same analysis to accepted review repairs.
 
-Repair reruns do not consume the single paired Baseline/Candidate diagnostic
-rerun allowed for ambiguous AI variation. Persistent inconsistency is
-**Unstable**. Continue after fixable issues; stop only for a human contract
-decision or an external permission, credential, or infrastructure blocker.
+Repair reruns caused by an identified evaluator or skill change do not consume
+the single paired diagnostic rerun allowed for ambiguous AI variation. Continue
+after fixable issues; stop only for a human contract decision or an external
+permission, credential, or infrastructure blocker.
 
 Conditional scenarios are reserved for exceptionally slow, destructive, or
 provider-failure cases. Run one when its protected rule changes materially or
@@ -66,13 +75,16 @@ unchanged, mark the scenario **Not run**, and report the residual risk.
 
 ## Evidence, cleanup, and cadence
 
-Capture final responses, relevant agent events, exact settings and checksums, and
-provider-native state outside the repository. Put only a concise result matrix in
+Capture final responses, relevant agent events, and provider-native state outside
+the repository. For every observation record the exact Source commit; model,
+reasoning effort, service tier, and settings; Codex CLI version and command;
+personality and permissions; prompt; Source and Upstream checksums; evaluator
+environment; result; and evidence location. Put only a concise result matrix in
 the delivery ticket or pull request; never commit transcripts, screenshots,
 command logs, or cumulative result files. Record each scenario as **Pass**,
-**Fail**, **Unstable**, **Not run**, or **Carried forward**. A carried row names
-its original commit and rationale; a conditional Not run row names its residual
-risk.
+**Gap**, **Fail**, **Unstable**, **Not run**, or **Carried forward**. Gap is valid
+only for a behavior-changing Baseline. A carried row names its original commit
+and rationale; a conditional Not run row names its residual risk.
 
 Use a unique prefix for every resource in
 `tylerlong/implement-in-parallel-sandbox`. Capture evidence before best-effort
