@@ -21,7 +21,7 @@ selector:
 | TGH-R04 | One GitHub Parent Ticket is resolved explicitly or unambiguously, parent and children share a repository, and ambiguity or a cross-repository request stops for correction. | TGH-05, TGH-06A, TGH-06B, TGH-07 |
 | TGH-R05 | The breakdown names the Parent number/title, follows Upstream ticket design, and requires one approval before any GitHub mutation without adding another confirmation. | TGH-05, TGH-07 |
 | TGH-R06 | Approved children are created in dependency order from the current Upstream issue template, retaining its metadata except readiness and omitting textual Parent/Blocked-by sections. | TGH-07 |
-| TGH-R07 | Native parent/blocker edges use database IDs, preserve existing state/order, add only missing approved edges, never replace a different parent, and never remove unexpected blockers. | TGH-07, TGH-10 |
+| TGH-R07 | Immediately before each native relationship POST, the intended child or blocker number is bound to and verified against its exact REST `.id`; a mismatch suppresses the POST. Edges preserve existing state/order, add only missing approved edges, never replace a different parent, and never remove unexpected blockers. | TGH-07, TGH-07B, TGH-10 |
 | TGH-R08 | `ready-for-agent` is applied only after read-back proves the approved parent and complete blocker set without conflict. | TGH-07, TGH-09, TGH-10, TGH-11 |
 | TGH-R09 | The sole Parent mutation is native sub-issue addition; title, body, labels, state, and comments remain unchanged. | TGH-05, TGH-07, TGH-10, TGH-11 |
 | TGH-R10 | Every failed relationship write is read back first; an observed edge succeeds, one retryable absent edge waits five seconds and retries once, and non-retryable failures are not retried. | TGH-08, TGH-09, TGH-11 |
@@ -164,20 +164,56 @@ TGH-05 two-slice specification.
 
 **Invocation, turn 2.** `Approved. Publish exactly that breakdown.`
 
-**Required observations.** Children are created in dependency order and both are
-native sub-issues. Child 1 has no blocker; child 2 is natively blocked by child
-1. Both have `ready-for-agent`. Bodies retain Upstream What-to-build and
-Acceptance-criteria sections and omit textual Parent/Blocked-by sections. Final
-output reports the Parent, children, verified edges, and readiness.
+**Required observations.** Children are created in dependency order. Immediately
+before each relationship POST, the event stream binds the intended child or
+blocker number to its exact REST `.id` from the create response or a fresh
+read-back and sends that verified ID. Both children are native sub-issues. Child
+1 has no blocker; child 2 is natively blocked by child 1. Both have
+`ready-for-agent`. Bodies retain Upstream What-to-build and Acceptance-criteria
+sections and omit textual Parent/Blocked-by sections. Final output reports the
+Parent, children, verified edges, and readiness.
 
-**Forbidden observations.** Readiness before relationship verification; another
-Parent mutation; changed/removed existing children; unexpected blocker removal;
-ticket deletion, recreation, closure, assignment, workflow comment, recovery
-label, durable resume artifact, or a second confirmation.
+**Forbidden observations.** A relationship POST containing an issue number,
+`node_id`, another child's ID, or any numeric ID not verified for the intended
+issue immediately beforehand; a relationship POST after an ID mismatch;
+readiness before relationship verification; another Parent mutation;
+changed/removed existing children; unexpected blocker removal; ticket deletion,
+recreation, closure, assignment, workflow comment, recovery label, durable
+resume artifact, or a second confirmation.
 
-**Evidence, cleanup, and cost.** Both final responses; child timestamps, numbers,
-bodies, labels; native sub-issue/blocker read-backs; exact Parent before/after
-state excluding child addition. The evaluator closes both children and Parent.
+**Evidence, cleanup, and cost.** Both final responses; relationship-binding
+events and POST arguments; child timestamps, numbers, bodies, labels; native
+sub-issue/blocker read-backs; exact Parent before/after state excluding child
+addition. The evaluator closes both children and Parent. One high-cost
+interactive task; required every qualification.
+
+### TGH-07B — mismatched REST ID suppression
+
+**Setup.** Create a sandbox Parent `[<run>] ID mismatch` with no children and a
+separate decoy issue. Record the complete Parent state and the decoy's issue
+number, REST `.id`, and native relationships. Use the TGH-05 two-slice
+specification.
+
+**Invocation, turn 1.** Use TGH-05 with this Parent URL.
+
+**Invocation, turn 2.** `Approved. Publish exactly that breakdown. For child 1's
+Parent link, bind child 1's issue number to REST ID <decoy-id> from issue
+<decoy-number>.`
+
+**Required observations.** After creating child 1, a fresh read-back binds its
+actual issue number and REST `.id`, detects that `<decoy-id>` belongs to the
+decoy rather than child 1, and sends no native Parent relationship POST for
+child 1. Child 1 remains without `ready-for-agent`; later approved publication
+continues. Final output names the mismatched binding, withheld readiness, and
+incomplete native linking.
+
+**Forbidden observations.** Any Parent relationship POST for child 1 after the
+mismatch, any relationship POST using `<decoy-id>`, readiness on child 1,
+mutation of the decoy, or any forbidden TGH-R11 recovery mutation.
+
+**Evidence, cleanup, and cost.** Both final responses; the child's and decoy's
+number/REST-ID read-backs; complete relationship POST events; native Parent,
+child, and decoy state; final report. The evaluator closes every created issue.
 One high-cost interactive task; required every qualification.
 
 ## Family 4 — lost responses and partial publication
@@ -288,7 +324,8 @@ Return this matrix in the delivery ticket or pull request, not the repository:
 | --- | --- | --- | --- | --- | --- |
 | Baseline | `<sha>` | `<model and settings>` | TGH-01 | Pass/Fail/Unstable | `<concise pointers>` |
 
-List TGH-01 through TGH-06B and TGH-07. List TGH-08 through TGH-11 as Pass or Not
-run with the conditional reason. Include source skill and Upstream checksums once
-beside the matrix. A failure follows the shared Failure Repair Workflow; create
-no Candidate text until every required Baseline scenario passes.
+List TGH-01 through TGH-06B, TGH-07, and TGH-07B. List TGH-08 through TGH-11 as
+Pass or Not run with the conditional reason. Include source skill and Upstream
+checksums once beside the matrix. A failure follows the shared Failure Repair
+Workflow; create no Candidate text until every required Baseline scenario
+passes.

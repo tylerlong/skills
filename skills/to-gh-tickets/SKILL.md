@@ -42,8 +42,17 @@ approves publication.
 
 Publish approved children in upstream dependency order.
 
-For relationship writes, use each issue's numeric database `.id`, not its issue
-number. With `gh api`, pass numeric fields with `-F`:
+Immediately before every native relationship POST, bind and verify the intended
+issue's exact REST `.id` together with its issue number from the create response
+or a fresh read-back. For a parent edge, bind the child; for a blocker edge, bind
+the blocker. Use only that verified `.id` in the POST. Never use an issue number,
+`node_id`, another child's ID, or any unverified numeric ID. If the number and
+REST `.id` are missing or mismatched, do not send the relationship POST.
+If any candidate ID was supplied or carried from an earlier step, verify it
+against that binding. A mismatch fails that edge: do not silently substitute a
+different ID or send the POST, even when a fresh read-back finds the correct ID.
+
+With `gh api`, pass verified numeric REST IDs with `-F`:
 
 ```sh
 gh api --method POST repos/OWNER/REPO/issues/PARENT/sub_issues -F sub_issue_id=CHILD_DATABASE_ID
