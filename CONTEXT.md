@@ -42,6 +42,10 @@ _Avoid_: Dynamic child set, frozen set
 Child Ticket workers do not communicate, monitor, synchronize, or know about sibling workers; the coordinator handles ticket dependencies through their starting commits.
 _Avoid_: Child independence, worker coordination
 
+**Repair proof**:
+Evidence tied to one repair that demonstrates the reported defect or violated behavior in the exact starting state and demonstrates that its acceptance check succeeds in the repaired state.
+_Avoid_: Generic focused checks, unrelated passing tests
+
 **Installed skill**:
 A disposable copy of a source skill made available to agents.
 _Avoid_: Source skill
