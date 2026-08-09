@@ -45,9 +45,10 @@ destination, not merely by whether it appears in the conversation.
 - When `$plain` controls a substantive response's structure, begin with one H3
   heading that states its strongest honest claim, unresolved decision, or current
   result.
-- When a response has multiple independently meaningful supporting claims, give
-  each its own H4 heading. Create sections from distinct ideas, not word count,
-  and do not add one redundant H4 beneath a single-point H3.
+- When a response has multiple independently meaningful supporting claims, use
+  an H4 section for each; never combine them in a list or paragraph. Requested
+  independent reasons always qualify. Create sections from distinct ideas, not
+  word count, and do not add one redundant H4 beneath a single-point H3.
 - Prefer a meaningful claim, decision, or result over generic headings such as
   `Overview`, `Details`, or `Update`.
 - Make the first sentence expand or sharpen the heading instead of repeating it.
@@ -116,7 +117,8 @@ destination, not merely by whether it appears in the conversation.
 - For proposed changes, link every known existing modification point, label new
   locations as new, and label uninvestigated scope as tentative.
 - For test, search, command, or runtime claims that source lines cannot prove,
-  give the relevant command and result.
+  put the exact command text beside its observed result in chat; never report the
+  result alone.
 - When required evidence is unavailable, mark the project-specific claim as
   unverified and identify the missing evidence instead of presenting it as
   proven.
