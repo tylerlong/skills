@@ -18,10 +18,23 @@ Keep upstream skills installed separately. Do not copy them into this repository
 
 ## Workflow
 
-1. Edit the source skill under `skills/`.
-2. Review it and run `make test`.
-3. Commit and push `main`.
-4. Run `make install`.
+1. Define or update the Skill behavior tests outside `skills/`.
+2. Resolve the exact Baseline skill and run every required scenario once. Repair
+   failures at their owning boundary until all invalidated scenarios pass and
+   unaffected evidence is explicitly carried forward.
+3. Simplify the Source skill without weakening its Skill contract, then run
+   every required scenario once against the exact Candidate skill. Apply the
+   same change-impact process to later repairs.
+4. Commit the proposed final tree, then run `make test`, any additional
+   repository-defined full verification, and final review against that exact
+   commit. Apply change-impact analysis to any accepted repair and rerun these
+   exact-final gates.
+5. Push `main`.
+6. Run `make install` as a separate post-merge consumer action.
+
+The [Skill behavior test guide](test/behavior/README.md) defines isolated setup,
+change-impact reruns, carried-forward evidence, and delivery reporting. Keep raw
+execution evidence out of the repository.
 
 Only install committed versions from `main`.
 

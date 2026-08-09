@@ -21,19 +21,21 @@ and merge state, and CI URLs and SHAs. Keep this evidence outside the repository
 The evaluator, not the skill under test, removes disposable local resources and
 best-effort remote leftovers after evidence capture.
 
-Run each required scenario once per version. A clear violation fails. Only
-ambiguous agent variation permits one paired Baseline/Candidate diagnostic rerun;
-inconsistent results after that are **Unstable** and block qualification. Report a
-concise result matrix in the delivery ticket or PR; never commit transcripts or a
-rolling results file.
+Run each required scenario once for initial Baseline and initial Candidate
+qualification. A clear violation fails. Only ambiguous agent variation permits
+one paired Baseline/Candidate diagnostic rerun; inconsistent results after that
+are **Unstable** and block qualification. Report a concise result matrix in the
+delivery ticket or PR; never commit transcripts or a rolling results file.
 
 A scenario failure starts diagnosis. Repair a faulty specification, fixture, or
-evaluator without weakening the contract, or make the minimum Source-skill repair
-at its owning boundary. Select the repaired commit as the new exact Baseline,
-invalidate all prior Baseline evidence, and restart every required scenario. Stop
-only for a human-only contract decision or an external permission, credential, or
-infrastructure blocker. These repair reruns do not consume the one paired rerun
-reserved for ambiguous AI variation.
+evaluator without weakening the contract, or make the minimum Source skill
+repair at its owning boundary. Follow the shared change-impact workflow: select
+a repaired Source skill as the new exact Baseline, rerun every traceably affected
+scenario, and mark disjoint evidence Carried forward with its original commit and
+rationale. Use family or full-suite invalidation when impact cannot be bounded.
+Stop only for a human-only contract decision or an external permission,
+credential, or infrastructure blocker. Repair reruns do not consume the one
+paired rerun reserved for ambiguous AI variation.
 
 ## Contract traceability
 
@@ -536,12 +538,14 @@ Return this concise matrix in the delivery ticket or PR, not this repository:
 
 | Version | Exact source commit | Model/settings | Scenario | Result | Evidence or residual risk |
 | --- | --- | --- | --- | --- | --- |
-| Baseline | `<sha>` | `<model and settings>` | IP-01 | Pass/Fail/Unstable | `<concise pointers>` |
+| Baseline | `<sha>` | `<model and settings>` | IP-01 | Pass/Fail/Unstable/Carried forward | `<concise pointers>` |
 
 List IP-01 through IP-06. List IP-06A through IP-06C and IP-07 through IP-07B as
-Pass, Fail, Unstable, or Not run; use Not run only for an unexecuted variant and
-include the reason. Include staged skill and upstream checksums once beside the
-matrix. A failure
-starts the Failure Repair Workflow; preserve its evidence and create no Candidate
-skill text until every required Baseline scenario passes. Stop only for the
-human-only or external blockers defined above.
+Pass, Fail, Unstable, Carried forward, or Not run. A carried row keeps its
+original execution commit and impact rationale; use Not run only for an
+unexecuted variant and include the residual risk. Include staged skill and
+upstream checksums once beside the matrix. A failure starts the shared
+change-impact workflow; preserve its evidence and create no Candidate skill text
+until every invalidated Baseline scenario passes and unaffected evidence is
+explicitly carried forward. Stop only for the human-only or external blockers
+defined above.

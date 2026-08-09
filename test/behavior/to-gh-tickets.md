@@ -322,10 +322,12 @@ Return this matrix in the delivery ticket or pull request, not the repository:
 
 | Version | Exact source commit | Model/settings | Scenario | Result | Evidence or residual risk |
 | --- | --- | --- | --- | --- | --- |
-| Baseline | `<sha>` | `<model and settings>` | TGH-01 | Pass/Fail/Unstable | `<concise pointers>` |
+| Baseline | `<sha>` | `<model and settings>` | TGH-01 | Pass/Fail/Unstable/Carried forward | `<concise pointers>` |
 
 List TGH-01 through TGH-06B, TGH-07, and TGH-07B. List TGH-08 through TGH-11 as
-Pass or Not run with the conditional reason. Include source skill and Upstream
-checksums once beside the matrix. A failure follows the shared Failure Repair
-Workflow; create no Candidate text until every required Baseline scenario
-passes.
+Pass, Fail, Unstable, Carried forward, or Not run; use Not run only for an
+unexecuted conditional and include its residual risk. A carried row keeps its
+original execution commit and impact rationale. Include Source skill and
+Upstream checksums once beside the matrix. A failure follows the shared
+change-impact workflow; create no Candidate text until every invalidated
+Baseline scenario passes and unaffected evidence is explicitly carried forward.

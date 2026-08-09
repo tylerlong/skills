@@ -29,15 +29,33 @@ them identical between Baseline and Candidate. Invoke explicit-only skills by
 name and identify the staged repository path in the prompt so the selected copy
 is observable.
 
-Run every required Baseline scenario before writing Candidate text. Run each
-required scenario once per version. A clear failure starts diagnosis: repair a
-faulty catalog, exact fixture, or evaluator without weakening the contract, or
-make the minimum source skill repair at its owning boundary. A source skill
-repair selects a new coordinating Baseline and invalidates all prior Baseline
-evidence. Repair reruns are distinct from the single paired Baseline/Candidate
-diagnostic rerun allowed for ambiguous AI variation. Persistent inconsistency is
-**Unstable** and blocks qualification. Stop only for a human contract decision or
-an external permission, credential, or infrastructure blocker.
+Run every required scenario once for initial Baseline qualification before
+writing Candidate text, then once for initial Candidate qualification. A clear
+failure starts diagnosis: repair the catalog, exact fixture, evaluator, Baseline
+skill, or Candidate skill at its owning boundary without weakening the Skill
+contract.
+
+Before a repair rerun, inspect the exact change and use the catalog's
+rule-to-scenario trace to find every scenario whose required or forbidden
+observations could change. Include shared setup, fixtures, evaluator behavior,
+model or settings, Upstream skills, earlier interaction turns, and dependent
+downstream flows. Invalidate and rerun that affected set. Evidence for a
+demonstrably disjoint scenario may be **Carried forward**, but its matrix row
+must retain the original execution commit and state the impact rationale; never
+claim that it ran against the repaired commit.
+
+If impact is uncertain, cross-cutting, or cannot be bounded safely, invalidate
+the broader family or full required suite. Global evaluator, model, settings,
+dependency, routing, and shared-contract changes normally require broad
+invalidation. A Baseline repair establishes a new shared Baseline and pauses
+Candidate work until affected Baseline scenarios pass and unaffected evidence
+is explicitly carried forward. Apply the same analysis to Candidate and accepted
+review repairs.
+
+Repair reruns do not consume the single paired Baseline/Candidate diagnostic
+rerun allowed for ambiguous AI variation. Persistent inconsistency is
+**Unstable**. Continue after fixable issues; stop only for a human contract
+decision or an external permission, credential, or infrastructure blocker.
 
 Conditional scenarios are reserved for exceptionally slow, destructive, or
 provider-failure cases. Run one when its protected rule changes materially or
@@ -49,14 +67,17 @@ unchanged, mark the scenario **Not run**, and report the residual risk.
 Capture final responses, relevant agent events, exact settings and checksums, and
 provider-native state outside the repository. Put only a concise result matrix in
 the delivery ticket or pull request; never commit transcripts, screenshots,
-command logs, or cumulative result files.
+command logs, or cumulative result files. Record each scenario as **Pass**,
+**Fail**, **Unstable**, **Not run**, or **Carried forward**. A carried row names
+its original commit and rationale; a conditional Not run row names its residual
+risk.
 
 Use a unique prefix for every resource in
 `tylerlong/implement-in-parallel-sandbox`. Capture evidence before best-effort
 evaluator cleanup. Cleanup may close evaluator-owned issues and remove disposable
 repositories; it is not behavior of the skill under test.
 
-Run required scenarios for every Baseline and final Candidate qualification.
-Budget only the fresh tasks and follow-up turns named by each scenario. Run
-deterministic repository tests separately afterward; do not add a behavior-test
-Make target or generic runner.
+Budget only the fresh tasks and follow-up turns named by each scenario. Against
+the exact final commit, always rerun deterministic repository tests, any
+repository-defined full verification, and required final reviews. Do not add a
+behavior-test Make target or generic runner.
