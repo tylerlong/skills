@@ -5,15 +5,18 @@ description: Implement, resume, and deliver the ready direct children of one Git
 
 # Implement in Parallel
 
-Reuse the installed `implement` workflow for Child Ticket work. Own only Parent
-Ticket discovery, dependency-aware orchestration, integration, combined
-validation, resumability, PR and CI delivery, and tracker updates here.
-
 ## 1. Load the implementation workflow
 
-Resolve `../implement/SKILL.md` relative to this skill and read it completely.
-Treat it as the worker implementation contract, subject only to the limits below.
-Stop if it is missing or unreadable; never copy or reconstruct its rules.
+Before commentary or any other action, resolve `../implement/SKILL.md` relative to
+this skill and make one attempt to read it completely. If it is missing or
+unreadable, report that `implement` is missing at the exact resolved path, return
+Do Not Start, and end immediately. Do not inspect or use another tool, and never
+copy or reconstruct its rules.
+
+After a successful read, treat it as the worker implementation contract, subject
+only to the limits below. Reuse it for Child Ticket work. Own only Parent Ticket
+discovery, dependency-aware orchestration, integration, combined validation,
+resumability, PR and CI delivery, and tracker updates here.
 
 ## 2. Use explicit outcomes and sparse checkpoints
 
