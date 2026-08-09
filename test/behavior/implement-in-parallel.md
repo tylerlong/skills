@@ -200,7 +200,8 @@ file-overlap scheduling; worker-to-worker contact or knowledge; concurrent
 integration; coordinator-authored conflict/repair code; public ticket mutation
 before finalization; force push; local-main delivery; stale review, verification,
 or CI reused for a changed candidate; early Batch Branch deletion; ticket graph or
-task-definition mutation; Candidate skill text.
+task-definition mutation; or, during Baseline qualification, authoring or
+modifying Candidate Source text.
 
 **Evidence.** Exact commits and checksums; settings; timestamped worker lifecycle
 and focused-check events; prompts; `git log --graph`, refs, ancestry, worktree
@@ -238,12 +239,12 @@ removes only proven successful owned artifacts.
 or native relationships; claiming Complete; pre-green ticket mutation; or
 cleaning blocked-child evidence needed to resume.
 
-**Evidence and cost.** Exact remote-main CI SHA/result; before/after issue states,
-labels, comments, parents, and blockers; final response; local-main and cleanup
-state. One focused delivery; required. Paired qualification executed Baseline
-`2eddcca` and Candidate `58351cf`; the Candidate result is Carried forward to
-`acc8dd5` because later edits are disjoint from R18 finalization. Delivery
-reporting retains those original commits and this rationale.
+**Evidence.** Exact remote-main CI SHA/result; before/after issue states, labels,
+comments, parents, and blockers; final response; local-main and cleanup state.
+
+**Cleanup and cost.** After evidence capture, the evaluator best-effort closes
+its Parent, delivered child, blocked child, and outside blocker and removes its
+disposable artifacts. One focused delivery; required.
 
 ### IP-05 — resume without repeated work
 
