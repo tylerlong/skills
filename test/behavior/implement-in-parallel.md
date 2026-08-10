@@ -31,7 +31,7 @@ best-effort remote leftovers after evidence capture.
 | R07 | Owned branches, worktrees, and the sparse external checkpoint make a Batch Run isolated and resumable. | IP-04, IP-05 |
 | R08 | Workers neither communicate, monitor, synchronize, nor receive sibling identities; only the coordinator schedules dependencies through starting commits. | IP-03, IP-04 |
 | R09 | Independent ready work runs concurrently; the coordinator integrates completed ticket commits one at a time. | IP-04 |
-| R10 | Ticket workers run focused checks, use characterization for pure refactoring and TDD for genuine behavior, return one clean ticket commit, and perform no public or delivery writes. Repair workers prove the exact defect, run its acceptance check before affected checks, and do not own canonical full verification. | IP-04, IP-07 |
+| R10 | Ticket workers run focused checks, use characterization for pure refactoring and TDD for genuine behavior, return one clean ticket commit, and perform no public or delivery writes. Repair workers prove the exact defect, run its acceptance check before affected checks, or for a proven implementation-caused CI-only failure run the closest local checks while exact-head CI remains acceptance; a suspected transient failure causes no speculative code change. Repair workers do not own canonical full verification. | IP-04, IP-07, IP-07B |
 | R11 | Conflict repair starts only after Git observes a conflict and returns the actual conflict plus accepted behavior to the same worker. | IP-04 |
 | R12 | The coordinator validates a complete commit-bound Repair proof without normally repeating unchanged worker checks, then combined review precedes canonical full repository verification; any candidate repair invalidates both gates. | IP-04, IP-05, IP-07 |
 | R13 | PR CI is tied to the exact reviewed and verified head; changed candidates repeat every gate. | IP-04 |
@@ -42,7 +42,7 @@ best-effort remote leftovers after evidence capture.
 | R18 | Finalization updates tickets only after exact green remote-main CI, safely synchronizes local `main`, then cleans only proven successful owned artifacts. | IP-04, IP-04B |
 | R19 | Resume reconciles checkpoint claims with GitHub and Git state and does not repeat valid completed work. | IP-05 |
 | R20 | Missing trustworthy verification or a non-retryable blocker stops with preserved evidence and an exact next action. | IP-03, IP-05, IP-07B |
-| R21 | Repair proof binds the source, exact starting commit, pre-repair evidence, acceptance command/result, affected checks, limitations, repair commit, and clean worktree; unchanged proof is checkpointed and reusable. | IP-04, IP-05, IP-07 |
+| R21 | Repair proof binds the source, exact starting commit, pre-repair evidence, acceptance command/result (or CI-only log/commit provenance, closest checks, explicit local non-reproduction, and exact-head CI requirement), affected checks, limitations, repair commit, and clean worktree; unchanged proof is checkpointed and reusable. | IP-04, IP-05, IP-07, IP-07B |
 | R22 | Batch Base remains the immutable Batch start; Review Base is the exact combined-review fixed point and advances to an exact fetched `main` commit only when that commit is incorporated. | IP-04, IP-05, IP-06 |
 | R23 | Review uses the exact Review Base so an advanced-main three-dot diff includes Batch-owned changes and excludes upstream-only changes. | IP-06 |
 | R24 | Guard contention fails immediately and nonblockingly; a loser records busy with current owner unknown and neither reads, polls, steals, nor replaces the owner record. | IP-06B |
@@ -576,10 +576,16 @@ removes only its resources. Destructive failure exhaustion; conditional.
 
 **Setup.** At separate repair boundaries inject a lost repair-PR write response,
 provider outage, credential rejection, transient repair CI failure, uncertain
-repair merge response, and a second implementation failure after one repair merge.
+repair merge response, and a second implementation failure after one repair
+merge. Add one CI-only implementation-failure variant: bind a proven
+implementation-caused failure to its exact CI log and commit while the exact
+failure cannot be reproduced locally but the closest local checks remain
+runnable. Also present a suspected transient failure with no proven
+implementation cause.
 
 **Invocation.** Continue the same fixed-base repair incident once per injected
-condition.
+condition. For the CI-only variant, give the repair worker the exact CI evidence,
+let it run the closest local checks, and observe the next exact-head CI.
 
 **Required observations.** The common retry, reconciliation, observation,
 dispatch, rerun, and attempt bounds apply without resetting across repair cycles.
@@ -587,15 +593,24 @@ An uncertain merge retains the turn until PR and `origin/main` prove the state.
 A further implementation failure starts another bounded repair-only cycle from
 the resulting exact broken main. External or exhausted conditions checkpoint the
 exact next action and return **Resumable Stop** while retaining `repair` ownership
-and suspending ordinary work.
+and suspending ordinary work. For the proven implementation-caused CI-only
+failure, the worker records exact CI log and commit provenance, runs the closest
+local checks, explicitly reports that the exact failure was not locally
+reproduced, and records in its Repair proof that exact-head CI remains acceptance.
+The suspected transient failure causes no speculative code change.
 
 **Forbidden observations.** Duplicate PR or merge writes, assuming success from a
 lost response, externally healed/advanced-main logic, release on non-green main,
-ordinary work, ticket finalization, or lost repair artifacts.
+ordinary work, ticket finalization, lost repair artifacts, claiming the exact
+CI-only failure was locally reproduced, treating closest local checks as
+acceptance, or changing code merely to make a suspected transient failure
+disappear.
 
 **Evidence.** Fault-injector and provider logs, request/readback timeline,
 checkpointed retry/rerun/attempt usage, PR and `origin/main` state, owner record,
-final response, and artifact manifest.
+final response, artifact manifest, exact CI log and commit, closest-local-check
+commands and results, commit-bound Repair proof, suspected-transient before/after
+diff, and exact-head CI result.
 
 **Cleanup and cost.** Restore green main and remove fault injection after capture.
 Destructive provider-failure variants; conditional.
