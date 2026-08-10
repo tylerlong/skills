@@ -43,6 +43,11 @@ _Avoid_: Rerun, Pass on the repaired commit
 The Parent Ticket's direct Child Tickets when a Batch Run starts, assumed unchanged until that run completes.
 _Avoid_: Dynamic child set, frozen set
 
+**Worker profile**:
+The Codex model and reasoning-effort combination approved for a Child Ticket
+and assigned to its implementation worker.
+_Avoid_: Worker model, Ticket complexity
+
 **Worker isolation**:
 Child Ticket workers do not communicate, monitor, synchronize, or know about sibling workers; the coordinator handles ticket dependencies through their starting commits.
 _Avoid_: Child independence, worker coordination
