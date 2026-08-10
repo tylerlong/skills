@@ -152,29 +152,33 @@ The coordinator never authors repair or conflict-resolution code. Give every
 accepted review finding, verification or CI implementation failure, actual
 conflict, and broken-main failure to a dedicated worker. Establish or reuse
 failure evidence bound to the exact starting commit before editing. Reproduce
-evidence that is stale, ambiguous, nondeterministic, or not runnable; a CI-only
-failure may use the exact CI log and commit, and a full-suite-only reproducer may
-use that suite only to establish the failure. Each targeted attempt must add new
-evidence rather than repeat an identical blind retry.
+evidence that is stale, ambiguous, nondeterministic, or not runnable. For a
+proven implementation-caused CI-only failure, use the exact CI log and commit,
+run the closest local checks, explicitly report that the exact failure was not
+locally reproduced, and keep exact-head CI as acceptance; never change code
+merely to make a suspected transient failure disappear. A full-suite-only
+reproducer may use that suite only to establish the failure. Each targeted
+attempt must add new evidence rather than repeat an identical blind retry.
 
 The worker runs the exact acceptance check first after the change and stays
 narrow until it passes, then selects and runs the smallest affected focused
-checks. Reuse an existing check that honestly exposes a behavior defect; add or
-strengthen a regression check for uncovered behavior; use a meaningful static
-check or explicit inspection for a nonbehavioral finding. Broaden only when
-uncertainty or observed impact requires it. Workers never run canonical full
-verification.
+checks; the CI-only exception above uses its closest local checks instead. Reuse
+an existing check that honestly exposes a behavior defect; add or strengthen a
+regression check for uncovered behavior; use a meaningful static check or
+explicit inspection for a nonbehavioral finding. Broaden only when uncertainty
+or observed impact requires it. Workers never run canonical full verification.
 
 Handoff one clean repair commit with a **Repair proof** recording the repair
 source, exact starting commit, reused or reproduced pre-failure evidence, exact
-passing acceptance command, affected checks and results, limitations, repair
-commit, and clean-worktree state. The coordinator validates this commit-bound
-handoff without normally rerunning unchanged focused checks; missing, stale,
-mismatched, or ambiguous proof returns to the worker. Checkpoint concise accepted
-metadata, never raw logs, and reuse it only while its commits and evidence remain
-unchanged. One shared fallback allowance covers either a fresh worker after
-essential context loss or a genuinely different approach after strategy
-exhaustion; it is not a blank restart.
+passing acceptance command (or the CI-only exception's closest checks, explicit
+non-reproduction, and exact-head CI requirement), affected checks and results,
+limitations, repair commit, and clean-worktree state. The coordinator validates
+this commit-bound handoff without normally rerunning unchanged focused checks;
+missing, stale, mismatched, or ambiguous proof returns to the worker. Checkpoint
+concise accepted metadata, never raw logs, and reuse it only while its commits
+and evidence remain unchanged. One shared fallback allowance covers either a
+fresh worker after essential context loss or a genuinely different approach
+after strategy exhaustion; it is not a blank restart.
 
 When workers end, classify each unintegrated in-scope child as excluded, paused,
 blocked by an incomplete in-scope child, or blocked out of scope. Do not open a PR
@@ -246,11 +250,12 @@ While owning `delivery`:
 2. Fetch `origin/main`. If it advanced beyond Review Base, invalidate all
    gates and merge it into the Batch Branch. On conflict, abort, release and
    checkpoint no ownership, and give the exact conflict to a dedicated worker.
-   After a clean merge, advance Review Base to the exact incorporated `main`
-   commit while leaving Batch Base unchanged, then release and checkpoint the
-   changed head and Review Base with no ownership before pushing. Resolve/push
-   outside the turn and repeat review against that Review Base, full verification,
-   and PR CI; the review range must exclude upstream-only changes.
+   After a clean merge or successful integration of the worker's replacement,
+   advance Review Base to the exact incorporated `main` commit while leaving
+   Batch Base unchanged, then release and checkpoint the changed head and Review
+   Base with no ownership before pushing. Resolve/push outside the turn and
+   repeat review against that Review Base, full verification, and PR CI; the
+   review range must exclude upstream-only changes.
 3. Reconfirm the exact green PR head, merge through GitHub with a merge commit
    without deleting its branch, checkpoint the merge SHA, fetch `origin/main`,
    and prove exact equality plus Batch-head ancestry.
