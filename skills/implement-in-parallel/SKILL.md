@@ -29,11 +29,12 @@ Use exactly these outcomes:
 
 Keep at most one sparse Markdown checkpoint at
 `<git-common-dir>/implement-in-parallel-parent-<parent>.md`, outside all branches
-and worktrees. Record only repository and Parent, Batch scope, Batch Base/Branch/
-Worktree, integrated and delivered commits, exact review/verification/PR/CI/merge
-evidence, Delivery Turn owner and phase, external retry allowances, owned
-artifacts, and next action. Git, tickets, PRs, and CI remain authoritative for
-their own state.
+and worktrees. Record only repository and Parent, Batch scope, immutable Batch
+Base, current Review Base, Batch Branch/Worktree, integrated and delivered
+commits, accepted commit-bound Repair proof metadata, exact review/verification/
+PR/CI/merge evidence, Delivery Turn owner and phase, external retry and repair
+attempt allowances, owned artifacts, and next action. Git, tickets, PRs, and CI
+remain authoritative for their own state.
 
 Write it atomically after initialization, each integration, combined validation,
 exact PR CI, Delivery Turn acquisition/inheritance, merge, each ownership-phase
@@ -83,8 +84,9 @@ report all exclusions and blockers. An existing checkpoint follows resume rules.
 
 Do not require, enter, clean, switch, stash, reset, or otherwise modify the caller
 checkout or its `main`, and never mutate an Installed Skill. Fetch `origin`
-without switching branches, record fetched `origin/main` as Batch Base, and make
-one task-owned Batch Branch and external Batch Worktree named for the Parent
+without switching branches, record fetched `origin/main` as both immutable Batch
+Base and initial Review Base, and make one task-owned Batch Branch and external
+Batch Worktree named for the Parent
 (`codex/parallel-<parent>-batch` when available), then checkpoint. One child and
 many use the same path.
 
@@ -115,32 +117,68 @@ blockers. For each runnable child:
 3. Run independent children concurrently. Workers never communicate, monitor,
    or synchronize with one another; the coordinator alone handles dependencies.
 
-Every ticket or repair worker must stay in its owned worktree, use `implement`,
-use TDD at an agreed seam for behavior and characterization-first regression
-evidence for pure refactoring, run focused checks rather than full verification,
+Every ticket or repair worker must stay in its owned worktree and follow
+`implement` except for this skill's explicit orchestration and verification
+overrides. It must use TDD at an agreed seam for behavior and
+characterization-first regression evidence for pure refactoring, run focused
+checks rather than full verification,
 leave a clean worktree, and report its commit and evidence. Ticket work returns
 exactly one final commit; repair commits stay separate. Workers never use
 auto-closing keywords, push, merge, mutate GitHub, run combined review, or run
 full repository verification.
 
 Correct coordinator scheduling or branch mistakes and resume the same worker.
-Return implementation failures with its diff and evidence. Permit at most one
-fresh worker for lost context or one genuinely different technical approach;
-never restart blank. Preserve external or human blockers. For an undeclared
+Return implementation failures with its diff and evidence. Preserve external or
+human blockers. For an undeclared
 prerequisite, pause the child; if it is another in-scope child, integrate it,
 update the paused branch, and resume the same worker. Otherwise report it without
 changing the issue graph and continue independent work.
 
-As each worker finishes, verify focused checks, its commit shape, and cleanliness;
-refresh the selected in-scope ticket and blockers; then cherry-pick one commit and
-checkpoint its exact integrated SHA. Integrate only one child at a time and fill
-capacity with newly runnable work immediately.
+As each worker finishes, validate its commit-bound handoff, commit shape, and
+cleanliness without normally rerunning unchanged focused checks; refresh the
+selected in-scope ticket and blockers, then cherry-pick one commit and checkpoint
+its exact integrated SHA. Integrate only one child at a time and fill capacity
+with newly runnable work immediately.
 
 Repair conflicts only after Git or combined behavior observes one: abort the
 integration, preserve artifacts, update that child's branch onto the Batch
 Branch, and give the same worker the actual conflict plus all accepted behavior.
 Require focused checks and one replacement ticket commit, then integrate it.
 The coordinator never writes conflict or repair code on the Batch Branch.
+
+### Repair feedback and proof
+
+The coordinator never authors repair or conflict-resolution code. Give every
+accepted review finding, verification or CI implementation failure, actual
+conflict, and broken-main failure to a dedicated worker. Establish or reuse
+failure evidence bound to the exact starting commit before editing. Reproduce
+evidence that is stale, ambiguous, nondeterministic, or not runnable. For a
+proven implementation-caused CI-only failure, use the exact CI log and commit,
+run the closest local checks, explicitly report that the exact failure was not
+locally reproduced, and keep exact-head CI as acceptance; never change code
+merely to make a suspected transient failure disappear. A full-suite-only
+reproducer may use that suite only to establish the failure. Each targeted
+attempt must add new evidence rather than repeat an identical blind retry.
+
+The worker runs the exact acceptance check first after the change and stays
+narrow until it passes, then selects and runs the smallest affected focused
+checks; the CI-only exception above uses its closest local checks instead. Reuse
+an existing check that honestly exposes a behavior defect; add or strengthen a
+regression check for uncovered behavior; use a meaningful static check or
+explicit inspection for a nonbehavioral finding. Broaden only when uncertainty
+or observed impact requires it. Workers never run canonical full verification.
+
+Handoff one clean repair commit with a **Repair proof** recording the repair
+source, exact starting commit, reused or reproduced pre-failure evidence, exact
+passing acceptance command (or the CI-only exception's closest checks, explicit
+non-reproduction, and exact-head CI requirement), affected checks and results,
+limitations, repair commit, and clean-worktree state. The coordinator validates
+this commit-bound handoff without normally rerunning unchanged focused checks;
+missing, stale, mismatched, or ambiguous proof returns to the worker. Checkpoint
+concise accepted metadata, never raw logs, and reuse it only while its commits
+and evidence remain unchanged. One shared fallback allowance covers either a
+fresh worker after essential context loss or a genuinely different approach
+after strategy exhaustion; it is not a blank restart.
 
 When workers end, classify each unintegrated in-scope child as excluded, paused,
 blocked by an incomplete in-scope child, or blocked out of scope. Do not open a PR
@@ -153,7 +191,7 @@ Find canonical full verification in repository agent/development instructions,
 then documented scripts/targets, then CI commands. If none is trustworthy,
 checkpoint the exact decision needed and stop.
 
-For the exact Batch head, run installed `code-review` against Batch Base and
+For the exact Batch head, run installed `code-review` against Review Base and
 accept or reject every finding. Give accepted findings to a dedicated repair
 worker from the Batch Branch, integrate its separate commit, and repeat review.
 After a clean review, run canonical full verification. Give implementation
@@ -178,7 +216,8 @@ record contains Parent, Codex task, Batch Branch, PR, exact head, and `delivery`
 or `repair` phase. Serialize every read/mutation through a stable `<lock>.guard`
 held with a process-scoped OS advisory lock. Create the guard once and never
 unlink, rename, or replace it: every locker must use that persistent inode. On
-macOS, use `lockf -k` (or an open-FD/fcntl equivalent that preserves the inode).
+macOS, use zero-timeout `lockf -k -t 0` (or a nonblocking open-FD/fcntl
+equivalent that preserves the inode).
 Under the short-held guard, prepare the complete record beside the lock and
 acquire with one exclusive atomic create; never expose partial ownership or hold
 the guard during GitHub, CI, validation, or implementation. Acquire only after
@@ -192,9 +231,14 @@ missing process guess, or Parent alone is not proof; a completed checkpointed
 stop or conclusive orchestration-provider evidence is. Only the same proved owner
 may reconcile a lagging checkpoint after an interrupted lock/checkpoint write.
 
-Any active, ambiguous, unmatched, different-Parent, or mutex-unavailable turn is
-busy: checkpoint its owner and immediately return Resumable Stop without polling,
-stealing, deleting, or replacing it. Abandon only a user-named run after proving
+If nonblocking acquisition returns the platform-confirmed contention status,
+record only that the guard is busy and its current owner is unknown, then
+immediately checkpoint and return Resumable Stop without reading the owner
+record, polling, stealing, deleting, or replacing it. Any other acquisition
+failure is an external failure. After acquiring the guard, safely observed
+active, ambiguous, unmatched, or different-Parent ownership is busy: checkpoint
+that observed owner and immediately return Resumable Stop. Abandon only a
+user-named run after proving
 its head and PR were not merged, then atomically release the unchanged owner and
 record no ownership while preserving tickets and artifacts. An uncertain or
 completed merge retains the turn.
@@ -203,11 +247,15 @@ While owning `delivery`:
 
 1. Refresh in-scope tickets and blockers. If runnable work exists, verify and
    release ownership, implement it, update the existing PR, and repeat all gates.
-2. Fetch `origin/main`. If it advanced beyond the reviewed base, invalidate all
+2. Fetch `origin/main`. If it advanced beyond Review Base, invalidate all
    gates and merge it into the Batch Branch. On conflict, abort, release and
    checkpoint no ownership, and give the exact conflict to a dedicated worker.
-   After a clean merge, release and checkpoint the changed head before pushing.
-   Resolve/push outside the turn and repeat review, full verification, and PR CI.
+   After a clean merge or successful integration of the worker's replacement,
+   advance Review Base to the exact incorporated `main` commit while leaving
+   Batch Base unchanged, then release and checkpoint the changed head and Review
+   Base with no ownership before pushing. Resolve/push outside the turn and
+   repeat review against that Review Base, full verification, and PR CI; the
+   review range must exclude upstream-only changes.
 3. Reconfirm the exact green PR head, merge through GitHub with a merge commit
    without deleting its branch, checkpoint the merge SHA, fetch `origin/main`,
    and prove exact equality plus Batch-head ancestry.
@@ -230,6 +278,14 @@ exact broken `origin/main` remains fixed until its repair merges. From that exac
 commit create an owned repair branch/worktree and give one worker only failure
 evidence and restoration scope. Never roll back automatically or include
 unrelated feature work.
+
+The worker binds trustworthy failure evidence to that exact broken commit or
+reproduces it before editing, runs the exact acceptance command first, then the
+smallest affected focused checks, and returns one clean repair commit with the
+complete Repair proof. The coordinator validates and checkpoints the proof
+without normally rerunning those checks. A changed repair candidate invalidates
+its combined review and canonical full verification; the coordinator alone runs
+both gates on every exact candidate.
 
 For each exact repair candidate run combined review then canonical full
 verification, push normally, open a non-draft repair-only PR, and observe exact

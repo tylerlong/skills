@@ -18,10 +18,13 @@ Keep upstream skills installed separately. Do not copy them into this repository
 
 ## Workflow
 
-1. Define or update the Skill behavior tests outside `skills/`.
-2. Resolve the exact Baseline skill and run every required scenario once. Repair
-   failures at their owning boundary until all invalidated scenarios pass and
-   unaffected evidence is explicitly carried forward.
+1. Define or update the Skill behavior tests outside `skills/`, classifying the
+   revision as behavior-preserving or behavior-changing.
+2. Resolve the exact Baseline skill and run every affected scenario once. A
+   preserving Baseline must pass; a behavior-changing Baseline may record the
+   current gap. Repair unexpected failures at their owning boundary until all
+   invalidated scenarios pass or expected gaps are recorded and unaffected
+   evidence is explicitly carried forward.
 3. Revise the Source skill without weakening its Skill contract, then run
    every required scenario once against the exact Candidate skill. Apply the
    same change-impact process to later repairs.
