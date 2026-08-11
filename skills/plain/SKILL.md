@@ -15,6 +15,10 @@ or embedded-artifact segment sharing one intended destination.
 
 - Plain edits presentation only; never change the task, facts, meaning, caveats,
   conditions, exactness, or evidentiary basis.
+- Plain performs no task action or investigation. It may read, select, and present
+  only relevant Available task evidence already established and still in current
+  context; never invoke a tool to obtain or recheck evidence, including to search
+  or inspect/reinspect material, execute/rerun a command, or acquire evidence.
 - Treat each piece by intended destination, never appearance. Keep every
   publication-bound artifact's wording and owner format unchanged, including
   provisional drafts, Issues, comments, specifications, documentation, and
@@ -103,54 +107,73 @@ materially helps navigate a longer answer.
 - Bold only a label whose role gives the styling semantic purpose; code-style
   only material whose role does likewise. No explicit task or owner declaration
   is required. Emoji may cue semantics only when they speed recognition: pair
-  them with text, keep repeated meanings consistent, and retain list markers.
+  them with a textual label, keep repeated meanings consistent, and retain list
+  markers.
   Never require fixed emoji or apply emoji or special styling indiscriminately
   across items, headings, sections, or cells. Prefer no emoji or special styling
   when either adds noise.
 
 ## Present Available task evidence beside claims
 
-*Non-normative map; the rules below control: supported project-specific claim
-outside protected material → Available task evidence beside it; unsupported
-project-specific claim outside protected material → unverified plus missing
-proof; execution assertion proved by Available task evidence but not Source →
-exact existing command plus result; first material repository symbol used as
+*Non-normative map; the rules below control: sufficient linked evidence → the
+smallest precise direct link, without copied proof; unlinked execution evidence →
+the already-available exact command plus concise result; insufficient evidence →
+unverified plus what is missing; first material repository symbol used as
 evidence in scope → link; later claim about that entity → adjacent evidence
 without another link; different entity → its own specific evidence.*
 
+### Ownership and evidence form
+
 Evidence presentation applies only to Plain-controlled Codex-authored claims
 outside protected material; never insert it into or rewrite protected material.
-The task or other owning skill establishes and acquires evidence; context
+The task or other owning skill alone establishes and acquires evidence; context
 presence alone does not. Available task evidence is owner-established chat,
 tool results, or inspected files still in current context, even from before this
-invocation. Plain selects relevant evidence and makes it visible within owner
-structure; it never investigates or widens investigation.
+invocation. Plain only selects relevant evidence and makes it visible within
+owner structure; it never acts, investigates, searches, invokes a tool to inspect
+or reinspect material, executes or reruns commands, or fills evidence gaps.
 
 A project-specific claim means a factual assertion about a particular project
 or repository state; negative and historical facts qualify. In a proposal, only
 each factual current-state assertion qualifies, not its prescriptive remainder.
 Name the concrete subject rather than depending on a vague pointer such as `this
-suite`, `the layer`, or `it`. Put supporting Available task evidence beside each
+suite`, `the layer`, or `it`. Put sufficient Available task evidence beside each
 claim; otherwise mark it unverified and name the missing evidence.
 
-If Source lines cannot prove a test, search, command, or runtime assertion but
-Available task evidence proves that same assertion, reproduce beside it, in the
-same Plain-controlled message, the complete exact command text already present
-anywhere in that evidence and its observed result. Never reconstruct an
-equivalent. The result may be a concise faithful outcome; a tool event outside
-the response is no substitute. If the complete command or result is unavailable,
-mark that assertion unverified and name what is missing, even when other evidence
-supports it.
+Evidence form follows the claim: use a precise link to the exact relevant
+repository location for a repository assertion; the exact native Issue, comment,
+commit, check, or relationship link for GitHub; the relevant linked section for
+documentation; and a linkable authoritative record for an observed test, search,
+command, or runtime result. Subject to the link-reuse rules below, when sufficient
+evidence has a precise accessible link, use the smallest precise link that
+directly proves the claim. Do not copy, quote, or paste linked content merely as
+proof; never create an excerpt from a repository file merely as evidence.
+
+Keep any excerpt, diff, code block, quotation, or artifact explicitly required
+by the task or owner protected from these evidence edits. An already-required
+snippet copied from the repository still carries a nearby precise link directly
+to its exact origin.
+
+For an observed result with no linkable authoritative record, present beside the
+assertion, in the same Plain-controlled message, the complete exact command and a
+concise faithful result only when both already exist in Available task evidence.
+Never paste a full log merely as proof or reconstruct a missing command, result,
+or other evidence. A tool event outside the response is no substitute. If either
+the complete command or result is unavailable, mark the assertion unverified and
+name what is missing.
+
+Thus a claim that `make verify` is defined in a Makefile gets only a precise link
+to that definition, never a pasted recipe. A claim that `make verify` passed gets
+a linkable authoritative execution record or, only when none exists, the
+already-available exact command plus concise result.
+
+### Link specificity and reuse
 
 Every real repository path, line, or symbol named or materially used in a
 Plain-controlled claim—even incidentally—gets specific Available task evidence
-beside it or the unverified fallback. Naming a location is not evidence. A
-location-only path or line needs evidence, but no link solely for that reason.
-Never substitute an imprecise, ornamental, detached, or unmapped link collection.
+beside it or the unverified fallback. Naming a location is not evidence. Never
+substitute an imprecise, ornamental, detached, or unmapped link collection.
 
-- For code, cite exact relevant Source lines; for GitHub, the exact Issue,
-  comment, commit, check, or native relationship; for documentation, the
-  relevant section.
 - Each evidence link covers at most one contiguous relevant region in one file.
   Target its first relevant line or a supported tight range. Link non-adjacent
   regions and different files separately.
@@ -168,9 +191,12 @@ Never substitute an imprecise, ornamental, detached, or unmapped link collection
   locations with their own specific evidence. Later claims still need adjacent
   specific evidence without another link to that entity or location in the
   scope.
-- Link a copied repository snippet near its precise origin. Label one not yet
-  existing `proposed` and one invented only to explain `hypothetical`; either
-  correctly labelled form may omit a source link.
+- A copied repository snippet carries a nearby precise link directly to its exact
+  origin. Label one not yet existing `proposed` and one invented only to explain
+  `hypothetical`; either correctly labelled form may omit a source link.
+
+### Proposals and repetitive sets
+
 - For a proposal, link each existing location that Available task evidence
   establishes as a necessary edit. Mark a to-be-created location `new` and
   uninvestigated scope tentative; claim no completeness beyond Available task
@@ -178,13 +204,14 @@ Never substitute an imprecise, ornamental, detached, or unmapped link collection
 - Omit repetitive-set member links only when the set is mechanically reproducible
   and a complete list would overwhelm the answer, judged without a numeric
   cutoff. Link its defining symbol or start separately from member evidence,
-  state the member count, and give the exact editor operation, search, or command
-  that reproduces it. Still link every member discussed, compared, or used to
-  support a conclusion.
+  state the member count, and give an exact editor operation, search, or command
+  already present in Available task evidence that reproduces it. Still link every
+  member discussed, compared, or used to support a conclusion.
 
 ## Examples
 
 Use an example only when context would otherwise be insufficient. Prefer a real
-current instance, then a short labelled hypothetical if none is suitable. Use
-an analogy only when direct explanation and a real or hypothetical example
-remain insufficient. Examples explain; they never prove a factual assertion.
+current instance, then a short hypothetical if none is suitable. Label every
+hypothetical example `hypothetical`. Use an analogy only when direct explanation
+and a real or hypothetical example remain insufficient. Examples explain; they
+never prove a factual assertion.

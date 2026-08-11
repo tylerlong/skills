@@ -170,6 +170,11 @@ the raw artifacts.
 | PAO-20 | Plain **MUST** make its selected Available task evidence visible in the response. |
 | PAO-21 | Material counts as Available task evidence only when the task or owning skill has already established it and it is present in the current context. |
 | PAO-22 | Plain **MUST NOT** widen an investigation beyond the owning task's needs merely to improve presentation. |
+| PAO-23 | Plain **MUST NOT** perform a task action. |
+| PAO-24 | Plain **MUST NOT** conduct an investigation. |
+| PAO-25 | Plain **MUST NOT** perform a search. |
+| PAO-26 | Plain **MUST NOT** invoke a tool to inspect or reinspect any material, including material already present as Available task evidence. |
+| PAO-27 | Plain **MUST NOT** execute or rerun a command. |
 
 ## Fidelity and protected material
 
@@ -196,6 +201,7 @@ the raw artifacts.
 | PFP-19 | A paired skill's mandated section arrangement **MUST** survive unchanged. |
 | PFP-20 | A paired skill's required artifact **MUST** survive unchanged. |
 | PFP-21 | A paired skill's machine-consumed format **MUST** survive unchanged. |
+| PFP-22 | An excerpt, diff, code block, quotation, or artifact explicitly required by the task or owning skill **MUST** remain protected from Plain's evidence-presentation edits. |
 
 ## Claim-first prose
 
@@ -284,8 +290,8 @@ the raw artifacts.
 | ID | Atomic obligation |
 | --- | --- |
 | PEE-01 | A claim about a project **MUST** identify its concrete subject rather than depend on a vague pointer such as `this suite`, `the layer`, or `it`. |
-| PEE-02 | If Source lines cannot establish a test, search, command, or runtime assertion but Available task evidence can, the response **MUST** show the exact command that produced the evidence. |
-| PEE-03 | Under the condition in PEE-02, the response **MUST** show the command's observed result. |
+| PEE-02 | If an observed test, search, command, or runtime assertion has no linkable authoritative record and both its complete exact command and observed result already exist in Available task evidence, the response **MUST** show that complete exact command. |
+| PEE-03 | Under the condition in PEE-02, the response **MUST** show a concise faithful result. |
 | PEE-04 | Under the condition in PEE-02, the command and result **MUST** sit beside the assertion they support. |
 | PEE-05 | Under the condition in PEE-02, the command, result, and supported assertion **MUST** appear in the same Plain-controlled message. |
 | PEE-06 | A tool event outside the response **MUST NOT** substitute for evidence presented to the reader. |
@@ -301,31 +307,31 @@ the raw artifacts.
 | PEE-16 | An implementation trace **MUST NOT** add links to downstream calls unrelated to proving the assertion. |
 | PEE-17 | Within each link-reuse scope, the first material mention of a real repository symbol **MUST** carry its evidence link. |
 | PEE-18 | After a repository entity or location has been linked in a link-reuse scope, another mention of that same entity or location in that scope **MUST NOT** carry another link. |
-| PEE-19 | A snippet copied from the repository **MUST** have a nearby link to its precise origin. |
+| PEE-19 | A snippet copied from the repository **MUST** carry a nearby precise link directly to its exact origin. |
 | PEE-20 | A snippet that does not yet exist **MUST** be labelled proposed. |
 | PEE-21 | A snippet invented only for explanation **MUST** be labelled hypothetical. |
 | PEE-22 | A correctly labelled proposed or hypothetical snippet **MAY** omit a source link. |
-| PEE-23 | Support for a code assertion **MUST** cite the exact relevant Source lines. |
-| PEE-24 | Support for a GitHub assertion **MUST** cite the exact relevant Issue, comment, commit, check, or native relationship. |
-| PEE-25 | Support for a documentation assertion **MUST** cite the relevant document section. |
+| PEE-23 | Support for a repository assertion **MUST** use a precise link to the exact relevant repository location. |
+| PEE-24 | Support for a GitHub assertion **MUST** use the exact native Issue, comment, commit, check, or relationship link. |
+| PEE-25 | Support for a documentation assertion **MUST** use a link to the relevant document section. |
 | PEE-26 | A change proposal **MUST** link every existing location already known to require modification. |
 | PEE-27 | A location that would be created by a proposal **MUST** be marked `new`. |
 | PEE-28 | Proposed scope that has not been investigated **MUST** be marked tentative. |
-| PEE-29 | If Available task evidence does not support a project assertion, the response **MUST** identify that assertion as unverified. |
+| PEE-29 | If sufficient Available task evidence is unavailable for a project assertion, the response **MUST** identify that assertion as unverified. |
 | PEE-30 | Every unverified project assertion **MUST** state what evidence is missing. |
 | PEE-31 | Links for individual members of a repetitive collection **MAY** be omitted only when the collection is mechanically reproducible and a complete member-link list would overwhelm the answer. |
 | PEE-32 | Eligibility for the repetitive-collection exception **MUST** be decided by judgment, not by a numeric cutoff. |
 | PEE-33 | When the repetitive-collection exception is used, the collection's defining symbol or starting location **MUST** be linked. |
 | PEE-34 | The collection-level link **MUST** remain separate from any evidence links for individual members. |
 | PEE-35 | Use of the repetitive-collection exception **MUST** include the collection's member count. |
-| PEE-36 | Use of the repetitive-collection exception **MUST** include the exact editor operation, search, or command that reproduces the collection. |
+| PEE-36 | Use of the repetitive-collection exception **MUST** include an exact editor operation, search, or command already present in Available task evidence that reproduces the collection. |
 | PEE-37 | A member discussed on its own **MUST** retain an individual evidence link despite the repetitive-collection exception. |
 | PEE-38 | A member compared on its own **MUST** retain an individual evidence link despite the repetitive-collection exception. |
 | PEE-39 | A member used to support a conclusion **MUST** retain an individual evidence link despite the repetitive-collection exception. |
 | PEE-40 | An example **MAY** be introduced only when the surrounding context would otherwise be insufficient. |
 | PEE-41 | When an example is warranted, a real instance from the current situation **SHOULD** be the first choice. |
 | PEE-42 | If no suitable real instance exists, a short hypothetical **SHOULD** be the next choice. |
-| PEE-43 | A hypothetical example **MUST** be labelled hypothetical. |
+| PEE-43 | Every hypothetical example **MUST** be labelled `hypothetical`. |
 | PEE-44 | An analogy **MAY** be used only after direct explanation and a real or hypothetical example remain insufficient. |
 | PEE-45 | An example **MUST NOT** serve as proof for a factual assertion. |
 | PEE-46 | The term project-specific claim **MUST** mean a factual assertion about a particular project or repository state. |
@@ -337,3 +343,10 @@ the raw artifacts.
 | PEE-52 | A different URL rendering or target range for the same repository entity or location **MUST NOT** make it a different entity or location for link reuse. |
 | PEE-53 | Different repository entities in the same file **MUST** remain different locations with their own specific evidence requirements. |
 | PEE-54 | A later claim about an already-linked entity or location **MUST** still receive adjacent specific evidence without repeating that entity's or location's link in the same link-reuse scope. |
+| PEE-55 | Subject to PEE-18 and PEE-54, when sufficient Available task evidence has a precise accessible link, Plain **MUST** use the smallest precise link that directly proves the claim. |
+| PEE-56 | When PEE-55 applies, Plain **MUST NOT** copy, quote, or paste the linked content merely as proof. |
+| PEE-57 | Plain **MUST NOT** create an excerpt from a repository file merely to serve as evidence. |
+| PEE-58 | Support for an observed test, search, command, or runtime assertion **MUST** use a linkable authoritative execution record when one exists in Available task evidence. |
+| PEE-59 | Plain **MUST NOT** paste a full log merely as proof. |
+| PEE-60 | Plain **MUST NOT** reconstruct a missing command, result, or other evidence. |
+| PEE-61 | A copied repository snippet explicitly required by the task or owning skill **MUST** retain the precise origin link required by PEE-19. |
