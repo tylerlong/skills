@@ -16,6 +16,10 @@ This repository uses a single-context domain layout. See `docs/agents/domain.md`
 
 Repository changes follow a human-gated design, specification, ticketing, and implementation sequence. See `docs/agents/change-workflow.md`.
 
+### Skill authoring
+
+Skill requirements and AI-facing instructions follow separate authoring and review stages. See `docs/agents/skill-authoring.md`.
+
 ### Sandbox repository
 
 Use [tylerlong/implement-in-parallel-sandbox](https://github.com/tylerlong/implement-in-parallel-sandbox) when work on this repository needs a real GitHub repository for testing or verification. Agents may freely create, edit, and delete files, branches, issues, pull requests, workflows, and other test resources there without additional approval.
