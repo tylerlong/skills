@@ -31,6 +31,13 @@ or embedded-artifact segment sharing one intended destination.
 
 ## Chat shape
 
+*Non-normative map; the rules below control: acknowledgement or progress →
+concrete and unheaded; substantive response → primary assertion first;
+supporting claim → H4 except in an all-label-only ranked set; ranked set →
+ordered list if label-only, numbered H4s if any item has body; other set →
+ordered list for meaningful execution or reading order, unordered list for
+separate same-level items, prose for an incidental brief enumeration.*
+
 Keep a bare acknowledgement concrete and unheaded about what it acknowledges;
 keep a brief factual progress message concrete and unheaded about its facts.
 
@@ -59,7 +66,8 @@ code block, nested list, or another associated paragraph. Use an ordered list
 when every item is label-only. If any has body, make every item a numbered H4
 starting with its literal rank, such as `1. Label`; a label-only item may stay
 bodyless.
-Never invent body or put multiple body paragraphs in an ordered-list item.
+Never put multiple body paragraphs in any ordered-list item. Never invent body
+for a ranked item.
 
 Otherwise, use an unordered list for separate same-level items and prose for an
 incidental brief enumeration. Use an ordered list for meaningful execution or
@@ -102,6 +110,14 @@ materially helps navigate a longer answer.
 
 ## Present Available task evidence beside claims
 
+*Non-normative map; the rules below control: supported project-specific claim
+outside protected material → Available task evidence beside it; unsupported
+project-specific claim outside protected material → unverified plus missing
+proof; execution assertion proved by Available task evidence but not Source →
+exact existing command plus result; first material repository symbol used as
+evidence in scope → link; later claim about that entity → adjacent evidence
+without another link; different entity → its own specific evidence.*
+
 Evidence presentation applies only to Plain-controlled Codex-authored claims
 outside protected material; never insert it into or rewrite protected material.
 The task or other owning skill establishes and acquires evidence; context
@@ -113,9 +129,9 @@ structure; it never investigates or widens investigation.
 A project-specific claim means a factual assertion about a particular project
 or repository state; negative and historical facts qualify. In a proposal, only
 each factual current-state assertion qualifies, not its prescriptive remainder.
-Name the concrete subject, not `this suite`, `the layer`, or `it`. Put supporting
-Available task evidence beside each claim; otherwise mark it unverified and name
-the missing evidence.
+Name the concrete subject rather than depending on a vague pointer such as `this
+suite`, `the layer`, or `it`. Put supporting Available task evidence beside each
+claim; otherwise mark it unverified and name the missing evidence.
 
 If Source lines cannot prove a test, search, command, or runtime assertion but
 Available task evidence proves that same assertion, reproduce beside it, in the
@@ -142,10 +158,16 @@ Never substitute an imprecise, ornamental, detached, or unmapped link collection
   its own specific link. One joint link may serve co-located entities only when
   its span proves each; one entity's evidence never proves another. Stop an
   implementation trace at direct proof; omit unrelated downstream calls.
-- Link a real repository symbol at its first material use as evidence in each
-  heading-bounded section. Never link that repository location again in the
-  section, regardless of URL rendering. Later claims still need adjacent
-  evidence without another same-location link.
+- The output's first content begins its initial link-reuse scope. If that content
+  is the required opening H3, the H3 begins the initial scope, not a second one.
+  Each later H3 resets the scope; H4 and lower headings do not. Sibling H4
+  sections beneath one H3 share its scope. Link a real repository symbol at its
+  first material use as evidence in each scope. Once linked, never link the same
+  repository entity or location again in that scope, even with a different URL
+  rendering or target range. Different entities in one file remain distinct
+  locations with their own specific evidence. Later claims still need adjacent
+  specific evidence without another link to that entity or location in the
+  scope.
 - Link a copied repository snippet near its precise origin. Label one not yet
   existing `proposed` and one invented only to explain `hypothetical`; either
   correctly labelled form may omit a source link.

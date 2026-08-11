@@ -299,8 +299,8 @@ the raw artifacts.
 | PEE-14 | Evidence attached to one entity **MUST NOT** be used as evidence for another entity. |
 | PEE-15 | An implementation trace **MUST** stop once the cited material directly establishes the assertion. |
 | PEE-16 | An implementation trace **MUST NOT** add links to downstream calls unrelated to proving the assertion. |
-| PEE-17 | Within each response section, the first material mention of a real repository symbol **MUST** carry its evidence link. |
-| PEE-18 | Later mentions of the same location in that section **MUST NOT** repeat the link. |
+| PEE-17 | Within each link-reuse scope, the first material mention of a real repository symbol **MUST** carry its evidence link. |
+| PEE-18 | After a repository entity or location has been linked in a link-reuse scope, another mention of that same entity or location in that scope **MUST NOT** carry another link. |
 | PEE-19 | A snippet copied from the repository **MUST** have a nearby link to its precise origin. |
 | PEE-20 | A snippet that does not yet exist **MUST** be labelled proposed. |
 | PEE-21 | A snippet invented only for explanation **MUST** be labelled hypothetical. |
@@ -329,3 +329,11 @@ the raw artifacts.
 | PEE-44 | An analogy **MAY** be used only after direct explanation and a real or hypothetical example remain insufficient. |
 | PEE-45 | An example **MUST NOT** serve as proof for a factual assertion. |
 | PEE-46 | The term project-specific claim **MUST** mean a factual assertion about a particular project or repository state. |
+| PEE-47 | An output's first content **MUST** begin its initial link-reuse scope. |
+| PEE-48 | When an output's first content is its required opening H3, that H3 **MUST** begin the initial link-reuse scope rather than a second scope. |
+| PEE-49 | Each later H3 **MUST** reset the link-reuse scope. |
+| PEE-50 | An H4 or lower heading **MUST NOT** reset the link-reuse scope. |
+| PEE-51 | Sibling H4 sections beneath the same H3 **MUST** share one link-reuse scope. |
+| PEE-52 | A different URL rendering or target range for the same repository entity or location **MUST NOT** make it a different entity or location for link reuse. |
+| PEE-53 | Different repository entities in the same file **MUST** remain different locations with their own specific evidence requirements. |
+| PEE-54 | A later claim about an already-linked entity or location **MUST** still receive adjacent specific evidence without repeating that entity's or location's link in the same link-reuse scope. |
