@@ -1,196 +1,187 @@
 ---
 name: plain
-description: Make Codex-authored chat prose concrete, claim-first, structured, and easy to follow without changing the task or a paired skill's workflow. Use only when the user explicitly names $plain, alone or with another skill, for final answers and intermediate commentary.
+description: Make Codex chat concrete, claim-first, structured, and easy to follow without changing the task or a paired skill. Use only for requests containing the exact case-sensitive token $plain.
 ---
 
 # Plain
 
 ## 1. Establish scope and ownership
 
-Plain activates only when the user's request literally names `$plain`. One Plain
-invocation comprises that request, all Codex-authored commentary while answering
-it—including explanations, findings, recommendations, questions, approval
-prompts, and progress—and the final response that answers it. Plain's influence
-ends with that final response. Classify each piece of output by its intended
-destination before applying Plain.
+Activate only for a request containing the exact case-sensitive token `$plain`.
+One invocation covers that request, all Codex-authored commentary
+answering it—including explanations, findings, recommendations, questions,
+approval prompts, and progress—and its final response; it ends with that
+response.
 
-- Plain changes eligible chat presentation only. Later rules may add navigation,
-  a brief definition, visible evidence, or an unverified-status label, but never
-  authorize changing or inventing a factual assertion or intended meaning,
-  dropping a caveat or condition, changing its level of exactness or evidentiary
-  basis, or altering the task.
-- A publication-bound artifact is identified by its intended destination, not by
-  visual structure or by appearing in chat. Never rewrite its wording, even in a
-  provisional draft shown in chat, and preserve its owner-defined format. Issues,
-  comments, specifications, documentation, and comparable output are protected;
-  surrounding Codex-authored chat remains eligible for Plain.
-- Never alter source code, identifiers, commands, configuration, quotations,
-  logs, text originating outside Codex, or machine-consumed output.
-- Determine structure ownership before applying any rule below. Structure
-  explicitly required by the user remains part of the task. A paired skill owns
-  investigation, verification, decisions, actions, workflow, questions and their
-  count, stopping points, and response structure. Every paired-skill structure
-  rule wins, including a required wrapper or a conflict with Plain's headings,
-  lists, tables, or evidence placement. Preserve its exact heading text and
-  levels, section set and arrangement, required artifacts, and machine-consumed
-  formats. Plain controls only otherwise-unassigned chat structure.
+An output piece is the smallest chat or embedded-artifact segment with one
+intended destination. Plain edits only eligible Codex-authored chat presentation.
+Adding navigation, a short definition, visible evidence, or an unverified label
+never authorizes altering the task, facts, intended meaning, any caveat or
+condition, exactness, or evidentiary basis.
+
+By intended destination—not appearance or chat presence—leave the wording and
+owner-defined format of every publication-bound artifact untouched, including a
+provisional draft.
+Issues, comments, specifications, documentation, and comparable output qualify.
+Also leave source code, identifiers, commands, configuration, quotations, logs,
+text from outside Codex, and machine-consumed output unchanged. Surrounding
+Codex-authored chat remains eligible. These limits bind Plain, not an explicitly
+requested transformation owned by the task.
+
+The task or owning skill resolves ownership conflicts, never Plain.
+User-required structure remains part of the task. A paired skill retains
+investigation, verification, decisions, actions, workflow, stopping points,
+questions and their count, and response structure. Its rules—including wrappers
+and evidence placement—prevail over Plain. Preserve its exact heading text and
+levels, section set and arrangement, required artifacts, and machine-consumed
+formats. Plain owns only unassigned chat structure.
 
 ## 2. Shape Plain-owned chat
 
-Keep a bare acknowledgement concrete about what it acknowledges, and keep a
-short factual progress update concrete about its facts. Leave either unheaded.
-For substantive prose whose structure Plain owns, apply this order:
+Leave a bare acknowledgement unheaded and concrete about what it acknowledges;
+leave a short factual progress update unheaded and concrete about its facts.
 
-1. Make the response's first content an H3 stating its primary assertion. Lead
-   with the most important truthful current outcome, unresolved choice, or
-   conclusion before process or skill activity, and name its subject. Prefer
-   this to a content-free heading such as `Overview`, `Details`, or `Update`.
-2. When it helps understanding, move from the assertion through its rationale,
-   nearby support, and practical consequence.
-3. A supporting claim independently advances the main assertion and can stand on
-   its own. Evidence, qualification, explanation, transition, or status data
-   remains body under its claim unless it meets both tests. Give every supporting
-   claim its own H4 section and never merge it into another proposition's
-   paragraph; distinct reasons requested by the user always qualify. Do not put a
-   supporting claim in a list except in an all-label-only ranked set. If the
-   response has only the opening H3's point, do not add an H4 that restates that
-   role; this exception never covers a distinct supporting claim.
-4. For a ranked set, each item has a label and may have a body. Its label is only
-   its subject noun or short phrase. Any explanatory wording, follow-up
-   reasoning, evidence, qualification, example, quotation, code block, nested
-   list, or another associated paragraph is body. If every item is label-only,
-   use an ordered list. If any item has a body, use a numbered H4 for every item
-   and begin each heading's text with its literal rank number, such as
-   `1. Label`. A label-only item in a mixed set may remain a bodyless H4; never
-   invent body content. Never put multiple body paragraphs inside an ordered-list
-   item.
-5. A section is the content governed by one heading. The first sentence after
-   every heading advances rather than repeats it. Every later Plain-owned
-   section, including a utility section, opens with a concrete assertion stating
-   what that section establishes.
+Start a Plain-owned substantive portion with an H3 stating its primary assertion.
+If Plain owns the response hierarchy, the H3 is literally its first content;
+otherwise it follows an owner-required wrapper or protected artifact. It names
+the subject and gives the most important truthful current outcome,
+unresolved choice, or conclusion before process or skill activity. Prefer it to
+a content-free lead such as `Overview`, `Details`, or `Update`. When that order
+helps understanding, prefer assertion → rationale → nearby support → practical
+consequence.
 
-Prefer familiar, concrete words and briefly define an unavoidable unfamiliar
-term. Do not change abstraction or verbosity merely because you infer expertise.
-Remove filler, meaning-free repetition, tangents, needless examples, and a
-conclusion that only repeats an earlier one, while retaining the context,
-reasoning, evidence, qualifications, and transitions needed to follow the
-answer. Plain may add an introduction, summary, or concluding section only when
-it materially helps navigation in a longer answer.
+A supporting claim independently advances the primary assertion and stands on
+its own. Each gets an H4 section; distinct requested reasons qualify. Never merge
+one into another proposition's paragraph or make it a list entry, except as a
+label in an all-label-only ranked set. Evidence, qualification, explanation,
+transition, and status remain body unless they meet both tests. If the H3
+contains the only point, do not add an H4 that repeats its
+role; a distinct claim still gets one.
+
+A set is ranked only when its order expresses relative priority. Each item has a
+label—only its subject noun or short phrase—and may have a body. Explanatory
+wording, reasoning, evidence, qualification, an example, quotation, code block,
+nested list, or another associated paragraph is body. If every item is
+label-only, use an ordered list. If any has a body, make every item an H4 whose
+text starts with its literal rank number, such as `1. Label`. A label-only item
+may remain bodyless in that mixed set; never invent body. No ordered-list item
+may contain multiple body paragraphs.
+
+For other content, use an unordered list for separate same-level items but prose
+for an incidental brief enumeration. Use an ordered list for steps with
+meaningful execution or reading order, and task-list checkboxes only for real
+completion criteria or status.
+
+A section is content governed by one heading. A permitted bodyless ranked H4 is
+the exception: the first sentence after every other heading advances rather than
+repeats it, and every later Plain-owned section—including a utility section—opens
+with a concrete section-level assertion.
+
+Prefer familiar, concrete words; briefly define an unavoidable unfamiliar term.
+Do not change abstraction or length merely because you infer expertise. Remove
+filler, meaning-free repetition, tangents, needless examples, and repeated
+conclusions while retaining the needed context, supporting reasoning and
+evidence, every qualification, and transitions needed to follow the answer.
+Plain may add an introduction, summary, or concluding section only when it
+materially helps navigate a longer answer.
 
 ## 3. Choose semantic Markdown
 
-- Use no more structural markup than needed to reveal relationships. Keep
-  reasoning whose parts depend on one another in continuous paragraph prose.
-  Never impose a numerical quota or threshold, including counts of items, words,
-  sentences, paragraphs, headings, or formatting devices, and never format merely
-  for visual variety.
-- Put separate items at the same semantic level in an unordered list; keep a
-  brief enumeration incidental to a larger thought in prose. Put steps with a
-  meaningful execution or reading order in an ordered list. Do not use task-list
-  checkboxes unless they represent real completion criteria or real status.
-  Apply the supporting-claim and ranked-set rules above before these general list
-  rules.
-- Put every compact comparison across common dimensions, compact mapping between
-  repeated keys and values, or compact record set sharing the same fields in a
-  table. Never put an extended or continuous explanation in one.
-- Render a sizeable verbatim quotation that stands as its own item as a
-  blockquote. Preserve its full character sequence, including quotation marks;
-  never replace wording with a speaker label, decorate non-quoted text as a
-  quotation, or present a Codex-authored paraphrase or summary as external quoted
-  wording.
-- Use bold only for a label whose role gives that styling semantic purpose, and
-  code formatting only for material whose role does the same. Emoji may be added
-  as semantic cues only when they speed recognition: pair each with a textual
-  label, keep repeated cues consistent, and retain normal list markers. Never
-  require a predetermined emoji set or apply emoji or other special styling
-  indiscriminately across items, headings, sections, or cells. Prefer to omit
-  emoji and special styling whenever they add noise.
+- Use only markup needed to reveal relationships; keep interdependent reasoning
+  in continuous prose. Never format merely for variety.
+- Never impose numerical presentation quotas or thresholds, including counts of
+  items, words, sentences, paragraphs, headings, or formatting devices. Literal
+  rank numbers, evidence counts, and other content-required numbers are not quotas.
+- Use a table for every compact comparison across common dimensions, compact
+  repeated key-value mapping, or compact record set with shared fields. Keep
+  extended or continuous explanation out of tables.
+- Render a sizeable standalone verbatim quotation as a blockquote. Its markers
+  are presentation, not source characters. Preserve every quoted source
+  character, including quotation marks; never replace wording with a speaker
+  label, style non-quoted text as a quotation, or present a Codex paraphrase or
+  summary as external quoted wording.
+- Use bold only for a label whose role gives it semantic purpose and code styling
+  only for material whose role does the same. Emoji may be semantic cues only
+  when they speed recognition; pair them with textual labels, give repeated cues
+  consistent meanings, and retain list markers. Never require a fixed emoji set
+  or apply styling indiscriminately across items, headings, sections, or cells.
+  Prefer no emoji or special styling when either adds noise.
 
 ## 4. Present evidence in stages
 
-The structure-ownership rule above still controls evidence placement.
+### Stage 1: establish evidence and classify the claim
 
-### Stage 1: classify the claim and available evidence
+The task owns evidence unless a separate skill does. The owner decides what is
+established and acquires what its conclusion needs; context presence alone is
+not enough. Available task evidence is owner-established material still in
+current context, including chat, tool results, or inspected files, and may
+predate this invocation. Plain neither investigates nor widens investigation for
+presentation; within owner-required structure, it selects relevant Available
+task evidence and makes it visible.
 
 A project-specific claim is a factual assertion about a particular project or
-repository state. Factual negative and historical assertions qualify. A proposal
-qualifies only where it asserts current project state. Name the concrete subject
-instead of relying on a vague reference such as “this suite,” “the layer,” or
-“it.”
-
-The task or owning skill decides whether evidence is established; mere presence
-in context does not establish it. Available task evidence is material the owner
-already established and that remains in the model's current context, including
-chat, tool results, or inspected files. That context may extend beyond the
-narrower Plain invocation. Plain selects relevant Available task evidence and
-makes it visible. The task or owning skill performs any evidence acquisition
-needed for its conclusion and may investigate for its own needs; Plain never
-initiates or widens investigation.
-
-Beside every project-specific claim, present supporting Available task evidence
-or mark the claim unverified and identify the missing evidence. Apply every
-specialized rule below that fits; those rules refine this general rule.
+repository state. Factual negative and historical assertions qualify; a proposal
+qualifies only where it asserts current project state. Name its concrete subject,
+not `this suite`, `the layer`, or `it`. Beside every such claim, show supporting
+Available task evidence or mark it unverified and identify what is missing.
 
 ### Stage 2: handle execution claims
 
-For a test, search, command, or runtime assertion that source lines cannot prove,
-show the exact command and its observed result beside the assertion in the same
-Plain-controlled message when both are Available task evidence. The result may
-be a concise faithful outcome rather than the complete raw output. A tool event
-alone is not evidence presented to the reader. If the exact command or result is
-unavailable, the unverified label and missing-evidence disclosure are mandatory
-even when different evidence supports the assertion.
+If source lines cannot establish a test, search, command, or runtime assertion
+and both its exact command and observed result are Available task evidence, show
+them beside the assertion in the same Plain-controlled message. Only retained
+verbatim command text counts; never reconstruct an equivalent. The result may be
+a concise faithful outcome instead of complete raw output. A tool event outside
+the response is not presented evidence. If the command or result is unavailable,
+mark the assertion unverified and name what is missing even when other evidence
+supports it.
 
 ### Stage 3: attach repository evidence and links
 
-For every real repository location—a path, line, or symbol—that is named or used
-materially, put specific Available task evidence next to the claim. Merely naming
-the location is not evidence. If evidence is unavailable, use the general
-unverified fallback. Do not substitute an imprecise, ornamental, detached, or
-unmapped collection of links.
+Every real repository path, line, or symbol mention, even an incidental one,
+needs specific Available task evidence beside its claim. Naming a location is
+not evidence. If none is available, mark the claim unverified and name what is
+missing. Never substitute an imprecise, ornamental, detached, or unmapped link
+collection.
 
-A path or line mentioned only as a location needs specific evidence but is not,
-for that reason alone, required to be a link. A precise link is mandatory for
-these cases:
-
-- Support a code assertion with the exact relevant source lines.
-- Link a real repository symbol at its first material use in each section; do not
-  relink later mentions of the same location in that section.
-- Give a snippet copied from the repository a nearby link to its precise origin.
-  Label a not-yet-existing snippet `proposed` and an explanation-only invention
-  `hypothetical`; either correctly labelled form may omit a source link.
+- A path or line mentioned only as a location still needs evidence, but no link
+  solely for that reason. Cite exact relevant source lines for a code assertion.
+- Link a real symbol at its first material mention in each heading-bounded
+  section. A later claim about it still needs adjacent evidence but must not
+  repeat that link there; use a different relevant span or nearby non-link
+  evidence when appropriate.
+- Link a copied repository snippet to its nearby precise origin. Label a
+  not-yet-existing snippet `proposed` and an explanation-only invention
+  `hypothetical`; either labelled form may omit a source link.
 - Link every entity needed to prove a multi-part relationship, flow, comparison,
-  or proposal. Each entity needs participant-specific evidence. One link jointly
-  attached to co-located participants may prove each when its single source span
-  directly establishes each participant; otherwise one participant's evidence
-  never proves another.
+  or proposal, with participant-specific evidence. One jointly attached link may
+  prove co-located participants only if one span establishes them all; otherwise
+  one participant's evidence never proves another.
 
-Each evidence link covers no more than one contiguous relevant region of one
-file. Target its first relevant line or, when supported, a narrowly bounded
-range. Use separate links for non-adjacent regions or different files. Stop an
-implementation trace once the cited material directly establishes the assertion;
-do not add unrelated downstream calls. For GitHub assertions, cite the exact
-Issue, comment, commit, check, or native relationship; for documentation
-assertions, cite the relevant section.
+Each link covers at most one contiguous relevant region in one file. Target its
+first relevant line or a supported narrow range; use separate links for
+non-adjacent regions or different files. Stop an implementation trace once the
+cited material directly establishes the assertion; never add unrelated
+downstream calls. For GitHub, cite the exact Issue, comment, commit, check, or
+native relationship. For documentation, cite the relevant section.
 
 ### Stage 4: handle proposals and repetitive sets
 
-For a proposed change, link every existing location already known from Available
-task evidence to require that change. Mark a location that would be created as
-`new`, and mark uninvestigated scope as tentative.
+For a proposed change, link every existing modification point that Available
+task evidence shows must be edited, not a location that only proves the need.
+Mark a location to be created `new` and uninvestigated scope tentative.
 
-Individual links for a repetitive collection may be omitted only when the
-collection is mechanically reproducible and a complete member-link list would
-overwhelm the answer. Decide by judgment, never a numeric cutoff. When using this
-exception, link the collection's defining symbol or starting location separately
-from member links, state its member count, and give the exact editor operation,
-search, or command that reproduces it. Even then, individually link every member
-discussed, compared, or used to support a conclusion.
+Member links in a repetitive collection may be omitted only when it is
+mechanically reproducible and a complete member-link list would overwhelm the
+answer. Decide by judgment, never a numeric cutoff. When omitting them, link the
+defining symbol or starting location separately from member evidence, state the
+member count, and give the exact editor operation, search, or command that
+reproduces it. Still link each member discussed, compared, or used to support a
+conclusion.
 
-## Examples
+## 5. Use examples only when needed
 
-An example may be used only when context is otherwise missing. Prefer a real
-example from the current situation. If no suitable real instance exists, prefer
-a short labelled hypothetical. An analogy may be used only after direct
-explanation and a real or hypothetical example remain insufficient. Examples
-explain; they never prove a factual assertion.
+An example may be used only when context is otherwise insufficient. Prefer a
+real current instance, then a short labelled hypothetical if none is suitable.
+Use an analogy only if direct explanation and a real or hypothetical example
+remain insufficient. Examples explain; they never prove a factual assertion.
