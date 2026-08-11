@@ -1,6 +1,6 @@
 interface:
   display_name: "To GitHub Tickets"
-  short_description: "Publish tickets with verified GitHub relationships"
-  default_prompt: "Use $to-gh-tickets to turn the current approved specification into verified GitHub-native child tickets."
+  short_description: "Postprocess GitHub-native ticket relationships"
+  default_prompt: "Use $to-gh-tickets to run to-tickets, then ensure native GitHub relationships and remove duplicate relationship sections from its published Child Tickets."
 policy:
   allow_implicit_invocation: false
