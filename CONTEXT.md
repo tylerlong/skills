@@ -26,11 +26,11 @@ The Plain review gate requiring every supported reader profile to recover every 
 _Avoid_: Contract coverage, majority agreement
 
 **Instruction clarity**:
-The Plain quality dimension measuring how precisely and consistently instructions express obligations, boundaries, conditions, and exceptions.
+The Plain quality dimension measuring avoidable difficulty for the intended model reader in recovering precise and consistent obligations, boundaries, conditions, and exceptions, relative to the best presentation achievable for the frozen contract.
 _Avoid_: Contract fidelity, correctness score
 
 **Instruction readability**:
-The Plain quality dimension measuring how easily a reader can navigate and understand instructions without avoidable repetition or cognitive load.
+The Plain quality dimension measuring avoidable presentation burden when the intended model reader navigates and understands instructions, relative to the best presentation achievable for the frozen contract and its inherent semantic complexity.
 _Avoid_: Output readability, brevity
 
 **Instruction footprint**:

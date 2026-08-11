@@ -48,33 +48,48 @@ preference, condition, and exception; state its modality, conditions, and
 exceptions; and cite the exact instruction lines supporting it. Then list every
 plausible materially different reading, or `None`. Finish with one integer
 Instruction Clarity score and one integer Instruction Readability score, each
-with a concise reason citing the most material instruction evidence. Do not emit
-Pass/Fail, a pairwise preference, or a judgment about whether the approved
-behavior is desirable. Evaluate the approved contract rather than substituting a
-preferred writing style.
+with a concise reason citing the most material instruction evidence. Every score
+below 4 must cite the exact instruction evidence, explain the avoidable defect,
+propose a concrete valid improvement, and explain why applying it can plausibly
+raise that dimension to at least 4 without changing approved behavior, losing
+any modality, condition, exception, protected boundary, or self-containment
+constraint, lowering the other dimension, or failing Contract Fidelity. A score
+of 4 must identify the remaining minor valid improvement. If no meaningful
+feasible non-trade-off improvement can be identified, assign 5. Five is the
+attainable frontier under the constraints, not universal simplicity or
+perfection. Do not emit Pass/Fail, a pairwise preference, or a judgment about
+whether the approved behavior is desirable. Evaluate the approved contract
+rather than substituting a preferred writing style.
 
-**Instruction Clarity rubric.** Instruction Clarity measures precision and
-consistency in expressing obligations, boundaries, conditions, and exceptions.
+Judge both dimensions relative to the best presentation achievable for the
+frozen contract and intended model reader. Inherent semantic complexity,
+required precision, and intentional qualitative seams are not defects merely
+because they require effort. Generic requests to shorten, simplify, or reduce
+cognitive load are not actionable improvements.
+
+**Instruction Clarity rubric.** Instruction Clarity measures avoidable
+difficulty in recovering precise and consistent obligations, boundaries,
+conditions, and exceptions, relative to the frozen contract.
 
 | Score | Anchor |
 | --- | --- |
-| 1 | Unusable: obligations or boundaries cannot be recovered reliably. |
-| 2 | Major or repeated material obstruction makes obligations inconsistent or ambiguous. |
-| 3 | Meaning is recoverable only with significant friction or ambiguity. |
-| 4 | Obligations and boundaries are clear and consistent, with only minor localized issues. |
-| 5 | Exceptionally precise and consistent, with no meaningful clarity improvement available without trade-off. |
+| 1 | Unusable and requires a fundamental rewrite to recover obligations or boundaries reliably. |
+| 2 | Major or repeated avoidable obstruction to precise and consistent recovery, with a credible repair strategy. |
+| 3 | Significant avoidable obstruction to precise and consistent recovery, with a concrete path to at least 4. |
+| 4 | Passing: obligations and boundaries are precise and consistent, with only a minor valid improvement remaining. |
+| 5 | Attainable frontier: no meaningful feasible clarity improvement remains without behavior change or another trade-off. |
 
-**Instruction Readability rubric.** Instruction Readability measures how easily
-a reader can navigate and understand the instructions without avoidable
-repetition or cognitive load.
+**Instruction Readability rubric.** Instruction Readability measures avoidable
+presentation burden when the intended model reader navigates and understands
+the instructions, relative to the contract's inherent semantic complexity.
 
 | Score | Anchor |
 | --- | --- |
-| 1 | Unusable: the instructions cannot be navigated or understood reliably. |
-| 2 | Major or repeated material obstruction makes navigation or understanding difficult. |
-| 3 | Meaning is recoverable only with significant friction or cognitive load. |
-| 4 | The instructions are clear and easy to navigate, with only minor localized issues. |
-| 5 | Exceptionally easy to navigate and understand, with no meaningful readability improvement available without trade-off. |
+| 1 | Unusable and requires a fundamental rewrite for reliable navigation and understanding. |
+| 2 | Major or repeated avoidable presentation obstruction, with a credible repair strategy. |
+| 3 | Significant avoidable presentation obstruction, with a concrete path to at least 4. |
+| 4 | Passing: navigation and understanding have only a minor valid improvement remaining. |
+| 5 | Attainable frontier: no meaningful feasible readability improvement remains without behavior change or another trade-off. |
 
 **Coordinator mapping.** The implementation coordinator owns the
 obligation-by-profile matrix, Contract Fidelity decision, scorecard, and final
@@ -86,6 +101,12 @@ missing meaning for the reader. Contract Fidelity passes only if every profile
 recovers every obligation correctly and no profile recovers a material extra or
 incompatible obligation or reports a plausible materially incompatible reading.
 There is no fourth judge, majority cure, or favorable resampling.
+
+The coordinator validates every proposed improvement against the frozen
+specification and rejects it unless it preserves every affected obligation,
+modality, condition, exception, protected boundary, self-containment constraint,
+the other score dimension, and Contract Fidelity. A generic request to shorten,
+simplify, or reduce cognitive load does not satisfy this requirement.
 
 **Scores, outcomes, and optimization.** Every one of the six profile-by-dimension
 scores must be at least 4. Calculate an official composite only after Mechanical
@@ -103,10 +124,13 @@ all six scores. Use only these outcomes:
   rerun automatically.
 
 Run one completed review per exact version/profile. Another review is permitted
-only after Candidate instructions or this specification changes; first address
-every defect, mismatch, ambiguity, or sub-4 score in the Candidate. Apply this
-ordered policy: both gates; all six scores at least 4; valid-Baseline composite
-non-regression; higher composite; equal-composite smaller Instruction footprint.
+only after Candidate instructions or this specification changes. Before a
+Candidate repair review, address every accepted Mechanical Validity defect,
+Contract Fidelity mismatch, instruction-attributable ambiguity, and valid sub-4
+improvement proposal; alternatively, freeze an approved specification
+correction first. Apply this ordered policy: both gates; all six scores at least
+4; valid-Baseline composite non-regression; higher composite; equal-composite
+smaller Instruction footprint.
 Instruction footprint is the Unicode code-point count of the exact complete
 `SKILL.md`, including frontmatter, body, whitespace, and final newline.
 Abbreviations improve it only when they remain unambiguous and every Readability
