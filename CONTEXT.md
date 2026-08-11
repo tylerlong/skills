@@ -12,6 +12,22 @@ _Avoid_: Live skill, working copy
 The required agent behavior and boundaries of a source skill, independent of its wording.
 _Avoid_: Feature list, current prose
 
+**Plain contract specification**:
+The versioned, wording-independent statement of the `plain` source skill's atomic obligations, including each obligation's modality and conditions.
+_Avoid_: Contract Map, Plain behavior catalog
+
+**Contract fidelity**:
+The Plain review gate requiring every supported reader profile to recover every specified obligation with its intended modality and conditions from the exact Source skill.
+_Avoid_: Contract coverage, majority agreement
+
+**Instruction clarity**:
+The Plain quality dimension measuring how precisely and consistently instructions express obligations, boundaries, conditions, and exceptions.
+_Avoid_: Contract fidelity, correctness score
+
+**Instruction readability**:
+The Plain quality dimension measuring how easily a reader can navigate and understand instructions without avoidable repetition or cognitive load.
+_Avoid_: Output readability, brevity
+
 **Instruction footprint**:
 The text and resulting token cost of a source skill's metadata and instructions.
 _Avoid_: Big skill, skill size
@@ -21,6 +37,10 @@ An AI-executed, controlled scenario that invokes an exact Source skill and
 verifies its observable agent output or authoritative external state without
 depending on instruction wording or hidden reasoning.
 _Avoid_: Prompt snapshot, skill unit test
+
+**Skill contract review**:
+A direct evaluation of exact Source skill instructions against the Plain contract specification, measuring contract fidelity, instruction clarity, and instruction readability without claiming runtime compliance.
+_Avoid_: Skill behavior test, runtime evaluation
 
 **Baseline skill**:
 The exact committed Source skill evaluated before a revision under recorded
