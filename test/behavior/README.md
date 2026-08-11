@@ -4,6 +4,14 @@ Skill behavior tests are AI-executed scenarios that characterize observable
 agent output and authoritative external state. They do not inspect instruction
 wording or hidden reasoning and are not part of `make test`.
 
+The `plain` Source skill is the explicit exception recorded by ADR 0002. Its
+[`Plain contract specification`](plain.md) is the sole wording-independent
+behavior authority; omitted legacy rules are neutral. Reviewers inspect the
+exact complete Source instructions directly after the specification and
+Candidate are frozen. Plain has no runtime scenario or fixture and does not use
+the execution protocol below. Other Source skills continue to use this
+behavior-test policy unchanged.
+
 ## Scenario format
 
 Each scenario records a stable catalog identifier such as `IP-01`, `TGH-01`, or

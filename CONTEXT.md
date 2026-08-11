@@ -8,28 +8,35 @@ This repository is the canonical home for skills authored and maintained by Tyle
 The canonical, version-controlled definition of an authored skill.
 _Avoid_: Live skill, working copy
 
+**Source identity**:
+The repository path, full Git commit SHA, and SHA-256 digest of an exact complete
+Source skill file.
+_Avoid_: Branch name, short SHA
+
 **Skill contract**:
 The required agent behavior and boundaries of a source skill, independent of its wording.
 _Avoid_: Feature list, current prose
 
 **Plain contract specification**:
-The versioned, wording-independent statement of the `plain` source skill's atomic obligations, including each obligation's modality and conditions.
-_Avoid_: Contract Map, Plain behavior catalog
+The versioned, wording-independent authority containing only the non-obvious
+behavior required of the `plain` Source skill. Omitted legacy rules are neutral.
 
 **Contract fidelity**:
-The Plain review gate requiring every supported reader profile to recover every specified obligation with its intended modality and conditions from the exact Source skill, without recovering a material extra or incompatible obligation or plausible alternative reading.
+The Plain review gate requiring every supported Reader profile to recover every
+specified obligation from the exact Source skill without recovering a material
+extra or incompatible obligation.
 _Avoid_: Contract coverage, majority agreement
 
 **Instruction clarity**:
-The Plain quality dimension measuring how precisely and consistently instructions express obligations, boundaries, conditions, and exceptions.
+The Plain quality dimension measuring avoidable difficulty for the intended model reader in recovering precise and consistent obligations, boundaries, conditions, and exceptions, relative to the best presentation achievable for the frozen contract.
 _Avoid_: Contract fidelity, correctness score
 
 **Instruction readability**:
-The Plain quality dimension measuring how easily a reader can navigate and understand instructions without avoidable repetition or cognitive load.
+The Plain quality dimension measuring avoidable presentation burden when the intended model reader navigates and understands instructions, relative to the best presentation achievable for the frozen contract and its inherent semantic complexity.
 _Avoid_: Output readability, brevity
 
 **Instruction footprint**:
-The Unicode character count of a source skill's complete `SKILL.md`, including its metadata and instructions.
+The Unicode code-point count of a source skill's complete `SKILL.md`, including frontmatter, body, whitespace, and final newline.
 _Avoid_: Big skill, skill size
 
 **Skill behavior test**:
@@ -39,7 +46,9 @@ depending on instruction wording or hidden reasoning.
 _Avoid_: Prompt snapshot, skill unit test
 
 **Skill contract review**:
-A direct evaluation of exact Source skill instructions against the Plain contract specification, measuring contract fidelity, instruction clarity, and instruction readability without claiming runtime compliance.
+A direct evaluation of exact Source skill instructions against the Plain
+contract specification, measuring Contract fidelity, Instruction clarity, and
+Instruction readability without invoking Plain or claiming runtime compliance.
 _Avoid_: Skill behavior test, runtime evaluation
 
 **Available task evidence**:
@@ -48,13 +57,14 @@ _Avoid_: Complete investigation record, hidden evidence
 
 **Baseline skill**:
 The exact committed Source skill evaluated before a revision under recorded
-controlled conditions. A behavior-preserving revision requires a passing
-characterized Baseline; a behavior-changing revision may record the current gap.
+controlled conditions. A preservation comparison requires a Baseline that
+passes the Source skill's applicable evaluation protocol.
 _Avoid_: Old skill, installed skill
 
 **Candidate skill**:
-The exact proposed Source skill revision evaluated with the same conditions and
-scenarios recorded for the Baseline skill.
+The exact proposed Source skill revision evaluated under its applicable protocol
+and the same controlled conditions as the Baseline, except when an approved
+contract change requires Candidate-only qualification.
 _Avoid_: New skill, installed skill
 
 **Carried forward**:
