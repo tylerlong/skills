@@ -32,15 +32,16 @@ prompts, and progress. Classify text by its destination.
   subject and develop claim → explanation → nearby support → consequence when
   useful.
 - Keep bare acknowledgements and short factual progress updates concrete and
-  unheaded. When Plain owns a substantive response's structure, start at H3 with
-  an opening heading that states the main claim. Prefer it to `Overview`,
-  `Details`, or `Update`.
+  unheaded. When Plain owns a substantive response's structure, make the
+  response's first content an H3 that states the main claim. Prefer it to
+  `Overview`, `Details`, or `Update`.
 - A supporting claim is a proposition that advances the main assertion and can
-  stand on its own. Give every such claim its own H4 section, never a list or
-  combined paragraph; requested independent reasons always qualify. When a
-  substantive response contains only the point stated by its opening H3, do not
-  add an H4 that repeats that role; this exception never covers a distinct
-  supporting claim.
+  stand on its own. Give every such claim its own H4 section and never combine it
+  with another claim in one paragraph. Do not put one in a list unless it belongs
+  to an all-label-only ranked set under the rule below; requested independent
+  reasons always qualify. When a substantive response contains only the point
+  stated by its opening H3, do not add an H4 that repeats that role; this
+  exception never covers a distinct supporting claim.
 - The first sentence sharpens its heading rather than repeating it; each later
   section opens with its claim.
 - Prefer familiar, concrete words and briefly define an unavoidable unfamiliar
@@ -57,31 +58,38 @@ prompts, and progress. Classify text by its destination.
   paragraph count; do not format for visual variety.
 - Put separate items at the same semantic level in an unordered list unless they
   are supporting claims, which follow the H4 rule above; keep incidental short
-  enumerations in connected prose. Put meaningful sequences or ranks in an
-  ordered list, and use task lists only for real completion criteria or status.
+  enumerations in connected prose. Put meaningful sequences in an ordered list,
+  and use task lists only for real completion criteria or status.
+- A ranked item has a label and may have a body. Follow-up explanation, reasoning,
+  evidence, qualification, example, quotation, code block, nested list, or
+  another paragraph associated with the label counts as its body. If every item
+  is label-only, use an ordered list. If any item has a body, render the entire
+  ranked set as numbered H4 sections, one for every item. A label-only item in a
+  mixed set may remain a numbered H4 without a body; never invent body content.
+  Never put multiple body paragraphs inside an ordered-list item.
 - Put every compact comparison across common dimensions, compact mapping between
   repeated keys and values, or compact record set sharing the same fields in a
   table; never put an extended or continuous explanation in one.
 - Render a substantial exact quotation presented as a separate item in a
   blockquote. Copy every character, including quotation marks; do not substitute
   a speaker label, decorate other text, or make summaries look quoted.
-- Use bold only for a label and code formatting only for material when the task or
-  owning format establishes a semantic role for that styling. Emoji are optional
-  semantic signposts only when they speed recognition: pair them with words, use
-  them consistently, retain normal list markers, and never impose a palette or
-  decorate every item, heading, section, or cell. Prefer none when emoji or
-  special formatting would add noise.
+- Use bold only for a label whose role gives that styling semantic purpose. Use
+  code formatting only for material whose role gives that styling semantic
+  purpose. Emoji are optional semantic signposts only when they speed recognition:
+  pair them with words, use them consistently, retain normal list markers, and
+  never impose a palette or decorate every item, heading, section, or cell. Prefer
+  none when emoji or special formatting would add noise.
 
 ## Present Available task evidence beside claims
 
-The task or owning skill gathers evidence for its conclusions. For every
-project-specific claim, Plain presents supporting Available task evidence beside
-it or uses the unverified fallback below; the specialized rules below refine,
-rather than limit, that general rule. Available task evidence includes material
-the task or owning skill has already established in current-context chat, tool
-results, or inspected files. Plain's role is presentation only; it never
-initiates or expands investigation. The task or owning skill may investigate as
-its own needs require.
+The task or owning skill gathers evidence for its conclusions. A project-specific
+claim is a factual assertion about a particular project or repository state. For
+every such claim, Plain presents supporting Available task evidence beside it or
+uses the unverified fallback below; the specialized rules below refine, rather
+than limit, that general rule. Available task evidence includes material the task
+or owning skill has already established in current-context chat, tool results, or
+inspected files. Plain's role is presentation only; it never initiates or expands
+investigation. The task or owning skill may investigate as its own needs require.
 
 - Name the actual subject instead of relying on vague references such as “this
   suite,” “the layer,” or “it.”

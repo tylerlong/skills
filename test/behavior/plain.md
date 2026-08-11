@@ -184,11 +184,11 @@ the raw artifacts.
 | PCP-05 | A message that only acknowledges receipt **MUST NOT** have a heading. |
 | PCP-06 | A brief progress message containing facts **MUST** state those facts concretely. |
 | PCP-07 | A brief progress message containing facts **MUST NOT** have a heading. |
-| PCP-08 | If Plain controls a substantive response's hierarchy, the response **MUST** start at H3. |
+| PCP-08 | If Plain controls a substantive response's hierarchy, the response's first content **MUST** be an H3. |
 | PCP-09 | That opening H3 **MUST** communicate the response's primary assertion. |
 | PCP-10 | A lead heading **SHOULD NOT** be a content-free label such as `Overview`, `Details`, or `Update`. |
-| PCP-11 | Each supporting proposition that can stand on its own **MUST** have a separate H4 section. |
-| PCP-12 | An independently meaningful supporting proposition **MUST NOT** be reduced to a list entry. |
+| PCP-11 | Each supporting proposition that can stand on its own **MUST** have a separate H4 section, except when it is a ranked item in an all-label-only ranked set governed by PSS-08. |
+| PCP-12 | An independently meaningful supporting proposition **MUST NOT** be reduced to a list entry, except when it is a ranked item in an all-label-only ranked set governed by PSS-08. |
 | PCP-13 | An independently meaningful supporting proposition **MUST NOT** be merged into another proposition's paragraph. |
 | PCP-14 | Distinct reasons explicitly requested by the user **MUST** be treated as separate supporting propositions. |
 | PCP-15 | When a substantive response contains only one point, Plain **MUST NOT** create an H4 that restates the H3's role. |
@@ -224,7 +224,7 @@ the raw artifacts.
 | PSS-05 | Separate items at the same semantic level **MUST** be represented as an unordered list. |
 | PSS-06 | A brief enumeration that is incidental to a larger thought **MUST** stay within the prose. |
 | PSS-07 | Steps with a meaningful execution or reading order **MUST** be represented as an ordered list. |
-| PSS-08 | Ranked items **MUST** be represented as an ordered list. |
+| PSS-08 | If every item in a ranked set is label-only, the set **MUST** be represented as an ordered list. |
 | PSS-09 | Task-list checkboxes **MUST NOT** be used unless they represent real completion criteria or real status. |
 | PSS-10 | A compact comparison across common dimensions **MUST** be represented in a table. |
 | PSS-11 | A compact mapping between repeated keys and values **MUST** be represented in a table. |
@@ -246,6 +246,14 @@ the raw artifacts.
 | PSS-27 | Special styling **MUST NOT** be applied indiscriminately across content units such as items, headings, sections, or cells. |
 | PSS-28 | Plain **SHOULD** omit emoji whenever it would increase noise. |
 | PSS-29 | Plain **SHOULD** omit special styling whenever it would increase noise. |
+| PSS-30 | A ranked item **MUST** have a label. |
+| PSS-31 | A ranked item **MAY** have a body. |
+| PSS-32 | Follow-up explanation, reasoning, evidence, qualification, example, quotation, code block, nested list, or another paragraph associated with a ranked item's label **MUST** count as that item's body. |
+| PSS-33 | If any item in a ranked set has a body, every item in that set **MUST** be represented as a numbered H4 section. |
+| PSS-34 | An ordered-list item **MUST NOT** contain multiple body paragraphs. |
+| PSS-35 | Plain **MUST NOT** invent body content for a ranked item. |
+| PSS-36 | In a ranked set containing any body, a label-only item **MUST** still be represented as a numbered H4 section. |
+| PSS-37 | A label-only item governed by PSS-36 **MAY** remain without body content. |
 
 ## Evidence and examples
 
@@ -296,3 +304,4 @@ the raw artifacts.
 | PEE-43 | A hypothetical example **MUST** be labelled hypothetical. |
 | PEE-44 | An analogy **MAY** be used only after direct explanation and a real or hypothetical example remain insufficient. |
 | PEE-45 | An example **MUST NOT** serve as proof for a factual assertion. |
+| PEE-46 | The term project-specific claim **MUST** mean a factual assertion about a particular project or repository state. |
