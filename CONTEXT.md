@@ -18,11 +18,13 @@ The required agent behavior and boundaries of a source skill, independent of its
 _Avoid_: Feature list, current prose
 
 **Plain contract specification**:
-The versioned, wording-independent statement of the `plain` source skill's atomic obligations, including each obligation's modality, conditions, and exceptions.
-_Avoid_: Contract Map, Plain behavior catalog
+The versioned, wording-independent authority containing only the non-obvious
+behavior required of the `plain` Source skill. Omitted legacy rules are neutral.
 
 **Contract fidelity**:
-The Plain review gate requiring every supported reader profile to recover every specified obligation with its intended modality, conditions, and exceptions from the exact Source skill, without recovering a material extra or incompatible obligation or plausible materially incompatible alternative reading.
+The Plain review gate requiring every supported Reader profile to recover every
+specified obligation from the exact Source skill without recovering a material
+extra or incompatible obligation.
 _Avoid_: Contract coverage, majority agreement
 
 **Instruction clarity**:
@@ -44,7 +46,9 @@ depending on instruction wording or hidden reasoning.
 _Avoid_: Prompt snapshot, skill unit test
 
 **Skill contract review**:
-A direct evaluation of exact Source skill instructions against the Plain contract specification, measuring contract fidelity, instruction clarity, and instruction readability without claiming runtime compliance.
+A direct evaluation of exact Source skill instructions against the Plain
+contract specification, measuring Contract fidelity, Instruction clarity, and
+Instruction readability without invoking Plain or claiming runtime compliance.
 _Avoid_: Skill behavior test, runtime evaluation
 
 **Available task evidence**:
