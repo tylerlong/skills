@@ -17,7 +17,7 @@ The versioned, wording-independent statement of the `plain` source skill's atomi
 _Avoid_: Contract Map, Plain behavior catalog
 
 **Contract fidelity**:
-The Plain review gate requiring every supported reader profile to recover every specified obligation with its intended modality and conditions from the exact Source skill.
+The Plain review gate requiring every supported reader profile to recover every specified obligation with its intended modality and conditions from the exact Source skill, without recovering a material extra or incompatible obligation or plausible alternative reading.
 _Avoid_: Contract coverage, majority agreement
 
 **Instruction clarity**:
@@ -29,7 +29,7 @@ The Plain quality dimension measuring how easily a reader can navigate and under
 _Avoid_: Output readability, brevity
 
 **Instruction footprint**:
-The text and resulting token cost of a source skill's metadata and instructions.
+The Unicode character count of a source skill's complete `SKILL.md`, including its metadata and instructions.
 _Avoid_: Big skill, skill size
 
 **Skill behavior test**:
@@ -41,6 +41,10 @@ _Avoid_: Prompt snapshot, skill unit test
 **Skill contract review**:
 A direct evaluation of exact Source skill instructions against the Plain contract specification, measuring contract fidelity, instruction clarity, and instruction readability without claiming runtime compliance.
 _Avoid_: Skill behavior test, runtime evaluation
+
+**Available task evidence**:
+Evidence already established by the task or owning skill and present in the agent's current context. Plain selects and presents it but does not initiate investigation to create new evidence.
+_Avoid_: Complete investigation record, hidden evidence
 
 **Baseline skill**:
 The exact committed Source skill evaluated before a revision under recorded
@@ -67,6 +71,10 @@ _Avoid_: Dynamic child set, frozen set
 The Codex model and reasoning-effort combination approved for a Child Ticket
 and assigned to its implementation worker.
 _Avoid_: Worker model, Ticket complexity
+
+**Reader profile**:
+The Codex model and reasoning-effort combination assigned to a Skill contract review reader.
+_Avoid_: Worker profile, judge profile
 
 **Worker isolation**:
 Child Ticket workers do not communicate, monitor, synchronize, or know about sibling workers; the coordinator handles ticket dependencies through their starting commits.
