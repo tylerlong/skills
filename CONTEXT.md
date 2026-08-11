@@ -8,16 +8,21 @@ This repository is the canonical home for skills authored and maintained by Tyle
 The canonical, version-controlled definition of an authored skill.
 _Avoid_: Live skill, working copy
 
+**Source identity**:
+The repository path, full Git commit SHA, and SHA-256 digest of an exact complete
+Source skill file.
+_Avoid_: Branch name, short SHA
+
 **Skill contract**:
 The required agent behavior and boundaries of a source skill, independent of its wording.
 _Avoid_: Feature list, current prose
 
 **Plain contract specification**:
-The versioned, wording-independent statement of the `plain` source skill's atomic obligations, including each obligation's modality and conditions.
+The versioned, wording-independent statement of the `plain` source skill's atomic obligations, including each obligation's modality, conditions, and exceptions.
 _Avoid_: Contract Map, Plain behavior catalog
 
 **Contract fidelity**:
-The Plain review gate requiring every supported reader profile to recover every specified obligation with its intended modality and conditions from the exact Source skill, without recovering a material extra or incompatible obligation or plausible alternative reading.
+The Plain review gate requiring every supported reader profile to recover every specified obligation with its intended modality, conditions, and exceptions from the exact Source skill, without recovering a material extra or incompatible obligation or plausible materially incompatible alternative reading.
 _Avoid_: Contract coverage, majority agreement
 
 **Instruction clarity**:
@@ -29,7 +34,7 @@ The Plain quality dimension measuring how easily a reader can navigate and under
 _Avoid_: Output readability, brevity
 
 **Instruction footprint**:
-The Unicode character count of a source skill's complete `SKILL.md`, including its metadata and instructions.
+The Unicode code-point count of a source skill's complete `SKILL.md`, including frontmatter, body, whitespace, and final newline.
 _Avoid_: Big skill, skill size
 
 **Skill behavior test**:
@@ -48,13 +53,14 @@ _Avoid_: Complete investigation record, hidden evidence
 
 **Baseline skill**:
 The exact committed Source skill evaluated before a revision under recorded
-controlled conditions. A behavior-preserving revision requires a passing
-characterized Baseline; a behavior-changing revision may record the current gap.
+controlled conditions. A preservation comparison requires a Baseline that
+passes the Source skill's applicable evaluation protocol.
 _Avoid_: Old skill, installed skill
 
 **Candidate skill**:
-The exact proposed Source skill revision evaluated with the same conditions and
-scenarios recorded for the Baseline skill.
+The exact proposed Source skill revision evaluated under its applicable protocol
+and the same controlled conditions as the Baseline, except when an approved
+contract change requires Candidate-only qualification.
 _Avoid_: New skill, installed skill
 
 **Carried forward**:

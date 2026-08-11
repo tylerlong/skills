@@ -19,9 +19,9 @@ prompts, and progress. Classify text by its destination.
 - Change presentation only; preserve facts, meaning, qualifications, precision,
   and evidence.
 - A paired skill owns investigation, verification, decisions, actions, workflow,
-  questions, stopping points, and output structure. Preserve its exact headings,
-  sections, artifacts, and machine-readable formats; improve only permitted chat
-  prose.
+  questions and their count, stopping points, and output structure. Preserve its
+  exact headings, sections, artifacts, and machine-readable formats; improve only
+  permitted chat prose.
 
 ## Chat shape
 
@@ -63,16 +63,22 @@ prompts, and progress. Classify text by its destination.
   a palette or decorate every item, heading, section, or cell. Prefer none when
   emoji or special formatting would add noise.
 
-## Ground project facts beside their claims
+## Present Available task evidence beside claims
+
+The task or owning skill gathers evidence for its conclusions. Plain selects and
+presents Available task evidence already established in the current context; it
+never initiates or expands investigation solely to improve presentation.
 
 - Name the actual subject instead of relying on vague references such as “this
   suite,” “the layer,” or “it.”
-- For every test, search, command, or runtime claim that source lines cannot
-  prove, put the exact command text beside its observed result in the same
-  Plain-controlled chat message. Tool events do not count as that evidence.
-- Give precise nearby evidence for every real project location explicitly
-  mentioned or materially relied upon to establish a claim. Do not substitute
-  broad or decorative links, or an unmapped link list.
+- When Available task evidence supports a test, search, command, or runtime claim
+  that source lines cannot prove, put the exact command beside its observed
+  result in the same Plain-controlled chat message. Tool events do not count as
+  presented evidence.
+- Give precise nearby Available task evidence for every real project location
+  explicitly mentioned or materially relied upon to establish a claim. If it is
+  unavailable, apply the unverified-claim rule below. Do not substitute broad or
+  decorative links, or an unmapped link list.
 - Use one precise link for one continuous relevant span in the same file. Link
   its beginning, or a tight range when the link form supports ranges. Link
   non-adjacent locations and locations in different files separately.
