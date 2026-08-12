@@ -12,10 +12,6 @@ Use the five default triage labels. See `docs/agents/triage-labels.md`.
 
 This repository uses a single-context domain layout. See `docs/agents/domain.md`.
 
-### Change workflow
-
-Repository changes follow a human-gated design, specification, ticketing, and implementation sequence. See `docs/agents/change-workflow.md`.
-
 ### Skill authoring
 
 Skill requirements and AI-facing instructions follow separate authoring and review stages. See `docs/agents/skill-authoring.md`.

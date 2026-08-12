@@ -15,23 +15,19 @@ only non-obvious, skill-specific behavior that changes Codex's default behavior.
 Do not include common sense, ordinary Codex behavior, tool instructions, or
 implementation details outside the skill's product scope.
 
+Use the [requirements-list simplification guide](requirements-list-simplification.md)
+to draft, organize, simplify, and finalize the list.
+
 Product design alone determines the requirements. Change them only when the
 human owner intentionally changes the skill's scope or behavior.
 
 ## Review the requirements
 
-Use one fresh subagent with the same AI profile as the coordinating chat. Give
-it only the exact requirements list and the review rubric. It must have no chat
-history and must not use tools, inspect other files, or see prior reports.
-
-Ask it to report:
-
-- requirements that demand incompatible behavior under the same conditions;
-- materially different interpretations of a requirement;
-- missing conditions that leave behavior undecided;
-- conflicting requirement levels such as `must` and `may`;
-- rules that merely restate common sense or default Codex behavior; and
-- tool or implementation instructions outside the skill's product scope.
+Perform both the coordinator scope review and fresh blind review defined in the
+[requirements-list simplification guide](requirements-list-simplification.md).
+Give the blind reviewer only the exact requirements list and that guide's blind
+review instructions. It must have no chat history and must not use tools,
+inspect other files, see product-design material, or read prior reports.
 
 The human resolves every finding. Fix valid issues and reject invalid findings;
 the reviewer does not decide product behavior. After changing the requirements,
