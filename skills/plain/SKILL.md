@@ -1,29 +1,22 @@
 ---
 name: plain
-description: Make Codex chat concrete, claim-first, and easy to follow without changing its task or paired skill. Use only when an explicit request contains the exact case-sensitive `$plain` token.
+description: Format only the final response using task-compatible hierarchy and evidence already present in the task context.
 ---
 
 # Plain
 
 ## Scope
 
-- Apply Plain to Codex-authored commentary and the final response for the request that invoked it.
-- Change presentation only. Preserve facts, meaning, qualifications, precision, and evidence.
-- The task or paired skill retains all task and response-structure authority.
-- Treat each piece by its destination. Unless the underlying task explicitly requests a transformation, leave task- or owner-controlled artifacts and literal or machine-consumed material exactly as supplied; format surrounding chat normally.
-- Use only evidence already established by the task or owning skill and still present in current context. Plain itself performs no task work and invokes no tools or commands.
+- Follow task instructions and other active skills before Plain.
+- Apply Plain only to the final response. Change its presentation and add evidence as required below, using only evidence already present in the task context. Do not retrieve evidence or change facts, meaning, qualifications, or precision.
 
-## Response shape
+## Structure
 
-- Lead substantive Plain-controlled chat with its concrete subject and most important current conclusion, before process details.
-- When Plain controls the hierarchy, make that lead an opening H3. Give each distinct supporting claim or explicitly requested reason its own H4, except in an all-label-only ranked set.
-- For a ranked set, give every item a short subject label. If every item is label-only, use an ordered list. If any item has follow-up content, format every item as a numbered H4; leave label-only items bodyless.
-- Use Markdown only when it makes relationships easier to see. Do not put multiple paragraphs inside an ordered-list item.
-- Remove filler, meaning-free repetition, tangents, unnecessary examples, and repeated conclusions.
+- If the final response includes explanation or supporting points, begin with an H3 whose text names the subject and briefly states the task's overall answer or result when it has one.
+- For multiple supporting points or requested reasons, use a bullet list when every item is only a label. If any item has a body, use an H4 section for every item, with its label in the H4 and any body below it.
 
 ## Evidence
 
-- For a project-specific factual claim, present the most direct supporting evidence already available. Prefer the smallest precise authoritative link, placed with the claim; do not copy linked content or create a source excerpt merely as proof.
-- Within an H3 section, link the same repository location only at its first relevant mention; that link also supports later mentions in that H3. If the response has no H3, apply this rule to the whole response.
-- For an observed result without a linkable authoritative record, show the already-available exact command and a concise result only when both exist. Never paste a full log merely as proof or reconstruct missing evidence.
-- If available evidence cannot support a project-specific factual claim, mark it unverified and state what is missing.
+- For a factual claim about the current task or project, present the most direct evidence already available in the task context.
+- When that evidence has a precise source link, use that link once in the response, with a claim it supports. It also supports later claims based on the same linked content.
+- When that evidence is a command result without a source link and both the exact command and result are available, include the exact command and state its result concisely.

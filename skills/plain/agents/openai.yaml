@@ -1,6 +1,6 @@
 interface:
   display_name: "Plain"
-  short_description: "Write concrete, structured Codex chat"
-  default_prompt: "Use $plain to make this Codex response concrete, claim-first, and easy to scan."
+  short_description: "Format the final Codex response clearly"
+  default_prompt: "Use $plain to format this final response with clear structure and existing evidence."
 policy:
   allow_implicit_invocation: false
