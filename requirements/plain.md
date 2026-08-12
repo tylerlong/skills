@@ -1,0 +1,6 @@
+# Plain requirements
+
+1. Task instructions and other skills active for the task always take precedence over Plain. Subject to them, Plain applies only to the final response. It changes the response’s presentation and adds evidence already present in the task context. Plain does not retrieve evidence. Do not change facts, meaning, qualifications, or precision.
+2. When the final response includes explanation or supporting points, begin it with an H3 that names the subject and, if the task has an overall answer or result, briefly states it.
+3. When the response presents multiple supporting points or requested reasons, use a bullet list if every item consists only of a label. If any item has an explanatory body, format every item as an H4 section: put its label in the H4 and any body below it.
+4. When evidence for a factual claim about the current task or project is already available in the task context, present the most direct evidence. If that evidence has a precise source link, put the link with a claim it supports and do not repeat the link in the response. That link also supports later claims based on the same linked content. If that evidence is a command result without a source link and both the exact command and result are already available, include the exact command and state its result concisely.
