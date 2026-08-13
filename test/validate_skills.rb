@@ -6,6 +6,7 @@ require "yaml"
 
 ROOT = File.expand_path("..", __dir__)
 SKILLS_DIR = File.join(ROOT, "skills")
+REQUIREMENTS_DIR = File.join(ROOT, "requirements")
 SKILLS_CLI_VERSION = "1.5.21"
 ANSI_ESCAPE = /\e\[[0-?]*[ -\/]*[@-~]/
 
@@ -61,6 +62,22 @@ skill_dirs = if Dir.exist?(SKILLS_DIR)
              end
 
 errors << "skills: no source skills found" if skill_dirs.empty?
+skill_directory_names = skill_dirs.map { |path| File.basename(path) }
+requirement_names = if Dir.exist?(REQUIREMENTS_DIR)
+                      Dir.glob(File.join(REQUIREMENTS_DIR, "*.md")).map do |path|
+                        File.basename(path, ".md")
+                      end.sort
+                    else
+                      []
+                    end
+
+(skill_directory_names - requirement_names).each do |name|
+  errors << "#{name}: missing requirements/#{name}.md"
+end
+(requirement_names - skill_directory_names).each do |name|
+  errors << "requirements/#{name}.md: missing matching source skill"
+end
+
 names = Hash.new { |hash, name| hash[name] = [] }
 
 skill_dirs.each do |skill_dir|

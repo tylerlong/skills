@@ -227,6 +227,13 @@ class InstallSkillsTest < Minitest::Test
   def write_skill(repo, name, content)
     skill = File.join(repo, "skills", name)
     FileUtils.mkdir_p(File.join(skill, "agents"))
+    requirements = File.join(repo, "requirements")
+    FileUtils.mkdir_p(requirements)
+    File.write(File.join(requirements, "#{name}.md"), <<~REQUIREMENTS)
+      # #{name} requirements
+
+      1. Provide the test skill behavior.
+    REQUIREMENTS
     File.write(File.join(skill, "SKILL.md"), <<~SKILL)
       ---
       name: #{name}

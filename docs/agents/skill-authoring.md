@@ -10,10 +10,12 @@ any form that lets an AI recover their meaning without loss or invention.
 
 ## Write the requirements
 
-Create `requirements/<skill-name>.md` with a title and an ordered list. Include
-only non-obvious, skill-specific behavior that changes Codex's default behavior.
-Do not include common sense, ordinary Codex behavior, tool instructions, or
-implementation details outside the skill's product scope.
+Create `requirements/<skill-name>.md` with a title and ordered requirements.
+Use sections when they clarify distinct actors or workflows, and use a compact
+term list when definitions are needed. Include only non-obvious, skill-specific
+behavior that changes Codex's default behavior. Do not include common sense,
+ordinary Codex behavior, tool instructions, or implementation details outside
+the skill's product scope.
 
 Use the [requirements-list simplification guide](requirements-list-simplification.md)
 to draft, organize, simplify, and finalize the list.
@@ -43,6 +45,7 @@ them.
 Generate `skills/<skill-name>/SKILL.md` from the finalized requirements. The
 requirements are the only behavioral authority; do not carry forward behavior
 merely because an older `SKILL.md`, test, document, or history contains it.
+`SKILL.md` may reproduce the requirements directly or present them differently.
 
 There are no general authoring-style requirements for `SKILL.md`. Human
 readability, formatting preferences, instruction footprint, and numeric quality
