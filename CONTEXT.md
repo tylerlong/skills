@@ -32,3 +32,7 @@ _Avoid_: Global skill, Repository-owned installed skill
 **Upstream skill**:
 An externally maintained skill that a Source skill requires and loads separately.
 _Avoid_: Bundled skill
+
+**Worker profile**:
+The exact Codex model and reasoning-effort combination assigned to a Child Ticket for its Worker Agent.
+_Avoid_: Complexity tier, Model profile
