@@ -1,6 +1,6 @@
 interface:
   display_name: "Plain"
   short_description: "Format the final Codex response clearly"
-  default_prompt: "Use $plain to format this final response with clear structure and existing evidence."
+  default_prompt: "Use $plain to format the final response."
 policy:
   allow_implicit_invocation: false
