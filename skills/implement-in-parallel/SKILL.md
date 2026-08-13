@@ -1,327 +1,39 @@
 ---
 name: implement-in-parallel
-description: Implement, resume, and deliver the ready direct children of one GitHub Parent Ticket in an isolated Batch Run. Use when the user invokes $implement-in-parallel to coordinate dependency-aware workers, recover interrupted or failed deliveries, serialize Batch PR merges, and prove exact main CI green.
+description: Coordinate concurrent Worker Agents to implement the ready, unblocked direct Child Tickets of one GitHub Parent Ticket and push locally green commits directly to remote main without force. Use when the user wants one Parent Ticket implemented through its GitHub Child Tickets.
 ---
 
 # Implement in Parallel
 
-## Load `implement` first
+## Terms
 
-Before commentary or any other action, resolve `../implement/SKILL.md` relative to
-this skill and make one attempt to read it completely. If it is missing or
-unreadable, report that `implement` is missing at the exact resolved path, return
-**Do Not Start**, and end. Inspect nothing else and never reconstruct its rules.
+- **Primary Agent**: The main agent coordinating one Parent Ticket.
+- **Worker Agent**: A subagent implementing one Child Ticket.
+- **Worker Branch**: A branch whose name is its Child Ticket number.
+- **Direct Child Ticket**: An immediate child of the Parent Ticket in GitHub's native parent-child relationship.
+- **Native blocker**: A ticket linked as a blocker of a Child Ticket through GitHub's native blocked-by relationship.
+- **ready-for-agent**: A ticket label.
+- **Green**: A Worker Branch is green when all tests pass. A remote commit is green when its CI passes.
 
-After a successful read, use it as the Child Ticket worker contract, subject to
-the limits below. This skill owns Parent discovery, dependency-aware scheduling,
-integration, combined validation, recovery, delivery, and tracker updates.
+## Primary Agent workflow
 
-## Outcomes, checkpoint, and external bounds
+1. Only coordinate; do not implement changes or use a development branch or worktree.
+2. Check the Parent Ticket for `ready-for-agent`. If absent, report the issue to the user and stop. Otherwise, remove it and continue.
+3. Check CI for the current commit on the remote repository's `main` branch. If CI has failed, report the issue to the user and stop.
+4. Find every open Direct Child Ticket with `ready-for-agent` and no open Native blockers. Remove the label and create a Worker Agent for each. These Worker Agents run concurrently; whenever one stops, repeat this step for runnable Child Tickets.
+5. When no Worker Agents remain:
+   - If any Direct Child Ticket remains open, report the remaining open Child Tickets to the user and stop.
+   - Otherwise, wait for CI on this run's final pushed commit.
+6. If CI passes, comment on and close the Parent Ticket, then stop.
+7. If CI fails, create a Direct Child Ticket that is complete only when CI passes for its pushed fix, then create a Worker Agent for it.
+8. When that Worker Agent stops:
+   - If its Child Ticket remains open, report the blocker to the user and stop.
+   - If its Child Ticket is closed, comment on and close the Parent Ticket, then stop.
 
-Use exactly these outcomes:
+## Worker Agent workflow
 
-- **Do Not Start**: required input or initially runnable work is absent; create no
-  Batch Run, Git artifact, or checkpoint.
-- **Resumable Stop**: a started run cannot progress; atomically checkpoint it,
-  preserve unfinished artifacts, and report the blocker and exact next action.
-- **Complete**: the Batch scope is delivered and closed, tracker and local `main`
-  updates finish, and successful owned artifacts are cleaned.
-
-Keep at most one sparse Markdown checkpoint at
-`<git-common-dir>/implement-in-parallel-parent-<parent>.md`, outside all branches
-and worktrees. Record only repository and Parent, Batch scope, immutable Batch
-Base, current Review Base, Batch Branch/Worktree, integrated and delivered
-commits, accepted commit-bound Repair proof metadata, exact review/verification/
-PR/CI/merge evidence, Delivery Turn owner and phase, external retry and repair
-attempt allowances, owned artifacts, and next action. Git, tickets, PRs, and CI
-remain authoritative for their own state.
-
-Write it atomically after initialization, each integration, combined validation,
-exact PR CI, Delivery Turn acquisition/inheritance, merge, each ownership-phase
-change, and before every Resumable Stop. Never record routine commands, worker
-starts, or polls. On resume, reconcile every claim with Git and GitHub, discard
-only contradicted claims, and never repeat valid dispatch, implementation,
-integration, validation, push, PR, merge, or CI work. Remove it only at Complete.
-
-For synchronous transient failures, retry only after 5, 15, and 30 seconds.
-Before retrying a write, reconcile desired state; an existing result succeeds
-without another write. Never retry explicit permission, credential,
-infrastructure, human, or other rejection.
-
-Observe accepted asynchronous work without resubmission. Poll queued work every
-15 seconds and stop after 2 minutes without a lifecycle transition; poll executing
-work every 30 seconds and stop 20 minutes after provider-reported start. A status
-page never extends these limits. If required CI is absent, dispatch one existing
-equivalent workflow at most once. Rerun completed CI at most once and only for a
-proved transient failure. Checkpoint either allowance before use; an ambiguous
-lost response consumes it.
-
-An external or human-only blocker stops dispatch and monitoring. Preserve open
-tickets and artifacts and return Resumable Stop, or report the exact next action
-and return Do Not Start with no artifact when the Batch Run has not begun.
-
-## Admit one fixed Batch scope
-
-Require exactly one Parent Ticket and the current Git repository; infer GitHub
-from its remote. Read repository agent, tracker, label, and relevant owner
-instructions, then the Parent's complete ticket and all direct native children,
-including each child's complete ticket, native parent, and blockers. Native
-relationships are authoritative: never infer them from bodies or add, remove,
-assign, relabel, or rewrite tickets.
-
-At initialization, record all direct Child Ticket numbers as the fixed **Batch
-scope**. Assume it remains unchanged. Every later refresh reads only those
-in-scope tickets and accepts their latest data without revision comparison or a
-material-change pause. Resume uses the checkpointed Batch scope; never discover,
-add, or remove children during the run.
-
-A closed child is satisfied. An open child is eligible only with the configured
-`ready-for-agent` label, and runnable only when every native blocker is closed or
-its in-scope blocker commit is integrated. For a new run, return Do Not Start
-before Git artifacts when there are no children, no open ready children, or no
-initially runnable child; suggest `to-gh-tickets` for no children and otherwise
-report all exclusions and blockers. An existing checkpoint follows resume rules.
-
-Do not require, enter, clean, switch, stash, reset, or otherwise modify the caller
-checkout or its `main`, and never mutate an Installed Skill. Fetch `origin`
-without switching branches, record fetched `origin/main` as both immutable Batch
-Base and initial Review Base, and make one task-owned Batch Branch and external
-Batch Worktree named for the Parent
-(`codex/parallel-<parent>-batch` when available), then checkpoint. One child and
-many use the same path.
-
-On resume, reuse only checkpoint-proven artifacts. A later delivery cycle may
-start at current `origin/main` for in-scope work blocked during an earlier PR.
-Coordinate, integrate, validate, push, and open PRs only in the Batch Worktree;
-treat all other task worktrees as foreign. Preserve ambiguous artifacts and stop
-with their identity and first human action rather than guessing.
-
-## Schedule isolated workers and integrate serially
-
-Use available worker capacity while the primary agent coordinates and integrates.
-Schedule only by native blockers and capacity; never predict file overlap.
-Before worker work, each coordinator phase transition, and every external poll,
-inspect the Delivery Turn. Another run's `delivery` phase blocks only turn
-ownership. Observing `repair` suspends all ordinary dispatch, integration,
-validation, push, PR, and monitoring: halt workers at recoverable boundaries,
-checkpoint, and return Resumable Stop.
-
-Immediately before dispatch, refresh the selected in-scope child, Parent, and
-blockers. For each runnable child:
-
-1. Create its owned branch and external worktree from the current Batch Branch
-   head, which must contain every integrated blocker.
-2. Give the worker only Parent/Child context, repository instructions, exact
-   starting commit and owned paths, the loaded `implement` contract, and these
-   limits. Never provide sibling identities or communication duties.
-3. Run independent children concurrently. Workers never communicate, monitor,
-   or synchronize with one another; the coordinator alone handles dependencies.
-
-Every ticket or repair worker must stay in its owned worktree and follow
-`implement` except for this skill's explicit orchestration and verification
-overrides. It must use TDD at an agreed seam for behavior and
-characterization-first regression evidence for pure refactoring, run focused
-checks rather than full verification,
-leave a clean worktree, and report its commit and evidence. Ticket work returns
-exactly one final commit; repair commits stay separate. Workers never use
-auto-closing keywords, push, merge, mutate GitHub, run combined review, or run
-full repository verification.
-
-Correct coordinator scheduling or branch mistakes and resume the same worker.
-Return implementation failures with its diff and evidence. Preserve external or
-human blockers. For an undeclared
-prerequisite, pause the child; if it is another in-scope child, integrate it,
-update the paused branch, and resume the same worker. Otherwise report it without
-changing the issue graph and continue independent work.
-
-As each worker finishes, validate its commit-bound handoff, commit shape, and
-cleanliness without normally rerunning unchanged focused checks; refresh the
-selected in-scope ticket and blockers, then cherry-pick one commit and checkpoint
-its exact integrated SHA. Integrate only one child at a time and fill capacity
-with newly runnable work immediately.
-
-Repair conflicts only after Git or combined behavior observes one: abort the
-integration, preserve artifacts, update that child's branch onto the Batch
-Branch, and give the same worker the actual conflict plus all accepted behavior.
-Require focused checks and one replacement ticket commit, then integrate it.
-The coordinator never writes conflict or repair code on the Batch Branch.
-
-### Repair feedback and proof
-
-The coordinator never authors repair or conflict-resolution code. Give every
-accepted review finding, verification or CI implementation failure, actual
-conflict, and broken-main failure to a dedicated worker. Establish or reuse
-failure evidence bound to the exact starting commit before editing. Reproduce
-evidence that is stale, ambiguous, nondeterministic, or not runnable. For a
-proven implementation-caused CI-only failure, use the exact CI log and commit,
-run the closest local checks, explicitly report that the exact failure was not
-locally reproduced, and keep exact-head CI as acceptance; never change code
-merely to make a suspected transient failure disappear. A full-suite-only
-reproducer may use that suite only to establish the failure. Each targeted
-attempt must add new evidence rather than repeat an identical blind retry.
-
-The worker runs the exact acceptance check first after the change and stays
-narrow until it passes, then selects and runs the smallest affected focused
-checks; the CI-only exception above uses its closest local checks instead. Reuse
-an existing check that honestly exposes a behavior defect; add or strengthen a
-regression check for uncovered behavior; use a meaningful static check or
-explicit inspection for a nonbehavioral finding. Broaden only when uncertainty
-or observed impact requires it. Workers never run canonical full verification.
-
-Handoff one clean repair commit with a **Repair proof** recording the repair
-source, exact starting commit, reused or reproduced pre-failure evidence, exact
-passing acceptance command (or the CI-only exception's closest checks, explicit
-non-reproduction, and exact-head CI requirement), affected checks and results,
-limitations, repair commit, and clean-worktree state. The coordinator validates
-this commit-bound handoff without normally rerunning unchanged focused checks;
-missing, stale, mismatched, or ambiguous proof returns to the worker. Checkpoint
-concise accepted metadata, never raw logs, and reuse it only while its commits
-and evidence remain unchanged. One shared fallback allowance covers either a
-fresh worker after essential context loss or a genuinely different approach
-after strategy exhaustion; it is not a blank restart.
-
-When workers end, classify each unintegrated in-scope child as excluded, paused,
-blocked by an incomplete in-scope child, or blocked out of scope. Do not open a PR
-while runnable work remains. Continue only with an undelivered integrated change;
-otherwise checkpoint actionable status and return Resumable Stop.
-
-## Gate and publish the exact candidate
-
-Find canonical full verification in repository agent/development instructions,
-then documented scripts/targets, then CI commands. If none is trustworthy,
-checkpoint the exact decision needed and stop.
-
-For the exact Batch head, run installed `code-review` against Review Base and
-accept or reject every finding. Give accepted findings to a dedicated repair
-worker from the Batch Branch, integrate its separate commit, and repeat review.
-After a clean review, run canonical full verification. Give implementation
-failures and exact logs to a dedicated repair worker, then repeat both gates.
-Every candidate change invalidates review and verification. Checkpoint both exact
-gates; reuse them on resume only while their commit and evidence remain unchanged.
-
-Refresh in-scope tickets and blockers after validation. If work became runnable,
-schedule it and repeat invalidated gates. Otherwise push normally, open one
-non-draft PR to `main` naming the Parent and included children without auto-close
-keywords, confirm its head is the exact reviewed/verified commit, and observe all
-relevant exact-head CI within the common bounds. Implementation CI failures go to
-a dedicated repair worker and restart review, full verification, push, and CI.
-Any changed head invalidates all prior gates. External failure checkpoints and
-stops. After exact green PR CI, checkpoint it and retain every artifact.
-
-## Serialize delivery
-
-The Delivery Turn is the repository-wide
-`<git-common-dir>/implement-in-parallel-delivery-turn.lock`. Its complete owner
-record contains Parent, Codex task, Batch Branch, PR, exact head, and `delivery`
-or `repair` phase. Serialize every read/mutation through a stable `<lock>.guard`
-held with a process-scoped OS advisory lock. Create the guard once and never
-unlink, rename, or replace it: every locker must use that persistent inode. On
-macOS, use zero-timeout `lockf -k -t 0` (or a nonblocking open-FD/fcntl
-equivalent that preserves the inode).
-Under the short-held guard, prepare the complete record beside the lock and
-acquire with one exclusive atomic create; never expose partial ownership or hold
-the guard during GitHub, CI, validation, or implementation. Acquire only after
-exact review, verification, and PR CI, then checkpoint and release the guard.
-
-On resume, reconcile lock, checkpoint, PR, and `origin/main`. Inherit only a
-same-Parent lock whose recorded task is conclusively inactive and whose branch,
-PR, head, phase, and merge state agree. Under the guard, re-read the unchanged
-owner, atomically replace only task identity, checkpoint, and release. Age, a
-missing process guess, or Parent alone is not proof; a completed checkpointed
-stop or conclusive orchestration-provider evidence is. Only the same proved owner
-may reconcile a lagging checkpoint after an interrupted lock/checkpoint write.
-
-If nonblocking acquisition returns the platform-confirmed contention status,
-record only that the guard is busy and its current owner is unknown, then
-immediately checkpoint and return Resumable Stop without reading the owner
-record, polling, stealing, deleting, or replacing it. Any other acquisition
-failure is an external failure. After acquiring the guard, safely observed
-active, ambiguous, unmatched, or different-Parent ownership is busy: checkpoint
-that observed owner and immediately return Resumable Stop. Abandon only a
-user-named run after proving
-its head and PR were not merged, then atomically release the unchanged owner and
-record no ownership while preserving tickets and artifacts. An uncertain or
-completed merge retains the turn.
-
-While owning `delivery`:
-
-1. Refresh in-scope tickets and blockers. If runnable work exists, verify and
-   release ownership, implement it, update the existing PR, and repeat all gates.
-2. Fetch `origin/main`. If it advanced beyond Review Base, invalidate all
-   gates and merge it into the Batch Branch. On conflict, abort, release and
-   checkpoint no ownership, and give the exact conflict to a dedicated worker.
-   After a clean merge or successful integration of the worker's replacement,
-   advance Review Base to the exact incorporated `main` commit while leaving
-   Batch Base unchanged, then release and checkpoint the changed head and Review
-   Base with no ownership before pushing. Resolve/push outside the turn and
-   repeat review against that Review Base, full verification, and PR CI; the
-   review range must exclude upstream-only changes.
-3. Reconfirm the exact green PR head, merge through GitHub with a merge commit
-   without deleting its branch, checkpoint the merge SHA, fetch `origin/main`,
-   and prove exact equality plus Batch-head ancestry.
-4. Retain ownership while observing CI for that exact remote-main commit. A
-   non-green result never finalizes tickets or claims success. Apply bounded CI
-   recovery; for an implementation failure atomically change phase to `repair`,
-   checkpoint it, and follow broken-main repair. Otherwise stop while retaining
-   responsibility when no allowed action remains.
-5. On exact green main CI, verify and atomically release the unchanged owner,
-   then checkpoint green evidence.
-
-If GitHub proves a failed merge did not occur, release, checkpoint, and stop. If
-the response is uncertain, retain ownership until PR and `origin/main` reconcile.
-
-### Repair broken `main`
-
-During `repair`, all coordinators suspend ordinary ticket, Batch, tracker,
-local-main, cleanup, and monitoring work. The owning run assumes the recorded
-exact broken `origin/main` remains fixed until its repair merges. From that exact
-commit create an owned repair branch/worktree and give one worker only failure
-evidence and restoration scope. Never roll back automatically or include
-unrelated feature work.
-
-The worker binds trustworthy failure evidence to that exact broken commit or
-reproduces it before editing, runs the exact acceptance command first, then the
-smallest affected focused checks, and returns one clean repair commit with the
-complete Repair proof. The coordinator validates and checkpoints the proof
-without normally rerunning those checks. A changed repair candidate invalidates
-its combined review and canonical full verification; the coordinator alone runs
-both gates on every exact candidate.
-
-For each exact repair candidate run combined review then canonical full
-verification, push normally, open a non-draft repair-only PR, and observe exact
-PR CI using the common bounds. Return findings or implementation failures to the
-same worker and invalidate changed evidence. Across the incident allow that
-worker plus at most one fresh-worker or different-approach attempt; checkpoint
-cumulative use. Exhaustion or an external/human blocker returns Resumable Stop
-while retaining `repair` ownership and artifacts.
-
-Merge the green repair PR with a merge commit, checkpoint its SHA, fetch
-`origin/main`, and prove exact equality and repair-head ancestry. Retain `repair`
-ownership through CI for that exact repaired main. A further implementation
-failure starts another bounded repair-only cycle without resuming ordinary work.
-Only exact green main CI permits release, tracker finalization, local-main sync,
-and cleanup.
-
-## Finalize and clean
-
-Only after releasing the turn following exact green remote-main CI:
-
-1. Comment on and close each delivered in-scope child with Batch/repair PRs,
-   merge commits, final verification, and exact-main CI evidence.
-2. Comment on excluded, paused, or blocked in-scope children with their exact
-   blocker and next action; leave them open and preserve labels and relationships.
-3. Add one concise Parent summary; close the Parent only when every ticket in
-   Batch scope is closed.
-4. Fetch `origin/main` and fast-forward the local `main` mirror only if it has no
-   local-only commits, is its ancestor, and its checkout is clean and safe.
-   Never overwrite, reset, commit, merge, or push through ahead, divergent,
-   dirty, foreign, or ambiguous local state; checkpoint the exact action needed.
-5. Remove only successfully delivered owned branches/worktrees, including the
-   remote Batch Branch only after merge proof and exact-main CI green. Preserve
-   every blocked, unfinished, ambiguous, and unrelated artifact.
-
-If delivered work is complete but in-scope children remain blocked, clean only
-that delivered cycle, retain checkpoint and Batch scope, and return Resumable
-Stop for another PR. Return Complete and remove the checkpoint only after all
-Batch-scope tickets are delivered and closed, tracker and local-main work finish,
-and successful owned artifacts are cleaned.
+1. Resume the existing Worker Branch and worktree when present. Otherwise, create them from the latest commit on the remote repository's `main` branch.
+2. Read the Child Ticket and its comments. Follow the `implement` skill, make the Worker Branch green, and commit.
+3. Push the Worker Branch to the remote repository's `main` branch without force. After each non-fast-forward rejection, merge the latest commit from the remote repository's `main` branch into the Worker Branch, make it green, commit, and retry.
+4. When the work is complete, comment on the Child Ticket with a human-readable result and the exact pushed commit. Close the ticket, remove its Worker Branch and worktree, and stop.
+5. If the work cannot be completed, comment on the Child Ticket with a human-readable explanation of the blocker and what must happen to unblock it. Leave the ticket open, preserve useful unfinished work, and stop.

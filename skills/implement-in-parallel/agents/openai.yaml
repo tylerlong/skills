@@ -1,6 +1,6 @@
 interface:
   display_name: "Implement in Parallel"
-  short_description: "Recover and serialize isolated child-ticket deliveries"
-  default_prompt: "Use $implement-in-parallel with a Parent Ticket to start or resume its isolated Batch Run, deliver all progressable Child Tickets, and recover any owned failed delivery before ordinary work continues."
+  short_description: "Implement child tickets concurrently"
+  default_prompt: "Use $implement-in-parallel to implement the ready direct Child Tickets of this GitHub Parent Ticket with concurrent Worker Agents."
 policy:
   allow_implicit_invocation: false
