@@ -5,35 +5,30 @@ description: Coordinate concurrent Worker Agents to implement the ready, unblock
 
 # Implement in Parallel
 
-## Terms
+## Terms & boundaries
 
-- **Primary Agent**: The main agent coordinating one Parent Ticket.
-- **Worker Agent**: A subagent implementing one Child Ticket.
+- **Parent Ticket**: A GitHub issue which has sub-issues.
+- **Child Ticket**: An immediate child of the Parent Ticket in GitHub's native parent-child relationship.
+- **Primary Agent**: The main agent coordinating one Parent Ticket; it only coordinates and does not implement the work.
+- **Worker Agent**: A subagent implementing one Child Ticket; it can spawn its own sub-agents and Worker Agents run concurrently.
 - **Worker Branch**: A branch whose name is its Child Ticket number.
-- **Direct Child Ticket**: An immediate child of the Parent Ticket in GitHub's native parent-child relationship.
-- **Native blocker**: A ticket linked as a blocker of a Child Ticket through GitHub's native blocked-by relationship.
-- **ready-for-agent**: A ticket label.
-- **Green**: A Worker Branch is green when all tests pass. A remote commit is green when its CI passes.
+- **Runnable**: A ticket that is open, has the `ready-for-agent` label, and has no open blocker via GitHub's native blocked-by relationship.
+- **Green**: A Worker Branch is Green when all tests pass. A remote commit is Green when its CI passes.
+- **Remote Main**: The `main` branch of the remote repository; Workers push to it without force.
 
 ## Primary Agent workflow
 
-1. Only coordinate; do not implement changes or use a development branch or worktree.
-2. Check the Parent Ticket for `ready-for-agent`. If absent, report the issue to the user and stop. Otherwise, remove it and continue.
-3. Check CI for the current commit on the remote repository's `main` branch. If CI has failed, report the issue to the user and stop.
-4. Find every open Direct Child Ticket with `ready-for-agent` and no open Native blockers. Remove the label and create a Worker Agent for each. These Worker Agents run concurrently; whenever one stops, repeat this step for runnable Child Tickets.
-5. When no Worker Agents remain:
-   - If any Direct Child Ticket remains open, report the remaining open Child Tickets to the user and stop.
-   - Otherwise, wait for CI on this run's final pushed commit.
-6. If CI passes, comment on and close the Parent Ticket, then stop.
-7. If CI fails, create a Direct Child Ticket that is complete only when CI passes for its pushed fix, then create a Worker Agent for it.
-8. When that Worker Agent stops:
-   - If its Child Ticket remains open, report the blocker to the user and stop.
-   - If its Child Ticket is closed, comment on and close the Parent Ticket, then stop.
+1. Check CI for the latest commit on Remote Main. If it is not Green, report and stop.
+2. If the Parent Ticket is not Runnable, report and stop. Otherwise, remove its `ready-for-agent` label and continue.
+3. Find every Child Ticket that is Runnable. Remove its `ready-for-agent` label and create a Worker Agent for each. Brief each Worker Agent with: "You are a Worker Agent per the `implement-in-parallel` skill; implement Child Ticket #<n>," where **#<n> is that ticket's number**. Run these Worker Agents; whenever one stops, repeat this step for Child Tickets that are Runnable.
+4. When no Worker Agents remain:
+   - If any Child Ticket remains open, report and stop.
+   - Otherwise, comment on and close the Parent Ticket, then stop.
 
 ## Worker Agent workflow
 
-1. Resume the existing Worker Branch and worktree when present. Otherwise, create them from the latest commit on the remote repository's `main` branch.
-2. Read the Child Ticket and its comments. Follow the `implement` skill, make the Worker Branch green, and commit.
-3. Push the Worker Branch to the remote repository's `main` branch without force. After each non-fast-forward rejection, merge the latest commit from the remote repository's `main` branch into the Worker Branch, make it green, commit, and retry.
+1. Resume the existing Worker Branch and worktree when present. Otherwise, create them from the latest commit on Remote Main.
+2. Read the Child Ticket and its comments. Follow the `implement` skill, make the Worker Branch Green, and commit.
+3. Push the Worker Branch to Remote Main. After each non-fast-forward rejection, rebase it onto the latest commit on Remote Main, make it Green, and retry.
 4. When the work is complete, comment on the Child Ticket with a human-readable result and the exact pushed commit. Close the ticket, remove its Worker Branch and worktree, and stop.
-5. If the work cannot be completed, comment on the Child Ticket with a human-readable explanation of the blocker and what must happen to unblock it. Leave the ticket open, preserve useful unfinished work, and stop.
+5. If the work cannot be completed, comment on the Child Ticket with a human-readable explanation of what prevented completion. Preserve useful unfinished work, and stop.
