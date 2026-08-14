@@ -62,6 +62,9 @@ State each behavior once. Delete:
 - a retry prohibition already expressed by `at most once`;
 - a detailed description of what continues when the surrounding workflow makes
   `continue` unambiguous; and
+- a statement of something that needs no doing; if nothing changes without it,
+  do not say it (for example, do not say "leave the ticket open" when the
+  ticket is already open); and
 - a condition that cannot change the outcome.
 
 Do not keep two versions of a boundary merely because one sounds safer. Extra
@@ -119,6 +122,10 @@ For a workflow skill, prefer this order:
 5. Failure and recovery behavior beside the action that can fail.
 6. Delivery, cleanup, and completion conditions.
 
+Order any no-side-effect gate check before the step that mutates state, so a
+failed gate does not leave a spurious mutation. After deleting or reordering a
+numbered step, update every cross-reference such as "as in step N".
+
 For a non-workflow skill, order requirements by conceptual dependency: scope
 before structure, general rules before their special cases, and a concept before
 rules that constrain it.
@@ -147,6 +154,30 @@ reader to infer which earlier subject a clause modifies.
 Do not report a missing condition merely because one can imagine an edge case.
 Report it only when multiple reasonable readings would cause materially
 different behavior, and do not invent the missing decision.
+
+## Terms & vocabulary
+
+Manage the skill's vocabulary as closely as its rules.
+
+Choose what deserves a term:
+
+- Make a thing a term when it is awkward to explain inline and appears more
+  than once.
+- Inline a term when it is used only once; say it where it occurs.
+
+Fold reusable boundaries into the glossary:
+
+- Put role and safety boundaries in the glossary once, so the workflow does not
+  restate them (for example, that a role only coordinates, or that a shared
+  branch is pushed to without force).
+- Define terms without cycles: a term defined earlier must not reference a term
+  defined later.
+
+Use each term consistently:
+
+- Refer to each term by one canonical spelling and case.
+- Use the same words or phrases for the same referent everywhere; do not rename
+  the same thing from one clause to the next.
 
 ## Single-cycle review checks
 
