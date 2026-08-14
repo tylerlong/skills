@@ -4,6 +4,7 @@ Personal AI-agent skill source. Installed skills are disposable copies.
 
 ## Source skills
 
+- `chat-only`
 - `implement-in-parallel`
 - `plain`
 - `to-gh-tickets`
@@ -13,6 +14,7 @@ Personal AI-agent skill source. Installed skills are disposable copies.
 - `implement-in-parallel` requires `implement`.
 - `to-gh-tickets` requires `to-tickets`.
 - `plain` has no upstream skill dependency.
+- `chat-only` has no upstream skill dependency.
 
 Keep upstream skills installed separately. Do not copy them into this repository.
 
