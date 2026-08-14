@@ -1,28 +1,27 @@
 # implement-in-parallel requirements
 
-## Terms
+## Terms & boundaries
 
 - **Parent Ticket**: A GitHub issue which has sub-issues.
 - **Child Ticket**: An immediate child of the Parent Ticket in GitHub's native parent-child relationship.
-- **Primary Agent**: The main agent coordinating one Parent Ticket.
-- **Worker Agent**: A subagent implementing one Child Ticket.
+- **Primary Agent**: The main agent coordinating one Parent Ticket; it only coordinates and does not implement the work.
+- **Worker Agent**: A subagent implementing one Child Ticket; it can spawn its own sub-agents and Worker Agents run concurrently.
 - **Worker Branch**: A branch whose name is its Child Ticket number.
 - **Runnable**: A ticket that is open, has the `ready-for-agent` label, and has no open blocker via GitHub's native blocked-by relationship.
 - **Green**: A Worker Branch is Green when all tests pass. A remote commit is Green when its CI passes.
-- **Remote Main**: The `main` branch of the remote repository.
+- **Remote Main**: The `main` branch of the remote repository; Workers push to it without force.
 
 ## Primary Agent workflow
 
-1. The Primary Agent only coordinates; it does not implement changes or use a development branch or worktree.
-2. Check CI for the latest commit on Remote Main. If CI has failed, report and stop.
-3. If the Parent Ticket is not Runnable, report and stop. Otherwise, remove its `ready-for-agent` label and continue.
-4. Find every Child Ticket that is Runnable. Remove its `ready-for-agent` label and create a Worker Agent for each, each able to spawn its own sub-agents. Brief each Worker Agent with: "You are a Worker Agent per the `implement-in-parallel` skill; implement Child Ticket #<n>," where **#<n> is that ticket's number**. Run these Worker Agents concurrently; whenever one stops, repeat this step for Child Tickets that are Runnable.
-5. When no Worker Agents remain:
+1. Check CI for the latest commit on Remote Main. If CI has failed, report and stop.
+2. If the Parent Ticket is not Runnable, report and stop. Otherwise, remove its `ready-for-agent` label and continue.
+3. Find every Child Ticket that is Runnable. Remove its `ready-for-agent` label and create a Worker Agent for each. Brief each Worker Agent with: "You are a Worker Agent per the `implement-in-parallel` skill; implement Child Ticket #<n>," where **#<n> is that ticket's number**. Run these Worker Agents; whenever one stops, repeat this step for Child Tickets that are Runnable.
+4. When no Worker Agents remain:
    - If any Child Ticket remains open, report and stop.
    - Otherwise, wait for CI on the last commit the Workers pushed to Remote Main.
-6. If CI passes, comment on and close the Parent Ticket, then stop.
-7. If CI fails, create a Child Ticket to fix it, complete only when CI passes for its pushed commit, and create a Worker Agent for it as in step 4.
-8. When that Worker Agent stops:
+5. If CI passes, comment on and close the Parent Ticket, then stop.
+6. If CI fails, create a Child Ticket to fix it, complete only when CI passes for its pushed commit, and create a Worker Agent for it as in step 3.
+7. When that Worker Agent stops:
    - If its Child Ticket remains open, report and stop.
    - If its Child Ticket is closed, comment on and close the Parent Ticket, then stop.
 
@@ -30,6 +29,6 @@
 
 1. Resume the existing Worker Branch and worktree when present. Otherwise, create them from the latest commit on Remote Main.
 2. Read the Child Ticket and its comments. Follow the `implement` skill, make the Worker Branch Green, and commit.
-3. Push the Worker Branch to Remote Main without force. After each non-fast-forward rejection, rebase it onto the latest commit on Remote Main, make it Green, and retry.
+3. Push the Worker Branch to Remote Main. After each non-fast-forward rejection, rebase it onto the latest commit on Remote Main, make it Green, and retry.
 4. When the work is complete, comment on the Child Ticket with a human-readable result and the exact pushed commit. Close the ticket, remove its Worker Branch and worktree, and stop.
-5. If the work cannot be completed, comment on the Child Ticket with a human-readable explanation of what prevented completion. Leave the ticket open, preserve useful unfinished work, and stop.
+5. If the work cannot be completed, comment on the Child Ticket with a human-readable explanation of what prevented completion. Preserve useful unfinished work, and stop.
