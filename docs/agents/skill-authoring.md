@@ -119,7 +119,9 @@ invocation rather than a copy of the instructions, and set
 Do not invoke the skill or test whether an AI agent can carry out clear instructions.
 Execution mistakes by an AI agent or an available tool are outside skill-authoring
 scope. Runtime scenarios, human-readability scoring, and review matrices are not
-part of this process.
+part of this process. A lightweight behavioral smoke check (running the skill
+against a real repo and tickets) is not part of this gate, but may surface
+coordination bugs earlier than production does.
 
 After the rebuilt and authoritative requirements match and platform metadata is
 current, run `make test`. Version-control both the requirements and Source skill,
