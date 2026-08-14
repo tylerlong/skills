@@ -20,21 +20,6 @@ rule when doing so changes behavior or makes a material decision ambiguous.
 If every proposed rule merely restates common sense or default Codex behavior,
 do not author the skill.
 
-## Authority and source material
-
-The human owner decides the skill's product behavior. The requirements list is
-the human-facing semantic authority for that behavior.
-
-An existing `SKILL.md`, test, document, issue, discussion, or Git history may
-help produce a first draft or reveal a possible omission. It does not preserve
-behavior automatically. For every discovered legacy rule, ask whether omitting
-it would make Codex likely to behave materially incorrectly. If not, leave it
-out.
-
-Do not change the requirements merely to match an existing `SKILL.md` or make a
-later reconstruction review pass. Change them only when the human owner changes
-or clarifies the product behavior.
-
 ## Decide what belongs
 
 Keep a rule only when all of these are true:
@@ -155,13 +140,13 @@ Review logical and normative words as product behavior:
 - `must` requires behavior; `may` permits it; `must not` prohibits it; and
 - `every`, `any`, `some`, and `only` define different scopes.
 
-Use the least technical accurate term. Replace vague pronouns, undefined terms,
+Use the simplest accurate term. Replace vague pronouns, undefined terms,
 cross-references such as "as required below," and wording that requires the
 reader to infer which earlier subject a clause modifies.
 
-Do not add a condition merely because one can imagine an edge case. Add it only
-when multiple reasonable readings would cause materially different behavior and
-the human owner has an intentional decision to express.
+Do not report a missing condition merely because one can imagine an edge case.
+Report it only when multiple reasonable readings would cause materially
+different behavior, and do not invent the missing decision.
 
 ## Single-cycle review checks
 

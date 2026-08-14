@@ -1,32 +1,40 @@
 # Skill requirements and instructions
 
-Every skill's behavior has two version-controlled semantic artifacts with
-different responsibilities:
+Every skill's behavior has two version-controlled representations with different
+responsibilities:
 
 - `requirements/<skill-name>.md` is the human-facing semantic source of truth.
-- `skills/<skill-name>/SKILL.md` is the AI-facing presentation of those requirements.
+- The body of `skills/<skill-name>/SKILL.md` is the AI-facing presentation of
+  those requirements.
 
-The requirements determine what the skill means. `SKILL.md` may present them in
-any form that lets an AI recover their meaning without loss or invention.
+The requirements determine the skill's behavior after invocation. The
+`SKILL.md` body may present them in any form that lets an AI recover their
+meaning without loss or invention.
 
-`skills/<skill-name>/agents/openai.yaml` is required platform metadata for the
-skill's interface and invocation policy. It is not product behavior, so it is
-outside requirements review and reconstruction review.
+The `name` and `description` in `SKILL.md` frontmatter and
+`skills/<skill-name>/agents/openai.yaml` are required platform metadata for
+discovery, interface, and invocation policy. They are not product behavior, so
+they are outside requirements review and reconstruction review.
 
 ## Write the requirements
 
-Create `requirements/<skill-name>.md` with a title and ordered requirements.
-Use sections when they clarify distinct actors or workflows, and use a compact
-term list when definitions are needed. Include only non-obvious, skill-specific
-behavior that changes Codex's default behavior. Do not include common sense,
-ordinary Codex behavior, tool instructions, or implementation details outside
-the skill's product scope.
+Settle the skill's product behavior with the human owner. Existing skills,
+tests, documents, issues, discussions, and history may reveal possible
+omissions, but they do not preserve behavior automatically.
+
+Create `requirements/<skill-name>.md` with a title and requirements organized in
+a useful conceptual or execution order. Use sections when they clarify distinct
+actors or workflows, and use a compact term list when definitions are needed.
+Include only non-obvious, skill-specific behavior that changes Codex's default
+behavior. Do not include common sense, ordinary Codex behavior, tool
+instructions, or implementation details outside the skill's product scope.
 
 Use the [requirements-list simplification guide](requirements-list-simplification.md)
 to draft, organize, and simplify the list.
 
-Product design alone determines the requirements. Change them only when the
-human owner intentionally changes the skill's scope or behavior.
+Only the human owner changes the skill's scope or behavior. The coordinator may
+rewrite, reorder, merge, or split requirements to express the settled behavior
+more accurately without changing its meaning.
 
 ## Review the requirements
 
@@ -37,7 +45,8 @@ omissions. Then review the list using the
 [requirements-list simplification guide](requirements-list-simplification.md).
 
 Next, use one fresh subagent with the same AI profile as the coordinating chat.
-Give it only the exact requirements list and the simplification guide. It must
+Give it only the verbatim current contents of the complete requirements file and
+the simplification guide, not paths, summaries, or earlier snapshots. It must
 have no chat history and must not use tools, inspect other files, see
 product-design material, or read prior reports. Ask it to perform one review
 cycle and return the report defined by the guide.
@@ -49,13 +58,13 @@ to another fresh blind reviewer. Do not resample an unchanged list.
 
 Repeat until a reviewer reports no findings or the coordinator rejects every
 finding with a reason. Ask the human owner only when a finding requires an
-unresolved product decision. Finalize the requirements when no valid unresolved
+unresolved product decision. Lock the requirements when no valid unresolved
 finding remains. Keep review reports with the task, issue, or pull request rather
 than version-controlling them.
 
 ## Generate `SKILL.md`
 
-Generate `skills/<skill-name>/SKILL.md` from the finalized requirements. The
+Generate `skills/<skill-name>/SKILL.md` from the locked requirements. The
 requirements are the only behavioral authority; do not carry forward behavior
 merely because an older `SKILL.md`, test, document, or history contains it.
 `SKILL.md` may reproduce the requirements directly or present them differently.
@@ -65,19 +74,22 @@ readability, formatting preferences, instruction footprint, and numeric quality
 scores are outside the acceptance gate. Do not intentionally make the file hard
 for humans to read, but optimize only for accurate AI understanding.
 
-Change `SKILL.md` without changing the requirements only when reconstruction
-review shows that the current presentation is lossy or ambiguous.
+Change the `SKILL.md` body without changing the requirements only when
+reconstruction review shows that the current presentation is lossy or
+ambiguous.
 
 ## Review `SKILL.md`
 
 Use one fresh subagent that did not participate in requirements review, with the
-same AI profile as the coordinating chat. Give it only the exact complete
-`SKILL.md` and instructions to rebuild the requirements. It must have no chat
-history and must not use tools, inspect other files, see the authoritative
-requirements, or see prior reports or comparison results.
+same AI profile as the coordinating chat. Give it only the verbatim current
+contents of the complete `SKILL.md`, not a path, summary, or earlier snapshot,
+and instructions to rebuild the behavioral requirements from its body. It must
+have no chat history and must not use tools, inspect other files, see the
+authoritative requirements, or see prior reports or comparison results.
 
-Ask it to return an ordered requirements list and identify any materially
-different readings it cannot resolve.
+Ask it to return the complete reconstructed requirements in any clear structure
+and identify any materially different readings it cannot resolve. Do not treat
+frontmatter as a behavioral requirement.
 
 The coordinator compares the rebuilt list with the authoritative requirements
 in both directions:
@@ -90,10 +102,18 @@ in both directions:
 Wording, numbering, and grouping may differ. The lists match only when either
 could replace the other without changing the skill's behavior.
 
-If they do not match, rewrite only `SKILL.md` and review the changed file with
-another fresh blind reader. Do not change the requirements merely to make the
-presentation pass, and do not resample an unchanged `SKILL.md`. If product
-behavior must change, return to the requirements process first.
+If they do not match, rewrite only the `SKILL.md` body and review the changed
+file with another fresh blind reader. Do not change the requirements merely to
+make the presentation pass, and do not resample an unchanged `SKILL.md`. If
+product behavior must change, return to the requirements process first.
+
+## Review platform metadata
+
+After the `SKILL.md` body passes reconstruction review, ensure its frontmatter
+accurately describes what the skill does and when it applies. Ensure
+`agents/openai.yaml` still matches the skill, keep `default_prompt` to a minimal
+invocation rather than a copy of the instructions, and set
+`allow_implicit_invocation` intentionally.
 
 ## Finish the change
 
@@ -102,9 +122,9 @@ Execution mistakes by Codex or an available tool are outside skill-authoring
 scope. Runtime scenarios, human-readability scoring, and review matrices are not
 part of this process.
 
-After the rebuilt and authoritative requirements match, run `make test` and
-normal code review. Version-control the finalized requirements and matching
-`SKILL.md` together, along with platform metadata when it changes.
+After the rebuilt and authoritative requirements match and platform metadata is
+current, run `make test`. Version-control both the requirements and Source skill,
+including metadata changes. Do not finish while their behavior differs.
 
 After the change is committed and pushed to `main`, run `make install` separately
 from a clean local `main`.
