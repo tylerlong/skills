@@ -29,6 +29,11 @@ Include only non-obvious, skill-specific behavior that changes an AI agent's def
 behavior. Do not include common sense, ordinary AI-agent behavior, tool
 instructions, or implementation details outside the skill's product scope.
 
+Prefer delegating work to an Upstream skill over doing it in this skill. When the
+skill builds on another skill's behavior, delegate as much as possible, and keep
+this skill a preprocessor or postprocessor of that dependency. Do not change or
+override a dependency skill's behavior in this skill's requirements.
+
 Use the [requirements-list simplification guide](requirements-list-simplification.md)
 to draft, organize, and simplify the list.
 
