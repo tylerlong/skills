@@ -18,12 +18,7 @@
 3. Find every Child Ticket that is Runnable. Remove its `ready-for-agent` label and create a Worker Agent for each. Brief each Worker Agent with: "You are a Worker Agent per the `implement-in-parallel` skill; implement Child Ticket #<n>," where **#<n> is that ticket's number**. Run these Worker Agents; whenever one stops, repeat this step for Child Tickets that are Runnable.
 4. When no Worker Agents remain:
    - If any Child Ticket remains open, report and stop.
-   - Otherwise, wait for the last commit the Workers pushed to Remote Main to be Green.
-5. If it is Green, comment on and close the Parent Ticket, then stop.
-6. If it is not Green, create a Child Ticket to fix it, complete only when its pushed commit is Green, and create a Worker Agent for it as in step 3.
-7. When that Worker Agent stops:
-   - If its Child Ticket remains open, report and stop.
-   - If its Child Ticket is closed, comment on and close the Parent Ticket, then stop.
+   - Otherwise, comment on and close the Parent Ticket, then stop.
 
 ## Worker Agent workflow
 
