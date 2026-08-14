@@ -34,5 +34,5 @@ An externally maintained skill that a Source skill requires and loads separately
 _Avoid_: Bundled skill
 
 **Worker profile**:
-The exact Codex model and reasoning-effort combination assigned to a Child Ticket for its Worker Agent.
+The exact AI model and reasoning-effort combination assigned to a Child Ticket for its Worker Agent.
 _Avoid_: Complexity tier, Model profile

@@ -25,8 +25,8 @@ omissions, but they do not preserve behavior automatically.
 Create `requirements/<skill-name>.md` with a title and requirements organized in
 a useful conceptual or execution order. Use sections when they clarify distinct
 actors or workflows, and use a compact term list when definitions are needed.
-Include only non-obvious, skill-specific behavior that changes Codex's default
-behavior. Do not include common sense, ordinary Codex behavior, tool
+Include only non-obvious, skill-specific behavior that changes an AI agent's default
+behavior. Do not include common sense, ordinary AI-agent behavior, tool
 instructions, or implementation details outside the skill's product scope.
 
 Use the [requirements-list simplification guide](requirements-list-simplification.md)
@@ -80,8 +80,7 @@ ambiguous.
 
 ## Review `SKILL.md`
 
-Use one fresh subagent that did not participate in requirements review, with the
-same AI profile as the coordinating chat. Give it only the verbatim current
+Use one fresh subagent that did not participate in requirements review. Give it only the verbatim current
 contents of the complete `SKILL.md`, not a path, summary, or earlier snapshot,
 and instructions to rebuild the behavioral requirements from its body. It must
 have no chat history and must not use tools, inspect other files, see the
@@ -117,8 +116,8 @@ invocation rather than a copy of the instructions, and set
 
 ## Finish the change
 
-Do not invoke the skill or test whether Codex can carry out clear instructions.
-Execution mistakes by Codex or an available tool are outside skill-authoring
+Do not invoke the skill or test whether an AI agent can carry out clear instructions.
+Execution mistakes by an AI agent or an available tool are outside skill-authoring
 scope. Runtime scenarios, human-readability scoring, and review matrices are not
 part of this process.
 

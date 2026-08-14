@@ -1,6 +1,6 @@
 # Skills
 
-Personal Codex skill source. Installed skills are disposable copies.
+Personal AI-agent skill source. Installed skills are disposable copies.
 
 ## Source skills
 
@@ -25,7 +25,7 @@ Keep upstream skills installed separately. Do not copy them into this repository
 4. Run `make install` as a separate post-merge consumer action.
 
 Skill-authoring validation reviews instructions; it does not invoke a skill to
-test whether Codex executes clear instructions correctly.
+test whether an AI agent executes clear instructions correctly.
 
 Only install committed versions from `main`.
 

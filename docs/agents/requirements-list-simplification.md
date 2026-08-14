@@ -8,16 +8,16 @@ It defines the rules for one review cycle, not the surrounding authoring process
 A requirements list is the smallest complete description of the skill's
 non-obvious product behavior.
 
-- **Smallest** means it contains no common sense, default Codex behavior,
+- **Smallest** means it contains no common sense, default AI-agent behavior,
   duplication, rationale, or unnecessary implementation detail.
 - **Complete** means it preserves every intentional condition, boundary,
-  exception, permission, requirement, and prohibition that Codex is likely to
+  exception, permission, requirement, and prohibition that the AI agent is likely to
   get materially wrong without instruction.
 
 Concision is not the smallest word count. Never remove, merge, or generalize a
 rule when doing so changes behavior or makes a material decision ambiguous.
 
-If every proposed rule merely restates common sense or default Codex behavior,
+If every proposed rule merely restates common sense or default AI-agent behavior,
 do not author the skill.
 
 ## Decide what belongs
@@ -25,14 +25,14 @@ do not author the skill.
 Keep a rule only when all of these are true:
 
 1. It is specific to this skill.
-2. It changes or constrains normal Codex behavior.
-3. Without it, Codex is reasonably likely to produce a materially wrong result.
+2. It changes or constrains normal AI-agent behavior.
+3. Without it, the AI agent is reasonably likely to produce a materially wrong result.
 4. It states product behavior rather than an incidental way to implement it.
 
 Remove rules that merely describe:
 
 - common sense;
-- ordinary Codex writing, reasoning, or execution behavior;
+- ordinary AI-agent writing, reasoning, or execution behavior;
 - skill invocation, routing, or metadata;
 - responsibilities already owned by an upstream or paired skill;
 - a particular CLI, API, plugin, or tool when the product behavior is
@@ -78,7 +78,7 @@ skill controls the output" in every item.
 
 ### Prefer the behavior over its rationale
 
-Write what Codex must, may, or must not do. Omit why the rule was introduced
+Write what the AI agent must, may, or must not do. Omit why the rule was introduced
 unless the reason changes how the rule applies.
 
 ## Merge and split requirements
@@ -183,7 +183,7 @@ Use each term consistently:
 
 Review the complete list and report only material findings under these checks:
 
-1. **Necessity and scope**: common sense, default Codex behavior, rationale,
+1. **Necessity and scope**: common sense, default AI-agent behavior, rationale,
    metadata, upstream responsibilities, or tool and implementation mechanics
    that do not belong to the product behavior.
 2. **Duplication and implication**: repeated behavior, overlapping rules, or
