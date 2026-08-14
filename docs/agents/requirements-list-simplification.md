@@ -1,7 +1,7 @@
 # Requirements-list simplification guide
 
-Use this guide to draft, simplify, organize, and finalize a skill requirements
-list before generating `SKILL.md`.
+Use this guide to review and improve one version of a skill requirements list.
+It defines the rules for one review cycle, not the surrounding authoring process.
 
 ## Goal
 
@@ -163,35 +163,9 @@ Do not add a condition merely because one can imagine an edge case. Add it only
 when multiple reasonable readings would cause materially different behavior and
 the human owner has an intentional decision to express.
 
-## Review in two layers
+## Single-cycle review checks
 
-Requirements review has two different responsibilities. Do not ask a blind
-reviewer to compensate for missing product context.
-
-### Coordinator and human scope review
-
-The coordinator compares the list with the settled product decisions and checks:
-
-1. Every intentional product behavior is present.
-2. No unapproved behavior was invented.
-3. Existing artifacts were used only to find possible omissions, not as
-   authority.
-4. Every omitted legacy rule is default, common sense, upstream-owned,
-   implementation-specific, superseded, or unlikely to prevent a material
-   mistake.
-5. Every remaining rule passes the inclusion test in this guide.
-
-The human owner resolves missing product decisions. A reviewer may identify a
-gap but must not choose new behavior.
-
-### Fresh blind review
-
-Use one fresh subagent with the same AI profile as the coordinating chat. Give it
-only the exact requirements list and the review instructions. It must have no
-chat history and must not use tools, inspect files, see product-design material,
-or read previous reports.
-
-Ask it to report only material findings under these checks:
+Review the complete list and report only material findings under these checks:
 
 1. **Necessity and scope**: common sense, default Codex behavior, rationale,
    metadata, upstream responsibilities, or tool and implementation mechanics
@@ -211,45 +185,7 @@ Ask it to report only material findings under these checks:
 8. **Language quality**: indirect, awkward, misleading, overly technical, or
    unnecessarily verbose wording.
 
-For each finding, require the reviewer to quote the affected text, name the
-check, explain the materially different behavior or avoidable problem, and give
-the smallest concrete correction that does not invent product behavior. If there
-are no findings, it should say `No findings.`
-
-## Adjudicate findings
-
-The reviewer detects possible defects; it does not own the requirements.
-
-For every finding:
-
-1. Decide whether it identifies a material problem.
-2. Reject it if the proposed correction invents behavior, restates a default,
-   absorbs upstream responsibility, or adds unnecessary implementation detail.
-3. If accepted, make the smallest correction that preserves every other product
-   decision.
-4. Review the entire list again because a local edit may change grouping,
-   ordering, or another condition.
-
-After changing the list, use a different fresh blind reviewer. Do not resample an
-unchanged list to seek a preferred result. Stop when a reviewer reports no
-findings or when every finding is rejected with a reason. If a material finding
-requires a product choice, return it to the human instead of guessing.
-
-## Finalization checklist
-
-Lock the requirements only when all of these are true:
-
-- Every rule is necessary, skill-specific, non-default product behavior.
-- Every intentional behavior is present exactly once.
-- Conditions, boundaries, exceptions, permissions, requirements, and
-  prohibitions are precise.
-- Related clauses are grouped and independent decisions remain separable.
-- The order follows conceptual or execution dependencies.
-- The language is direct, natural, and technically accurate.
-- No tool recipe, invocation metadata, speculative behavior, or obsolete legacy
-  rule remains.
-- No valid scope-review or blind-review finding is unresolved.
-- The human owner agrees with every product decision.
-
-After the requirements are locked, generate and review `SKILL.md` through the
-separate process in [Skill requirements and instructions](skill-authoring.md).
+For each finding, quote the affected text, name the check, explain the materially
+different behavior or avoidable problem, and give the smallest concrete
+correction that does not invent product behavior. If there are no findings, say
+`No findings.`

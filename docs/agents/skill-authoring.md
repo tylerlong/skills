@@ -1,12 +1,17 @@
 # Skill requirements and instructions
 
-Every skill has two version-controlled artifacts with different responsibilities:
+Every skill's behavior has two version-controlled semantic artifacts with
+different responsibilities:
 
 - `requirements/<skill-name>.md` is the human-facing semantic source of truth.
 - `skills/<skill-name>/SKILL.md` is the AI-facing presentation of those requirements.
 
 The requirements determine what the skill means. `SKILL.md` may present them in
 any form that lets an AI recover their meaning without loss or invention.
+
+`skills/<skill-name>/agents/openai.yaml` is required platform metadata for the
+skill's interface and invocation policy. It is not product behavior, so it is
+outside requirements review and reconstruction review.
 
 ## Write the requirements
 
@@ -18,27 +23,35 @@ ordinary Codex behavior, tool instructions, or implementation details outside
 the skill's product scope.
 
 Use the [requirements-list simplification guide](requirements-list-simplification.md)
-to draft, organize, simplify, and finalize the list.
+to draft, organize, and simplify the list.
 
 Product design alone determines the requirements. Change them only when the
 human owner intentionally changes the skill's scope or behavior.
 
 ## Review the requirements
 
-Perform both the coordinator scope review and fresh blind review defined in the
+The coordinator first compares the complete list with the settled product
+decisions. Confirm that every intentional behavior is present, no unapproved
+behavior was invented, and legacy material was used only to find possible
+omissions. Then review the list using the
 [requirements-list simplification guide](requirements-list-simplification.md).
-Give the blind reviewer only the exact requirements list and that guide's blind
-review instructions. It must have no chat history and must not use tools,
-inspect other files, see product-design material, or read prior reports.
 
-The human resolves every finding. Fix valid issues and reject invalid findings;
-the reviewer does not decide product behavior. After changing the requirements,
-use another fresh reviewer. Do not resample an unchanged list to seek a
-different result.
+Next, use one fresh subagent with the same AI profile as the coordinating chat.
+Give it only the exact requirements list and the simplification guide. It must
+have no chat history and must not use tools, inspect other files, see
+product-design material, or read prior reports. Ask it to perform one review
+cycle and return the report defined by the guide.
 
-Finalize the requirements when no valid unresolved finding remains. Keep review
-reports with the task, issue, or pull request rather than version-controlling
-them.
+The coordinator adjudicates every finding against the settled product decisions.
+Reject invalid findings with a reason. For each accepted finding, apply the
+smallest correction, review the complete list again, and give the changed list
+to another fresh blind reviewer. Do not resample an unchanged list.
+
+Repeat until a reviewer reports no findings or the coordinator rejects every
+finding with a reason. Ask the human owner only when a finding requires an
+unresolved product decision. Finalize the requirements when no valid unresolved
+finding remains. Keep review reports with the task, issue, or pull request rather
+than version-controlling them.
 
 ## Generate `SKILL.md`
 
@@ -57,11 +70,11 @@ review shows that the current presentation is lossy or ambiguous.
 
 ## Review `SKILL.md`
 
-Use one different fresh subagent with the same AI profile as the coordinating
-chat. Give it only the exact complete `SKILL.md` and instructions to rebuild the
-requirements. It must have no chat history and must not use tools, inspect other
-files, see the authoritative requirements, or see prior reports or comparison
-results.
+Use one fresh subagent that did not participate in requirements review, with the
+same AI profile as the coordinating chat. Give it only the exact complete
+`SKILL.md` and instructions to rebuild the requirements. It must have no chat
+history and must not use tools, inspect other files, see the authoritative
+requirements, or see prior reports or comparison results.
 
 Ask it to return an ordered requirements list and identify any materially
 different readings it cannot resolve.
@@ -89,6 +102,9 @@ Execution mistakes by Codex or an available tool are outside skill-authoring
 scope. Runtime scenarios, human-readability scoring, and review matrices are not
 part of this process.
 
-After the rebuilt and authoritative requirements match, run the repository's
-deterministic validation and normal code review. Version-control the finalized
-requirements and matching `SKILL.md` together.
+After the rebuilt and authoritative requirements match, run `make test` and
+normal code review. Version-control the finalized requirements and matching
+`SKILL.md` together, along with platform metadata when it changes.
+
+After the change is committed and pushed to `main`, run `make install` separately
+from a clean local `main`.
