@@ -92,8 +92,8 @@ carries no new information:
   do not say it (for example, do not say "leave the ticket open" when the
   ticket is already open).
 
-Do not keep two versions of a boundary merely because one sounds safer. Extra
-wording can introduce a second interpretation instead of adding safety.
+Do not keep two versions of a boundary merely because one sounds safer;
+extra wording can introduce a second interpretation instead of adding safety.
 
 ### Keep clarity over brevity
 
@@ -105,7 +105,7 @@ Brevity stops where it forces inference. Favor the explicit form when:
   open" (ticket state) and "open blocker" (blocker state), and keep "pushed"
   when it distinguishes the exact commit.
 
-Concision never overrides a material decision; when in doubt, keep the word.
+When in doubt, keep the word.
 
 ### Prefer compact shapes over enumerated phrasing
 
@@ -214,7 +214,7 @@ Choose what deserves a term:
 
 - Make a thing a term when it is awkward to explain inline and appears more
   than once.
-- Inline a term when it is used only once; say it where it occurs.
+- Inline a term used only once.
 
 Fold reusable boundaries into the glossary:
 

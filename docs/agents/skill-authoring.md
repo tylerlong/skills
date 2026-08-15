@@ -34,7 +34,7 @@ skill builds on another skill's behavior, delegate as much as possible, and keep
 this skill a preprocessor or postprocessor of that dependency. Do not change or
 override a dependency skill's behavior in this skill's requirements.
 
-Use the [requirements authoring guide](requirements-authoring.md)
+Use the [requirements authoring guide](requirement-authoring.md)
 to draft, organize, and simplify the list.
 
 Only the human owner changes the skill's scope or behavior. The coordinator may
@@ -47,7 +47,7 @@ The coordinator first compares the complete list with the settled product
 decisions. Confirm that every intentional behavior is present, no unapproved
 behavior was invented, and legacy material was used only to find possible
 omissions. Then review the list using the
-[requirements authoring guide](requirements-authoring.md).
+[requirements authoring guide](requirement-authoring.md).
 
 Next, use one fresh subagent with the same AI profile as the coordinating chat.
 Give it only the verbatim current contents of the complete requirements file and
