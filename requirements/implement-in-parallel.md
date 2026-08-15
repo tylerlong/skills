@@ -4,7 +4,7 @@
 
 - **Parent Ticket**: A GitHub issue which has sub-issues.
 - **Child Ticket**: An immediate child of the Parent Ticket in GitHub's native parent-child relationship.
-- **Primary Agent**: The main agent coordinating one Parent Ticket; it only coordinates and does not implement the work.
+- **Primary Agent**: The main agent that coordinates one Parent Ticket and does not implement the work.
 - **Worker Agent**: A subagent implementing one Child Ticket; it can spawn its own sub-agents and Worker Agents run concurrently.
 - **Worker Branch**: A branch whose name is its Child Ticket number.
 - **Runnable**: A ticket that is open, has the `ready-for-agent` label, and has no open blocker via GitHub's native blocked-by relationship.
@@ -15,7 +15,7 @@
 
 1. Check CI for the latest commit on Remote Main. If it is not Green, report and stop.
 2. If the Parent Ticket is not Runnable, report and stop. Otherwise, remove its `ready-for-agent` label and continue.
-3. Find every Child Ticket that is Runnable. Remove its `ready-for-agent` label and create a Worker Agent for each. Brief each Worker Agent with: "You are a Worker Agent per the `implement-in-parallel` skill; implement Child Ticket #<n>," where **#<n> is that ticket's number**. Run these Worker Agents; whenever one stops, repeat this step for Child Tickets that are Runnable.
+3. Find every Child Ticket that is Runnable. Remove its `ready-for-agent` label and create a Worker Agent for each. Brief each Worker Agent with: "You are a Worker Agent per the `implement-in-parallel` skill; implement Child Ticket #<n>," where **#<n> is that ticket's number**. Run these Worker Agents; whenever one stops, repeat this step.
 4. When no Worker Agents remain:
    - If any Child Ticket remains open, report and stop.
    - Otherwise, comment on and close the Parent Ticket, then stop.
