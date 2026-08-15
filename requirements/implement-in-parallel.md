@@ -9,11 +9,11 @@
 - **Worker Branch**: A branch whose name is its Child Ticket number.
 - **Runnable**: A ticket is Runnable when it is open, has the `ready-for-agent` label, and has no open blocker via GitHub's native blocked-by relationship.
 - **Green**: A Worker Branch is Green when all tests pass. A remote commit is Green when its CI passes.
-- **Remote Main**: The `main` branch of the remote repository; Workers push to it without force.
+- **Remote Main**: The `main` branch of the remote repository; Worker Agents push to it without force.
 
 ## Primary Agent workflow
 
-1. Check CI for the latest commit on Remote Main. If it is not Green, report and stop.
+1. If CI of Remote Main is not Green, report and stop.
 2. If the Parent Ticket is not Runnable, report and stop. Otherwise, remove its `ready-for-agent` label and continue.
 3. For each Runnable Child Ticket, remove its `ready-for-agent` label, run a Worker Agent, and brief it with: "You are a Worker Agent per the `implement-in-parallel` skill; implement Child Ticket #<n>", where "#<n>" is the ticket number. Whenever a Worker Agent stops, repeat this step.
 4. When no Worker Agents remain:
