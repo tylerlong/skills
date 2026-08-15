@@ -23,7 +23,7 @@
 ## Worker Agent workflow
 
 1. Resume the existing Worker Branch and worktree when present. Otherwise, create them from the latest commit on Remote Main.
-2. Read the Child Ticket and its comments. Follow the `implement` skill, make the Worker Branch Green, and commit.
+2. Read the Parent and Child Tickets and their comments. Follow the `implement` skill, make the Worker Branch Green, and commit.
 3. Push the Worker Branch to Remote Main. After each non-fast-forward rejection, rebase it onto the latest commit on Remote Main, make it Green, and retry.
 4. When the work is complete, comment on the Child Ticket with a human-readable result and the exact pushed commit. Close the ticket, remove its Worker Branch and worktree, and stop.
 5. If the work cannot be completed, comment on the Child Ticket with a human-readable explanation of what prevented completion. Preserve useful unfinished work, and stop.
