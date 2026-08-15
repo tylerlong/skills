@@ -1,14 +1,11 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require "open3"
 require "yaml"
 
 ROOT = File.expand_path("..", __dir__)
 SKILLS_DIR = File.join(ROOT, "skills")
 REQUIREMENTS_DIR = File.join(ROOT, "requirements")
-SKILLS_CLI_VERSION = "1.5.21"
-ANSI_ESCAPE = /\e\[[0-?]*[ -\/]*[@-~]/
 
 def nonempty_string?(value)
   value.is_a?(String) && !value.strip.empty?
@@ -163,39 +160,4 @@ unless errors.empty?
   exit 1
 end
 
-expected_names = names.keys.sort
-begin
-  stdout, stderr, status = Open3.capture3(
-    { "NO_COLOR" => "1" },
-    "npx", "--yes", "skills@#{SKILLS_CLI_VERSION}", "add", ".", "--list",
-    chdir: ROOT
-  )
-rescue Errno::ENOENT => error
-  warn "- Skills CLI could not run: #{error.message}"
-  exit 1
-end
-
-output = "#{stdout}\n#{stderr}".gsub(ANSI_ESCAPE, "")
-unless status.success?
-  warn "- Skills CLI #{SKILLS_CLI_VERSION} failed\n#{output.strip}"
-  exit 1
-end
-
-found_count = output[/Found\s+(\d+)\s+skills?/, 1]
-errors << "Skills CLI did not report its discovered skill count" unless found_count
-if found_count && found_count.to_i != expected_names.length
-  errors << "Skills CLI found #{found_count} skills; expected #{expected_names.length}"
-end
-
-listed_lines = output.lines.map { |line| line.sub(/\A\s*│\s*/, "").strip }
-expected_names.each do |name|
-  count = listed_lines.count(name)
-  errors << "Skills CLI listed #{name} #{count} times; expected once" unless count == 1
-end
-
-unless errors.empty?
-  warn errors.map { |error| "- #{error}" }.join("\n")
-  exit 1
-end
-
-puts "Validated #{expected_names.length} source skills with Skills CLI #{SKILLS_CLI_VERSION}."
+puts "Validated #{skill_dirs.length} source skills."

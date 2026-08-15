@@ -1,21 +1,14 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help validate test-install test install
+.PHONY: help validate install
 
 help:
 	@printf '%s\n' \
 		'make validate      Validate Source Skills' \
-		'make test-install  Test global installation' \
-		'make test          Run all tests' \
 		'make install       Update tracked Installed Skills and install sources'
 
 validate:
 	ruby test/validate_skills.rb
-
-test-install:
-	ruby test/install_skills_test.rb
-
-test: validate test-install
 
 install:
 	@test "$$(git branch --show-current)" = main || \

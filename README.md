@@ -22,7 +22,7 @@ Keep upstream skills installed separately. Do not copy them into this repository
 
 1. Author and review the requirements and Source skill through the
    [requirements-first workflow](docs/agents/skill-authoring.md).
-2. Run `make test` and normal code review.
+2. Run `make validate` and normal code review.
 3. Push `main`.
 4. Run `make install` as a separate post-merge consumer action.
 
@@ -35,8 +35,6 @@ Only install committed versions from `main`.
 
 ```sh
 make validate
-make test-install
-make test
 make install
 ```
 

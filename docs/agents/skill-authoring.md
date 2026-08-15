@@ -129,7 +129,7 @@ against a real repo and tickets) is not part of this gate, but may surface
 coordination bugs earlier than production does.
 
 After the rebuilt and authoritative requirements match and platform metadata is
-current, run `make test`. Version-control both the requirements and Source skill,
+current, run `make validate`. Version-control both the requirements and Source skill,
 including metadata changes. Do not finish while their behavior differs.
 
 After the change is committed and pushed to `main`, run `make install` separately
