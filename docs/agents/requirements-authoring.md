@@ -1,7 +1,8 @@
-# Requirements-list simplification guide
+# Requirements authoring
 
-Use this guide to review and improve one version of a skill requirements list.
-It defines the rules for one review cycle, not the surrounding authoring process.
+Use this guide to draft, organize, and simplify one version of a skill's
+requirements list. It defines the authoring rules and the rules for one review
+cycle, not the surrounding coordination process.
 
 ## Goal
 
@@ -11,14 +12,14 @@ non-obvious product behavior.
 - **Smallest** means it contains no common sense, default AI-agent behavior,
   duplication, rationale, or unnecessary implementation detail.
 - **Complete** means it preserves every intentional condition, boundary,
-  exception, permission, requirement, and prohibition that the AI agent is likely to
-  get materially wrong without instruction.
+  exception, permission, requirement, and prohibition that the AI agent is
+  likely to get materially wrong without instruction.
 
 Concision is not the smallest word count. Never remove, merge, or generalize a
 rule when doing so changes behavior or makes a material decision ambiguous.
 
-If every proposed rule merely restates common sense or default AI-agent behavior,
-do not author the skill.
+If every proposed rule merely restates common sense or default AI-agent
+behavior, do not author the skill.
 
 ## Decide what belongs
 
@@ -50,25 +51,70 @@ its exact directory name usually is not.
 
 ## Simplify without losing meaning
 
-Review every clause for deletion before rewriting it.
+### Review at word grain
 
-### Remove duplication and implication
+Read the list at word grain, not sentence grain. For every word and clause ask:
+does it add new information, or does it re-say what is already established —
+either earlier in the same statement, or as common sense? If it adds none, cut it.
 
-State each behavior once. Delete:
+Two forces govern every cut:
+
+- **Brevity**: remove anything that carries no new information (below).
+- **Clarity**: if brevity would force the reader or the AI agent to infer an
+  ambiguous antecedent or a disputed condition, keep the explicit form (next
+  subsection).
+
+### Cut restatement, filler, and duplication
+
+Review every clause for deletion before rewriting it. Delete wording that
+carries no new information:
 
 - a negative restatement of an already precise positive rule;
 - an `otherwise` clause whose result is already determined by `only when`;
 - `if present` when the named removal operation is already a harmless no-op;
 - a retry prohibition already expressed by `at most once`;
 - a detailed description of what continues when the surrounding workflow makes
-  `continue` unambiguous; and
+  `continue` unambiguous;
+- a condition that cannot change the outcome;
+- a trailing restatement that echoes the opening of the same statement
+  (e.g. "repeat this step for runnable tickets" when the step already opens with
+  "for each runnable ticket");
+- a common-sense qualifier — a property true by definition of the medium or
+  domain (e.g. "human-readable" before a GitHub comment);
+- a wrapper noun that names what the content states directly
+  ("an explanation of what prevented completion" → "what prevented completion");
+- a noun echoed within the same sentence when an unambiguous pronoun suffices
+  ("what prevented completion" → "what prevented it" right after "cannot be
+  completed");
+- a verb whose action the operative verb already implies ("run a Worker Agent"
+  implies creating it, so do not also say "create");
 - a statement of something that needs no doing; if nothing changes without it,
   do not say it (for example, do not say "leave the ticket open" when the
-  ticket is already open); and
-- a condition that cannot change the outcome.
+  ticket is already open).
 
 Do not keep two versions of a boundary merely because one sounds safer. Extra
 wording can introduce a second interpretation instead of adding safety.
+
+### Keep clarity over brevity
+
+Brevity stops where it forces inference. Favor the explicit form when:
+
+- a pronoun has two plausible antecedents — name the noun ("whenever one stops"
+  → "whenever a Worker Agent stops"); and
+- a qualifier resolves a real distinction even if the word repeats — keep "is
+  open" (ticket state) and "open blocker" (blocker state), and keep "pushed"
+  when it distinguishes the exact commit.
+
+Concision never overrides a material decision; when in doubt, keep the word.
+
+### Prefer compact shapes over enumerated phrasing
+
+- Collapse multiple sentences into the fewest that hold all distinct information.
+- Prefer a compact per-item imperative loop over a sequence of
+  prepare-then-launch phrases: "For each X, remove…, run…, and brief…" instead
+  of "Find every X…, create each…, brief each…, then run these…".
+- Turn a relative or adjective clause into a modifier ("a Child Ticket that is
+  Runnable" → "a Runnable Child Ticket").
 
 ### State shared preconditions once
 
@@ -78,8 +124,8 @@ skill controls the output" in every item.
 
 ### Prefer the behavior over its rationale
 
-Write what the AI agent must, may, or must not do. Omit why the rule was introduced
-unless the reason changes how the rule applies.
+Write what the AI agent must, may, or must not do. Omit why the rule was
+introduced unless the reason changes how the rule applies.
 
 ## Merge and split requirements
 
@@ -150,6 +196,11 @@ Review logical and normative words as product behavior:
 Use the simplest accurate term. Replace vague pronouns, undefined terms,
 cross-references such as "as required below," and wording that requires the
 reader to infer which earlier subject a clause modifies.
+
+Quote literal content exactly, and keep sentence punctuation outside the quotes
+so it is not mistaken for part of a quoted string. Give parallel definitions
+parallel phrasing (for example, several conditional terms all read "is X when…").
+Use a serial comma in a list of three or more verbs.
 
 Do not report a missing condition merely because one can imagine an edge case.
 Report it only when multiple reasonable readings would cause materially
