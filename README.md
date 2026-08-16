@@ -1,6 +1,7 @@
 # Skills
 
-Personal AI-agent skill source. Installed skills are disposable copies.
+Personal AI-agent skill source. This repository is published to GitHub and its
+Source Skills are installed on this machine from there via the Skills CLI.
 
 ## Source skills
 
@@ -26,6 +27,10 @@ Keep upstream skills installed separately. Do not copy them into this repository
 3. Push `main`.
 4. Run `make install` as a separate post-merge consumer action.
 
+A skill edit takes effect only after it is committed to `main`, pushed to
+GitHub, and reinstalled with `make install` — `make install` pulls from GitHub
+and never pushes.
+
 Skill-authoring validation reviews instructions; it does not invoke a skill to
 test whether an AI agent executes clear instructions correctly.
 
@@ -40,8 +45,6 @@ make install
 
 Bare `make` lists these commands without changing anything.
 
-`make install` validates a clean local `main`, updates every Installed Skill
-tracked by the Skills CLI, and then reconciles each Source Skill into its Managed
-Installed Skill folder. It removes legacy content only inside currently managed
-folders. This local reconciliation does not change unrelated Installed Skills or
-Skills CLI metadata.
+`make install` validates a clean local `main`, updates upstream skills tracked
+by the Skills CLI, and installs this repository's Source Skills from the
+published GitHub repo (`tylerlong/skills`) via `npx skills add --global`.
