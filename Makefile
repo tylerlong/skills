@@ -16,5 +16,5 @@ install:
 	@test -z "$$(git status --porcelain)" || \
 		{ printf '%s\n' 'Installation requires a clean working tree.' >&2; exit 1; }
 	@$(MAKE) --no-print-directory validate
-	npx --yes skills@latest update --global --yes
-	npx --yes skills@latest add --global tylerlong/skills -y
+	npx --yes skills@latest update --global -y
+	npx --yes skills@latest add --global tylerlong/skills -a universal -y
