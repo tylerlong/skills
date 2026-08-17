@@ -1,6 +1,6 @@
 ---
 name: implement-in-parallel
-description: Coordinate concurrent Worker Agents to implement the ready, unblocked direct Child Tickets of one GitHub Parent Ticket and push locally green commits directly to remote main without force. Use when the user wants one Parent Ticket implemented through its GitHub Child Tickets.
+description: Coordinate concurrent Worker Agents to implement the ready, unblocked direct Child Tickets of one GitHub Parent Ticket and push locally green commits directly to remote main without force, then review all commits since this skill run against the Parent Ticket spec with model tencent/hy3 and apply the findings you accept as commits. Use when the user wants one Parent Ticket implemented through its GitHub Child Tickets.
 ---
 
 # Implement in Parallel
@@ -23,7 +23,7 @@ description: Coordinate concurrent Worker Agents to implement the ready, unblock
 3. For each Runnable Child Ticket, remove its `ready-for-agent` label, run a Worker Agent, and brief it with: "You are a Worker Agent per the `implement-in-parallel` skill; implement Child Ticket #<n>", where "#<n>" is the ticket number. Whenever a Worker Agent stops, repeat this step.
 4. When no Worker Agents remain:
    - If any Child Ticket remains open, report and stop.
-   - Otherwise, comment on and close the Parent Ticket, and stop.
+   - Otherwise, review all commits since this skill run as a whole against the Parent Ticket spec using model `tencent/hy3`, and apply the findings you accept as one commit. Repeat until the review reports no findings or every remaining finding is one you have rejected. Then comment on and close the Parent Ticket, and stop.
 
 ## Worker Agent workflow
 
@@ -32,3 +32,14 @@ description: Coordinate concurrent Worker Agents to implement the ready, unblock
 3. Push the Worker Branch to Remote Main. After each non-fast-forward rejection, rebase it onto the latest commit on Remote Main, make it Green, and retry.
 4. When the work is complete, comment on the Child Ticket with a result and the exact pushed commit. Close the ticket, remove its Worker Branch and worktree, and stop.
 5. If the work cannot be completed, comment on the Child Ticket with what prevented it, preserve useful unfinished work, and stop.
+
+## Review invocation mechanics
+
+`<repo_dir>` is the git repository root; `#<n>` is the Parent Ticket. "Since this skill run" means all commits on Remote Main after the commit that was latest when the skill started.
+
+```bash
+hermes --in "<repo_dir>" \
+  -z "Review all commits since this skill run as a whole against the Parent Ticket spec (#<n>). Report concrete findings and recommended edits." \
+  --provider openrouter \
+  --model tencent/hy3
+```
