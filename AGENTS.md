@@ -14,4 +14,4 @@ This repository uses a single-context domain layout. See `docs/agents/domain.md`
 
 ### Skill authoring
 
-Skill requirements and AI-facing instructions follow separate authoring and review stages. See `docs/agents/skill-authoring.md`.
+Each skill's requirements and AI-facing instructions are the same file (`SKILL.md`), authored and reviewed together. See `docs/agents/skill-authoring.md`.

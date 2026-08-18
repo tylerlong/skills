@@ -4,25 +4,21 @@ This repository is the canonical home for skills authored and maintained by Tyle
 
 ## Language
 
-**Requirements list**:
-The version-controlled, human-facing semantic authority for one skill at
-`requirements/<skill-name>.md`.
-_Avoid_: Skill contract, behavior-test specification
-
 **Source skill**:
-The version-controlled, AI-facing presentation of a Requirements list at
-`skills/<skill-name>/SKILL.md`.
-_Avoid_: Requirements list, Installed skill
+The single version-controlled representation of one skill at
+`skills/<skill-name>/SKILL.md`. Its body is simultaneously the semantic
+authority for the skill's product behavior and the AI-facing instructions.
+_Avoid_: Installed skill
 
-**Requirements reconstruction**:
-A fresh blind reader's self-contained rebuild of a Source skill's requirements,
-accepted only when it is semantically interchangeable with the authoritative
-Requirements list.
-_Avoid_: Wording comparison, runtime test
+**Skill requirements**:
+The behavioral requirements held in a Source skill's `SKILL.md` body — the
+smallest complete description of the skill's non-obvious behavior — which the
+authoring review gates.
+_Avoid_: Spec, Instruction set
 
 **Installed skill**:
 A disposable copy of a Source skill made available to agents.
-_Avoid_: Source skill, Requirements list
+_Avoid_: Source skill
 
 **Managed installed skill**:
 A disposable Installed skill whose Source skill lives in this repository and
