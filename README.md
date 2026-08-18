@@ -8,12 +8,16 @@ Source Skills are installed on this machine from there via the Skills CLI.
 - `chat-only`
 - `implement-in-parallel`
 - `plain`
+- `review-result`
 - `to-gh-tickets`
+- `to-spec-with-docs`
 
 ## Upstream skills
 
 - `implement-in-parallel` requires `implement`.
 - `to-gh-tickets` requires `to-tickets`.
+- `to-spec-with-docs` requires `to-spec`.
+- `review-result` has no upstream skill dependency.
 - `plain` has no upstream skill dependency.
 - `chat-only` has no upstream skill dependency.
 

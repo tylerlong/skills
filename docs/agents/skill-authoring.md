@@ -323,8 +323,7 @@ correction that does not invent product behavior. If there are no findings, say
 
 After the `SKILL.md` body passes review, ensure its frontmatter accurately
 describes what the skill does and when it applies. Ensure
-`agents/openai.yaml` still matches the skill, keep `default_prompt` to a minimal
-invocation rather than a copy of the instructions, and set
+`agents/openai.yaml` still matches the skill and set
 `allow_implicit_invocation` intentionally.
 
 ## Finish the change
