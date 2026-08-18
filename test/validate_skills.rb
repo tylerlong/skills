@@ -134,11 +134,6 @@ skill_dirs.each do |skill_dir|
     errors << "#{directory_name}: short_description must contain 25 to 64 characters"
   end
 
-  default_prompt = interface["default_prompt"]
-  unless nonempty_string?(default_prompt) && default_prompt.match?(/\$#{Regexp.escape(directory_name)}(?![a-z0-9-])/)
-    errors << "#{directory_name}: default_prompt must reference $#{directory_name}"
-  end
-
   implicit = policy["allow_implicit_invocation"]
   unless implicit == true || implicit == false
     errors << "#{directory_name}: allow_implicit_invocation must be a boolean"
