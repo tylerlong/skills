@@ -1,5 +1,0 @@
-interface:
-  display_name: "Plain"
-  short_description: "Format the final response clearly"
-policy:
-  allow_implicit_invocation: false

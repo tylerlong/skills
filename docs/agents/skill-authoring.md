@@ -4,10 +4,9 @@ Each skill's behavior has one version-controlled representation: the body of
 `skills/<skill-name>/SKILL.md`. It is simultaneously the semantic authority for
 the skill's product behavior and the AI-facing instructions served to agents.
 
-The `name` and `description` in `SKILL.md` frontmatter and
-`skills/<skill-name>/agents/openai.yaml` are required platform metadata for
-discovery, interface, and invocation policy. They are not product behavior, so
-they are outside the authoring review.
+The `name` and `description` in `SKILL.md` frontmatter are required
+platform metadata for discovery. They are not product behavior, so they are
+outside the authoring review.
 
 ## Author the behavior
 
@@ -319,12 +318,10 @@ different behavior or avoidable problem, and give the smallest concrete
 correction that does not invent product behavior. If there are no findings, say
 `No findings.`
 
-## Review platform metadata
+## Review frontmatter
 
-After the `SKILL.md` body passes review, ensure its frontmatter accurately
-describes what the skill does and when it applies. Ensure
-`agents/openai.yaml` still matches the skill and set
-`allow_implicit_invocation` intentionally.
+After the `SKILL.md` body passes review, ensure its frontmatter `description`
+accurately describes what the skill does and when it applies.
 
 ## Finish the change
 
@@ -335,7 +332,7 @@ part of this process. A lightweight behavioral smoke check (running the skill
 against a real repo and tickets) is not part of this gate, but may surface
 coordination bugs earlier than production does.
 
-After the review is locked and platform metadata is current, run `make validate`.
+After the review is locked and frontmatter is current, run `make validate`.
 Version-control the Source skill, including metadata changes. Do not finish while
 unresolved behavior remains.
 

@@ -92,41 +92,6 @@ skill_dirs.each do |skill_dir|
     check_reference(target, skill_dir, directory_name, errors)
   end
 
-  agents_path = File.join(skill_dir, "agents", "openai.yaml")
-  unless File.file?(agents_path)
-    errors << "#{directory_name}: missing agents/openai.yaml"
-    next
-  end
-
-  agents = yaml_mapping(File.read(agents_path), "#{directory_name}/agents/openai.yaml", errors)
-  next unless agents
-
-  interface = agents["interface"]
-  policy = agents["policy"]
-  unless interface.is_a?(Hash)
-    errors << "#{directory_name}: agents interface must be a mapping"
-    interface = {}
-  end
-  unless policy.is_a?(Hash)
-    errors << "#{directory_name}: agents policy must be a mapping"
-    policy = {}
-  end
-
-  errors << "#{directory_name}: display_name must be a nonempty string" unless nonempty_string?(interface["display_name"])
-
-  short_description = interface["short_description"]
-  unless nonempty_string?(short_description) && short_description.length.between?(25, 64)
-    errors << "#{directory_name}: short_description must contain 25 to 64 characters"
-  end
-
-  implicit = policy["allow_implicit_invocation"]
-  unless implicit == true || implicit == false
-    errors << "#{directory_name}: allow_implicit_invocation must be a boolean"
-  end
-
-  interface.values_at("icon_small", "icon_large").compact.each do |target|
-    check_reference(target.to_s, skill_dir, directory_name, errors)
-  end
 end
 
 names.each do |name, directories|

@@ -1,5 +1,0 @@
-interface:
-  display_name: "To GitHub Tickets"
-  short_description: "Postprocess GitHub-native ticket relationships"
-policy:
-  allow_implicit_invocation: false

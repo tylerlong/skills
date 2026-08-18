@@ -1,5 +1,0 @@
-interface:
-  display_name: "Chat Only"
-  short_description: "Chat-only mode: no code base changes."
-policy:
-  allow_implicit_invocation: false

@@ -1,5 +1,0 @@
-interface:
-  display_name: "Implement in Parallel"
-  short_description: "Implement child tickets concurrently"
-policy:
-  allow_implicit_invocation: false
