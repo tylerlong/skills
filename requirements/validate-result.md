@@ -1,91 +1,89 @@
-# validate-result requirements
+# Validate result requirements
 
-Validate and correct the current result without redoing the work or expanding
-its scope. The coordinating agent owns adjudication and editing; reviewers only
-report findings and context gaps.
+## Terms and ownership
 
-## Establish the review basis
+- **Candidate**: The current result within the original task's output boundary.
+- **Review Basis**: The task-relevant original request, settled decisions,
+  requirements, constraints, permissions, acceptance criteria, authoritative
+  evidence, and supplied artifact-specific criteria.
+- **Review Snapshot**: One exact Candidate version and its Review Basis.
+- **Context gap**: Information absent from the Review Basis that is needed to
+  determine whether the Candidate satisfies the Review Basis, including a
+  missing precedence rule for conflicting authoritative inputs.
+- **Reviewer Agent**: A fresh, read-only subagent that did not produce, edit, or
+  previously review the Candidate. It does not run task-owned completion checks,
+  edit the Candidate, contact the user, or adjudicate its report.
+- **Primary Agent**: The agent that owns Review Snapshot construction,
+  Reviewer Agent selection, adjudication, correction, and validation status.
 
-Identify:
+## Primary Agent requirements
 
-- the exact current candidate;
-- the original request and later settled decisions;
-- applicable requirements, constraints, permissions, and acceptance criteria;
-- authoritative evidence and relevant source or environment snapshots.
+1. Admit each Candidate version to review only after it is complete and has
+   passed the original task's applicable completion checks. Those checks remain
+   owned by the original task. If no Candidate is identifiable, ask the user
+   what to validate and do not begin review. If a Candidate exists but no Review
+   Basis input is identifiable, report validation unavailable and stop.
 
-Include all task-relevant context, but exclude unrelated conversation, producer
-reasoning, suspected defects, previous reviews, and adjudications.
+2. Create a Review Snapshot containing the exact current Candidate and every
+   identifiable Review Basis input. Give the Reviewer Agent its contents
+   directly or through read-only access to an immutable representation
+   containing only those contents. Exclude material outside the Candidate and
+   Review Basis, including unrelated conversation, producer reasoning,
+   suspected findings, previous reviews, and adjudications.
 
-Prefer verbatim inputs and raw evidence. For large sources, give the reviewer
-read-only access to the same source and identify the exact revision when
-possible.
+3. Obtain one valid review of the current Review Snapshot by giving a fresh
+   Reviewer Agent the Review Snapshot and all Reviewer Agent role and review
+   requirements, with no other task-specific context. A review is valid only
+   when that Reviewer Agent reviews the complete Candidate within its role
+   boundaries and returns the required report. Retry an invalid review with
+   another fresh Reviewer Agent, but do not resample a valid review of an
+   unchanged Review Snapshot.
 
-If there is no identifiable candidate, ask the user what to validate. If there
-is no objective basis for judgment, explain that the candidate can only be
-critiqued, not validated.
+4. Consolidate duplicates among the findings and Context gaps in the current
+   valid review, then adjudicate each underlying item. Accept a finding only
+   when it is correct, supported by the Review Basis, in scope, and not already
+   satisfied; otherwise, reject it and record the reason. Accept a reported
+   Context gap only when it meets the Context gap definition; otherwise, reject
+   it and record the reason. Resolve an accepted Context gap from
+   already-authorized sources; ask the user only when resolution requires the
+   user to provide a product decision, evidence, permission, or scope.
 
-## Run objective checks
+5. Apply the smallest complete correction for every accepted finding within the
+   original task's output boundary. After any Candidate or Review Basis change,
+   create a new Review Snapshot and have another fresh Reviewer Agent review the
+   complete Candidate. If corrections conflict or reverse one another under an
+   unchanged Review Basis, adjudicate the conflict instead of oscillating.
 
-Run existing applicable checks such as tests, compilation, schema validation, or
-link checking. Do not invent a new validation framework. Objective failures take
-precedence over reviewer opinion.
+6. Complete validation only when the latest valid review reports `No findings.`
+   or every finding in that review has been rejected with a reason, with no
+   unresolved accepted Context gap. Otherwise, report validation incomplete.
+   Report the review rounds, corrections applied for accepted findings,
+   rejected findings, rejected Context gaps, and unresolved accepted Context
+   gaps. On successful completion, state that no valid unresolved findings
+   remain under the Review Basis without claiming absolute correctness.
 
-## Review independently
+## Reviewer Agent requirements
 
-Create a fresh sub-agent that did not produce or edit the candidate. Give it the
-review basis, exact candidate, and objective-check results. Keep it read-only.
+1. Review the complete Candidate independently against only the supplied Review
+   Basis.
 
-Instruct it to review the complete candidate for material problems:
+2. Report only material problems involving:
 
-- mismatch with the request or settled decisions;
-- missing, incorrect, contradictory, or unsupported content;
-- conflict with authoritative evidence;
-- scope, constraint, permission, or acceptance-criteria violations;
-- failures that prevent the candidate from serving its intended purpose.
+   - mismatch with the original request or settled decisions;
+   - missing, incorrect, contradictory, or unsupported content;
+   - conflict with authoritative evidence;
+   - violation of scope, constraints, permissions, or acceptance criteria;
+   - failure to serve the Candidate's stated purpose; or
+   - supplied artifact-specific criteria.
 
-Apply supplied artifact-specific criteria. Do not invent requirements from
-personal taste, stylistic preference, or speculative best practices.
+   Do not derive requirements from personal taste, stylistic preference, or
+   speculative best practices.
 
-For each finding, require:
+3. For every finding, identify the affected content or omission, basis for the
+   finding, concrete problem and material impact, and smallest complete
+   correction.
 
-- affected location;
-- conflicting requirement or evidence;
-- concrete problem and impact;
-- smallest correction.
+4. Report each Context gap, identifying what is missing, why it is required,
+   and the source or decision needed.
 
-Require a **Context gap** when a judgment needs missing information, identifying
-what is missing and why. If there are no findings or context gaps, require the
-exact response `No findings.`
-
-## Adjudicate and correct
-
-For every finding:
-
-- **Accept** it when supported, then apply the smallest complete correction.
-- **Reject** it when incorrect, unsupported, subjective, duplicate, out of
-  scope, or already satisfied, and record the reason.
-- **Resolve a context gap** from authorized sources, or ask the user when it
-  requires a new product decision or additional authority.
-
-Do not write outside the candidate.
-
-## Repeat
-
-After any candidate or review-basis change:
-
-1. rerun affected objective checks;
-2. capture the exact updated candidate;
-3. create another fresh reviewer;
-4. review the complete result, not only the correction.
-
-Do not review when neither the candidate nor the review basis changed. If
-corrections begin reversing each other under an unchanged review basis,
-adjudicate the conflict instead of oscillating.
-
-Finish when the latest reviewer reports `No findings.` or every latest finding
-has been rejected with a reason.
-
-Deliver the corrected result and briefly summarize checks, review rounds,
-accepted corrections, rejected findings, and unresolved decisions. Say that no
-valid unresolved findings remain under the supplied requirements and evidence;
-do not claim absolute correctness.
+5. If there are no findings or Context gaps, return exactly `No findings.`
