@@ -11,10 +11,15 @@ report findings and context gaps.
 
 ## Terms and ownership
 
+- **Output boundary**: The Candidate artifact(s) the original task is
+  responsible for producing; findings and corrections outside it are out of
+  scope.
 - **Candidate**: The current result within the original task's output boundary.
 - **Review Basis**: The task-relevant original request, settled decisions,
   requirements, constraints, permissions, acceptance criteria, authoritative
-  evidence, and supplied artifact-specific criteria.
+  evidence, and supplied artifact-specific criteria. The task-relevant code
+  base, available to the Reviewer read-only in the repository, counts as
+  authoritative evidence.
 - **Review Snapshot**: One exact Candidate version and its Review Basis.
 - **Context gap**: Information absent from the Review Basis that is needed to
   determine whether the Candidate meets the Review Basis's requirements,
@@ -39,7 +44,8 @@ report findings and context gaps.
 
 3. Obtain one valid review of the current Review Snapshot by giving a Reviewer
    Agent the Review Snapshot and all Reviewer Agent requirements, with no other
-   task-specific context. A review is valid only when that Reviewer Agent
+   task-specific context; the Reviewer may consult the repository read-only for
+   authoritative evidence. A review is valid only when that Reviewer Agent
    returns the report required by the Reviewer Agent requirements. Retry an
    invalid review with another Reviewer Agent. The Primary Agent may stop
    retrying when further attempts are unlikely to yield a valid review; if it
@@ -56,10 +62,11 @@ report findings and context gaps.
    permitted to consult; ask the user otherwise as in requirement 1.
 
 6. Apply the smallest complete correction for every accepted finding within the
-   original task's output boundary. After any Candidate or Review Basis change,
-   re-review the Candidate with another Reviewer Agent. If corrections
-   conflict or reverse one another under an unchanged Review Basis, adjudicate
-   the conflict instead of oscillating.
+   original task's output boundary. After applying a correction, ensure the
+   corrected Candidate has passed the original task's applicable completion
+   checks, then re-review the Candidate with another Reviewer Agent. If
+   corrections conflict or reverse one another under an unchanged Review Basis,
+   adjudicate the conflict instead of oscillating.
 
 7. Complete validation only when the valid review of the current Review
    Snapshot reports `No findings.` or every finding in that review has been
@@ -76,7 +83,10 @@ report findings and context gaps.
 
 ## Reviewer Agent requirements
 
-1. Review the complete Candidate against only the supplied Review Basis.
+1. Review the complete Candidate against only the supplied Review Basis. The
+   Reviewer may consult the repository read-only for the task-relevant code and
+   other authoritative evidence; the supplied Review Basis remains the standard
+   for every finding.
 
 2. Report only material problems involving:
 
