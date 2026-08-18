@@ -1,8 +1,8 @@
 # validate-result requirements
 
-Validate and correct the current result without recreating the task or expanding
+Validate and correct the current result without redoing the work or expanding
 its scope. The coordinating agent owns adjudication and editing; reviewers only
-report findings.
+report findings and context gaps.
 
 ## Establish the review basis
 
@@ -13,9 +13,8 @@ Identify:
 - applicable requirements, constraints, permissions, and acceptance criteria;
 - authoritative evidence and relevant source or environment snapshots.
 
-Include all task-relevant context, even if the producer overlooked some of it,
-but exclude unrelated conversation, producer reasoning, suspected defects,
-previous reviews, and adjudications.
+Include all task-relevant context, but exclude unrelated conversation, producer
+reasoning, suspected defects, previous reviews, and adjudications.
 
 Prefer verbatim inputs and raw evidence. For large sources, give the reviewer
 read-only access to the same source and identify the exact revision when
@@ -34,10 +33,9 @@ precedence over reviewer opinion.
 ## Review independently
 
 Create a fresh sub-agent that did not produce or edit the candidate. Give it the
-review basis, exact candidate, and objective-check results. Keep it read-only and
-do not expose earlier review history.
+review basis, exact candidate, and objective-check results. Keep it read-only.
 
-Instruct it to review the complete candidate for material:
+Instruct it to review the complete candidate for material problems:
 
 - mismatch with the request or settled decisions;
 - missing, incorrect, contradictory, or unsupported content;
@@ -69,7 +67,7 @@ For every finding:
 - **Resolve a context gap** from authorized sources, or ask the user when it
   requires a new product decision or additional authority.
 
-Do not accept findings automatically or perform unauthorized external writes.
+Do not write outside the candidate.
 
 ## Repeat
 
@@ -80,9 +78,9 @@ After any candidate or review-basis change:
 3. create another fresh reviewer;
 4. review the complete result, not only the correction.
 
-Do not give the new reviewer previous findings or adjudications. Do not review
-an unchanged candidate again. If corrections begin reversing each other under
-an unchanged review basis, adjudicate the conflict instead of oscillating.
+Do not review when neither the candidate nor the review basis changed. If
+corrections begin reversing each other under an unchanged review basis,
+adjudicate the conflict instead of oscillating.
 
 Finish when the latest reviewer reports `No findings.` or every latest finding
 has been rejected with a reason.
