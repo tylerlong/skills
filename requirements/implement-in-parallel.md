@@ -10,6 +10,7 @@
 - **Runnable**: A ticket is Runnable when it is open, has the `ready-for-agent` label, and has no open blocker via GitHub's native blocked-by relationship.
 - **Green**: A Worker Branch is Green when all tests pass. A remote commit is Green when its CI passes.
 - **Remote Main**: The `main` branch of the remote repository; Worker Agents push to it without force.
+- **Since this skill run**: All commits on Remote Main after the commit that was latest when the skill started.
 
 ## Primary Agent workflow
 

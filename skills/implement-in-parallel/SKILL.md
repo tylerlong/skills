@@ -1,6 +1,6 @@
 ---
 name: implement-in-parallel
-description: Coordinate concurrent Worker Agents to implement the ready, unblocked direct Child Tickets of one GitHub Parent Ticket and push locally green commits directly to remote main without force, then review all commits since this skill run against the Parent Ticket spec with model tencent/hy3 and apply the findings you accept as commits. Use when the user wants one Parent Ticket implemented through its GitHub Child Tickets.
+description: Coordinate concurrent Worker Agents to implement the ready, unblocked direct Child Tickets of one GitHub Parent Ticket and push locally green commits directly to remote main without force, then delegate review of all commits since this skill run against the Parent Ticket spec to a fresh sub-agent and apply the findings you accept as commits. Use when the user wants one Parent Ticket implemented through its GitHub Child Tickets.
 ---
 
 # Implement in Parallel
@@ -15,6 +15,7 @@ description: Coordinate concurrent Worker Agents to implement the ready, unblock
 - **Runnable**: A ticket is Runnable when it is open, has the `ready-for-agent` label, and has no open blocker via GitHub's native blocked-by relationship.
 - **Green**: A Worker Branch is Green when all tests pass. A remote commit is Green when its CI passes.
 - **Remote Main**: The `main` branch of the remote repository; Worker Agents push to it without force.
+- **Since this skill run**: All commits on Remote Main after the commit that was latest when the skill started.
 
 ## Primary Agent workflow
 
@@ -23,7 +24,7 @@ description: Coordinate concurrent Worker Agents to implement the ready, unblock
 3. For each Runnable Child Ticket, remove its `ready-for-agent` label, run a Worker Agent, and brief it with: "You are a Worker Agent per the `implement-in-parallel` skill; implement Child Ticket #<n>", where "#<n>" is the ticket number. Whenever a Worker Agent stops, repeat this step.
 4. When no Worker Agents remain:
    - If any Child Ticket remains open, report and stop.
-   - Otherwise, review all commits since this skill run as a whole against the Parent Ticket spec using model `tencent/hy3`, and apply the findings you accept as one commit. Repeat until the review reports no findings or every remaining finding is one you have rejected. Then comment on and close the Parent Ticket, and stop.
+   - Otherwise, delegate to a fresh sub-agent that has not seen this authoring conversation, giving it (1) the repository path on disk, (2) the Parent Ticket number, and (3) the commit hashes since this skill run, and instruct it to review all commits on Remote Main since this skill run as a whole against the Parent Ticket spec, reporting concrete findings and recommended edits. Apply the findings you accept as one commit, and repeat until the review reports no findings or every remaining finding is one you have rejected. Then comment on and close the Parent Ticket, and stop.
 
 ## Worker Agent workflow
 
@@ -32,14 +33,3 @@ description: Coordinate concurrent Worker Agents to implement the ready, unblock
 3. Push the Worker Branch to Remote Main. After each non-fast-forward rejection, rebase it onto the latest commit on Remote Main, make it Green, and retry.
 4. When the work is complete, comment on the Child Ticket with a result and the exact pushed commit. Close the ticket, remove its Worker Branch and worktree, and stop.
 5. If the work cannot be completed, comment on the Child Ticket with what prevented it, preserve useful unfinished work, and stop.
-
-## Review invocation mechanics
-
-`<repo_dir>` is the git repository root; `#<n>` is the Parent Ticket. "Since this skill run" means all commits on Remote Main after the commit that was latest when the skill started.
-
-```bash
-hermes --in "<repo_dir>" \
-  -z "Review all commits since this skill run as a whole against the Parent Ticket spec (#<n>). Report concrete findings and recommended edits." \
-  --provider openrouter \
-  --model tencent/hy3
-```
