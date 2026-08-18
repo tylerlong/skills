@@ -1,6 +1,6 @@
 ---
 name: review-result
-description: Independently review and correct an existing result (spec, plan, code change, analysis, ticket, document, migration, skill output, or other checkable artifact) against its review basis, using a fresh read-only reviewer that reports findings and context gaps, then adjudicate and apply accepted corrections until no valid unresolved findings remain. Use when the user asks to review, verify, double-check, or quality-gate the current result. Prefer a requested artifact-specific review skill when available.
+description: Independently review and correct a completed result against its basis, applying accepted findings.
 ---
 
 # Review Result

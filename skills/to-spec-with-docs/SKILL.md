@@ -1,6 +1,6 @@
 ---
 name: to-spec-with-docs
-description: Turn the current conversation into a spec including project documentation updates, delegate review of the created spec ticket to a fresh sub-agent, and edit the spec ticket based on the review findings.
+description: Turn the conversation into a spec, including project documentation updates, and review the published spec ticket.
 ---
 
 # To Spec with Docs

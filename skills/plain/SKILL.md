@@ -1,6 +1,6 @@
 ---
 name: plain
-description: Format only the final response using task-compatible hierarchy and evidence already present in the task context.
+description: Format only the final response, using evidence already in the task.
 ---
 
 # Plain

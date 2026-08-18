@@ -1,6 +1,6 @@
 ---
 name: to-gh-tickets
-description: Invoke the to-tickets skill, then create a CI-check child ticket blocked by all the others and make the intended Parent and blocker relationships of every child ticket native in GitHub, removing the duplicate relationship sections safely, then delegate review of the child tickets to a fresh sub-agent and edit based on accepted findings.
+description: Break work into tickets, create native GitHub parent and blocker relationships, and review the child tickets.
 ---
 
 # To GitHub Tickets

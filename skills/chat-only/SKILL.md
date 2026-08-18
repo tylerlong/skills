@@ -1,6 +1,6 @@
 ---
 name: chat-only
-description: In chat-only mode, reply like a chat assistant without changing the current code base.
+description: Reply as a chat assistant without changing the code base.
 ---
 
 # Chat Only

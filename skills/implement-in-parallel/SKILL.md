@@ -1,6 +1,6 @@
 ---
 name: implement-in-parallel
-description: Coordinate concurrent Worker Agents to implement the ready, unblocked direct Child Tickets of one GitHub Parent Ticket and push locally green commits directly to remote main without force, then delegate review of all commits since this skill run against the Parent Ticket spec to a fresh sub-agent and apply the findings you accept as commits. Use when the user wants one Parent Ticket implemented through its GitHub Child Tickets.
+description: Implement a GitHub Parent Ticket by coordinating parallel Worker Agents for its runnable Child Tickets, then review all resulting commits.
 ---
 
 # Implement in Parallel
