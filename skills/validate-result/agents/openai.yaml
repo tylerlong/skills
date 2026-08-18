@@ -1,0 +1,6 @@
+interface:
+  display_name: "Validate Result"
+  short_description: "Validate and correct a result via a fresh blind reviewer"
+  default_prompt: "Use $validate-result to validate and correct the current result."
+policy:
+  allow_implicit_invocation: false
