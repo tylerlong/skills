@@ -1,4 +1,4 @@
-# Validate result requirements
+# review-result requirements
 
 ## Terms and ownership
 

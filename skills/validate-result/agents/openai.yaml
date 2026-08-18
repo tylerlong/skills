@@ -1,5 +1,0 @@
-interface:
-  display_name: "Validate Result"
-  short_description: "Validate and correct a result via a fresh blind reviewer"
-policy:
-  allow_implicit_invocation: true

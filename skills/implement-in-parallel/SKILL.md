@@ -24,7 +24,7 @@ description: Coordinate concurrent Worker Agents to implement the ready, unblock
 3. For each Runnable Child Ticket, remove its `ready-for-agent` label, run a Worker Agent, and brief it with: "You are a Worker Agent per the `implement-in-parallel` skill; implement Child Ticket #<n>", where "#<n>" is the ticket number. Whenever a Worker Agent stops, repeat this step.
 4. When no Worker Agents remain:
    - If any Child Ticket remains open, report and stop.
-   - Otherwise, call the Skill tool with "validate-result". Then comment on and close the Parent Ticket, and stop.
+   - Otherwise, call the Skill tool with "review-result". Then comment on and close the Parent Ticket, and stop.
 
 ## Worker Agent workflow
 

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Review Result"
+  short_description: "Review and correct a result via a fresh blind reviewer"
+policy:
+  allow_implicit_invocation: true
