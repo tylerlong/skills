@@ -1,6 +1,5 @@
 interface:
   display_name: "Chat Only"
   short_description: "Chat-only mode: no code base changes."
-  default_prompt: "Switch to $chat-only mode for a chat-only reply."
 policy:
   allow_implicit_invocation: false

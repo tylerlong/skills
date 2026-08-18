@@ -1,6 +1,5 @@
 interface:
   display_name: "To GitHub Tickets"
   short_description: "Postprocess GitHub-native ticket relationships"
-  default_prompt: "Use $to-gh-tickets to add native relationships to these tickets."
 policy:
   allow_implicit_invocation: false

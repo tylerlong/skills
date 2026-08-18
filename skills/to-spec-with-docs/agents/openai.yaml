@@ -1,6 +1,5 @@
 interface:
   display_name: "To Spec with Docs"
   short_description: "Turn conversation into spec with doc updates"
-  default_prompt: "Use $to-spec-with-docs to create a spec with project documentation updates."
 policy:
   allow_implicit_invocation: false

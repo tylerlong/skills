@@ -1,6 +1,5 @@
 interface:
   display_name: "Implement in Parallel"
   short_description: "Implement child tickets concurrently"
-  default_prompt: "Use $implement-in-parallel to implement this Parent Ticket."
 policy:
   allow_implicit_invocation: false
