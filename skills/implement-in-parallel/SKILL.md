@@ -16,7 +16,6 @@ description: Implement a GitHub Parent Ticket by coordinating parallel Worker Ag
 - **Runnable**: A ticket is Runnable when it is open, has the `ready-for-agent` label, and has no open blocker via GitHub's native blocked-by relationship.
 - **Green**: A Worker Branch is Green when all tests pass. A remote commit is Green when its CI passes.
 - **Remote Main**: The `main` branch of the remote repository; Worker Agents push to it without force.
-- **Since this skill run**: All commits on Remote Main after the commit that was latest when the skill started.
 
 ## Primary Agent workflow
 
@@ -28,14 +27,14 @@ description: Implement a GitHub Parent Ticket by coordinating parallel Worker Ag
 4. Once the loop in step 3 exits (no Runnable Child Tickets and no Worker Agents remain):
    - If any Child Ticket remains open, report and stop.
    - Otherwise:
-      - Fast-forward local main to Remote Main with `git pull --ff-only`, 
+      - Fast-forward local main to Remote Main,
       - Call the Skill tool with "review-result". 
       - Comment on and close the Parent Ticket, and stop.
 
 ## Worker Agent workflow
 
 1. Resume the existing Worker Branch and its Worker Worktree when present. Otherwise, create the Worker Branch and a Worker Worktree at `../<repo>-<Worker-Branch>` from the latest commit on Remote Main.
-2. Read the Parent and Child Tickets and their comments. Read the installed upstream `implement` skill at `~/.agents/skills/implement/SKILL.md` and follow it, make the Worker Branch Green, and commit.
-3. Run `git push origin <Worker-Branch>:main` to push the Worker Branch to Remote Main. After each non-fast-forward rejection, rebase it onto the latest commit on Remote Main, make it Green, and retry.
+2. Read the Parent and Child Tickets and their comments. Read the installed upstream `implement` skill and follow it, make the Worker Branch Green, and commit.
+3. Push the Worker Branch to Remote Main. After each non-fast-forward rejection, rebase it onto the latest commit on Remote Main, make it Green, and retry.
 4. When the work is complete, comment on the Child Ticket with a result and the exact pushed commit. Close the ticket, remove its Worker Branch and Worker Worktree, and stop.
 5. If the work cannot be completed, comment on the Child Ticket with what prevented it, preserve useful unfinished work, and stop.
