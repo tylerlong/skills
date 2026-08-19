@@ -66,7 +66,8 @@ Remove rules that merely describe:
 
 - common sense;
 - ordinary AI-agent writing, reasoning, or execution behavior;
-- skill invocation, routing, or metadata;
+- the skill body does not define how the skill itself is invoked or routed; that
+belongs to the invoker or to metadata, outside the skill body's scope.
 - responsibilities already owned by an upstream or paired skill;
 - a particular CLI, API, plugin, or tool when the product behavior is
   tool-independent;
