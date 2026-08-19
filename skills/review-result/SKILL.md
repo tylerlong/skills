@@ -1,6 +1,6 @@
 ---
 name: review-result
-description: Independently review and correct a completed result against its basis, applying accepted findings.
+description: Review and correct a completed result against its basis, applying accepted findings.
 ---
 
 # Review Result
@@ -23,7 +23,7 @@ report findings.
   reports findings. It does not run the original task's applicable completion
   checks, contact the user, or adjudicate findings.
 - **Primary Agent**: The agent that owns Review Snapshot construction, Reviewer
-  Agent creation and selection, adjudication, correction, and validation status.
+  Agent creation, adjudication, correction, and validation status.
 
 ## Primary Agent requirements
 
@@ -39,46 +39,42 @@ report findings.
 
 4. A review is valid only when the Reviewer Agent returns the report required by
    the Reviewer Agent requirements. Retry an invalid review with another fresh
-   Reviewer Agent. The Primary Agent may stop retrying when further attempts are
-   unlikely to yield a valid review; if it stops before a valid review exists,
-   report validation incomplete.
+   Reviewer Agent.
 
-5. Consolidate duplicates among the findings in the valid review, then
-   adjudicate each. Accept a finding only when it is correct, supported by the
-   Review Basis, and not already satisfied by the Candidate; otherwise, reject
-   it and record the reason.
+5. Adjudicate each finding in the valid review. Accept a finding only when it
+   is correct, supported by the Review Basis, and not already satisfied by the
+   Candidate; otherwise, reject it and record the reason.
 
 6. Apply the smallest complete correction for every accepted finding. After
-   applying a correction, ensure the corrected Candidate has passed the original
-   task's applicable completion checks, then re-review the Candidate with
-   another fresh Reviewer Agent. If corrections conflict or reverse one another
-   under an unchanged Review Basis, adjudicate the conflict instead of
-   oscillating.
+   applying all corrections, ensure the corrected Candidate has passed the
+   original task's applicable completion checks, then re-review the Candidate
+   with another fresh Reviewer Agent.
 
 7. Complete validation only when the valid review of the current Review
    Snapshot reports `No findings.` or every finding in that review has been
-   rejected with a reason. Otherwise, report validation incomplete.
+   rejected with a reason.
 
 8. Report, for each valid review of a Review Snapshot, the corrections applied
    for its accepted findings, and separately its rejected findings. On
-   successful completion, state that no valid unresolved findings remain under
-   the Review Basis without claiming absolute correctness.
+   successful completion, do not claim that the result is correct beyond the
+   Review Basis.
 
 ## Reviewer Agent requirements
 
-1. Review the complete Candidate against only the supplied Review Basis, the
-   standard for every finding.
+1. Review the complete Candidate against only the supplied Review Basis.
 
-2. Report only material problems involving:
+2. Report every material problem in the Candidate against the Review Basis,
+   including when it is not listed here. Common examples:
 
    - mismatch with the original request or settled decisions;
    - missing, incorrect, contradictory, or unsupported content;
    - conflict with authoritative evidence;
-   - violation of scope, constraints, permissions, or acceptance criteria; or
+   - violation of scope, constraints, permissions, or acceptance criteria;
+   - deviation from industry standards or best practice; and
    - supplied artifact-specific criteria.
 
-3. For every finding, identify the affected content or omission, basis for the
-   finding, concrete problem and material impact, and smallest complete
-   correction.
+3. For every finding, report the affected content or omission, the basis for
+   the finding, the concrete problem and its material impact, and the smallest
+   complete correction.
 
 4. If there are no findings, return exactly `No findings.`
