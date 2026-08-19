@@ -7,7 +7,7 @@ description: Independently review and correct a completed result against its bas
 
 Review and correct the current result without redoing the original task's
 work. The Primary Agent owns adjudication and correction; Reviewer Agents only
-report findings and context gaps.
+report findings.
 
 ## Terms and ownership
 
@@ -19,23 +19,16 @@ report findings and context gaps.
   base, available to the Reviewer read-only in the repository, counts as
   authoritative evidence.
 - **Review Snapshot**: One exact Candidate version and its Review Basis.
-- **Context gap**: Information absent from the Review Basis that is needed to
-  determine whether the Candidate meets the Review Basis's requirements,
-  including a missing precedence rule for conflicting authoritative inputs.
 - **Reviewer Agent**: A read-only subagent that reviews the Candidate and
-  reports findings and Context gaps. It does not run the original task's
-  applicable completion checks, contact the user, or adjudicate findings.
+  reports findings. It does not run the original task's applicable completion
+  checks, contact the user, or adjudicate findings.
 - **Primary Agent**: The agent that owns Review Snapshot construction, Reviewer
   Agent creation and selection, adjudication, correction, and validation status.
 
 ## Primary Agent requirements
 
 1. Admit each Candidate version to review only after it has passed the original
-   task's applicable completion checks. If no Candidate is identifiable, ask
-   the user what to validate. If a Candidate exists but no Review Basis input
-   is identifiable, ask the user what to use as the Review Basis only when the
-   user must supply a product decision, evidence, permission, or scope; if the
-   user supplies no Review Basis input, report validation unavailable.
+   task's applicable completion checks.
 
 2. Freeze the current Candidate and its Review Basis as the Review Snapshot.
 
@@ -50,36 +43,26 @@ report findings and context gaps.
    unlikely to yield a valid review; if it stops before a valid review exists,
    report validation incomplete.
 
-5. Consolidate duplicates among the findings and Context gaps in the valid
-   review, then adjudicate each underlying item. Accept a finding only when it
-   is correct, supported by the Review Basis, and not already satisfied by the
-   Candidate; otherwise, reject it and record the reason. Accept a reported
-   Context gap only when it meets the Context gap definition; otherwise, reject
+5. Consolidate duplicates among the findings in the valid review, then
+   adjudicate each. Accept a finding only when it is correct, supported by the
+   Review Basis, and not already satisfied by the Candidate; otherwise, reject
    it and record the reason.
 
-6. Resolve an accepted Context gap from sources the Primary Agent is already
-   permitted to consult; otherwise ask the user for the missing decision or
-   source, and if none is supplied, report validation unavailable.
-
-7. Apply the smallest complete correction for every accepted finding. After
+6. Apply the smallest complete correction for every accepted finding. After
    applying a correction, ensure the corrected Candidate has passed the original
    task's applicable completion checks, then re-review the Candidate with
    another fresh Reviewer Agent. If corrections conflict or reverse one another
    under an unchanged Review Basis, adjudicate the conflict instead of
    oscillating.
 
-8. Complete validation only when the valid review of the current Review
+7. Complete validation only when the valid review of the current Review
    Snapshot reports `No findings.` or every finding in that review has been
-   rejected with a reason, with no unresolved accepted Context gap. Otherwise,
-   report validation incomplete, unless the sole outstanding condition is an
-   unsupplied Review Basis input, in which case report validation unavailable
-   per requirement 1.
+   rejected with a reason. Otherwise, report validation incomplete.
 
-9. Report, for each valid review of a Review Snapshot, the corrections applied
-   for its accepted findings, and separately its rejected findings, rejected
-   Context gaps, resolved accepted Context gaps, and unresolved accepted
-   Context gaps. On successful completion, state that no valid unresolved
-   findings remain under the Review Basis without claiming absolute correctness.
+8. Report, for each valid review of a Review Snapshot, the corrections applied
+   for its accepted findings, and separately its rejected findings. On
+   successful completion, state that no valid unresolved findings remain under
+   the Review Basis without claiming absolute correctness.
 
 ## Reviewer Agent requirements
 
@@ -98,7 +81,4 @@ report findings and context gaps.
    finding, concrete problem and material impact, and smallest complete
    correction.
 
-4. Report each Context gap, identifying what is missing, why it is required,
-   and the source or decision needed.
-
-5. If there are no findings and no Context gaps, return exactly `No findings.`
+4. If there are no findings, return exactly `No findings.`
