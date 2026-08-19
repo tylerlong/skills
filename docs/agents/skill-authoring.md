@@ -273,11 +273,12 @@ possible omissions. Then review the body using the
 
 Use one fresh subagent with the same AI profile as the coordinating chat. Give
 it only the verbatim current contents of the complete `SKILL.md` body and the
-single-cycle review checks, not paths, summaries, or earlier snapshots. It must
-have no chat history and must not use tools, inspect other files, see
-product-design material, or read prior reports. Ask it to perform one review
-cycle, return the report defined by the checks, and record the behavioral
-requirements it recovers from the body plus any reading it could not determine.
+complete [authoring rules](#authoring-rules) above, not paths, summaries, or
+earlier snapshots. It must have no chat history and must not use tools, inspect
+other files, see product-design material, or read prior reports. Ask it to
+perform one review cycle, apply the complete authoring rules to the body, return
+the report defined below, and record the behavioral requirements it recovers
+from the body plus any reading it could not determine.
 
 The coordinator adjudicates every finding against the settled product decisions.
 Reject invalid findings with a reason. For each accepted finding, apply the
@@ -290,33 +291,14 @@ unresolved product decision. Lock the `SKILL.md` when no valid unresolved
 finding remains. Keep review reports with the task, issue, or pull request
 rather than version-controlling them.
 
-### Single-cycle review checks
+### Single-cycle review
 
-Review the complete `SKILL.md` body and report only material findings under
-these checks:
-
-1. **Necessity and scope**: common sense, default AI-agent behavior, rationale,
-   metadata, upstream responsibilities, or tool and implementation mechanics
-   that do not belong to the product behavior.
-2. **Duplication and implication**: repeated behavior, overlapping rules, or
-   clauses already determined by another rule.
-3. **Semantic consistency**: contradictory behavior or inconsistent obligations,
-   permissions, and prohibitions under the same conditions.
-4. **Material ambiguity**: materially different readings, vague references,
-   undefined terms, or inaccurate logical words and quantities.
-5. **Missing conditions**: a material condition, boundary, or exception needed
-   to determine the behavior stated by the body.
-6. **Grouping**: closely related clauses that should be merged or independent
-   decisions that should be split.
-7. **Ordering**: prerequisites, definitions, actions, failure handling, or
-   finalization presented in an order that obscures their relationship.
-8. **Language quality**: indirect, awkward, misleading, overly technical, or
-   unnecessarily verbose wording.
-
-For each finding, quote the affected text, name the check, explain the materially
-different behavior or avoidable problem, and give the smallest concrete
-correction that does not invent product behavior. If there are no findings, say
-`No findings.`
+Check the complete `SKILL.md` body against every rule in the complete
+[authoring rules](#authoring-rules) above, and report only material findings.
+For each finding, quote the affected text, name the authoring rule or subsection
+applied, explain the materially different behavior or avoidable problem, and
+give the smallest concrete correction that does not invent product behavior. If
+there are no findings, say `No findings.`
 
 ## Review frontmatter
 
