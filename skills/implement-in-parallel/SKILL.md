@@ -34,7 +34,7 @@ description: Implement a GitHub Parent Ticket by coordinating parallel Worker Ag
 ## Worker Agent workflow
 
 1. Resume the existing Worker Branch and its Worker Worktree when present. Otherwise, create the Worker Branch and a Worker Worktree at `../<repo>-<Worker-Branch>` from the latest commit on Remote Main.
-2. Read the Parent and Child Tickets and their comments. Read the installed upstream `implement` skill and follow it, make the Worker Branch Green, and commit.
+2. Read the Parent and Child Tickets and their comments. Read the installed upstream `implement` skill and follow it, make the Worker Branch Green, and commit if there are changed files.
 3. Push the Worker Branch to Remote Main. After each non-fast-forward rejection, rebase it onto the latest commit on Remote Main, make it Green, and retry.
 4. When the work is complete, comment on the Child Ticket with a result and the exact pushed commit. Close the ticket, remove its Worker Branch and Worker Worktree, and stop.
 5. If the work cannot be completed, comment on the Child Ticket with what prevented it, preserve useful unfinished work, and stop.
